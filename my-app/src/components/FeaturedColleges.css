@@ -1,0 +1,49 @@
+.featured-colleges {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .featured-colleges h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .college-list {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .college-card {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem;
+    width: 300px;
+  }
+  
+  .college-card h3 {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+  
+  .college-card p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+  }
+  
+  .college-card button {
+    background-color: #fa5b4d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .college-card button:hover {
+    background-color: #ffffff;
+    color: #fa5b4d;
+  }
+  
