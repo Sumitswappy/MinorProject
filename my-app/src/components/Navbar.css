@@ -16,10 +16,12 @@
     color: #ffffff;
     font-size: 20px;
     font-weight: bold;
+    border-radius: 25px;;
   }
    .menu .nav:hover{
     text-decoration: none;
-    color: rgb(255, 100, 4);
+    background-color: rgb(255, 255, 255);
+    color:rgb(255, 94, 35);
   } 
   .nav {
     color: white;

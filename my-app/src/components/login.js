@@ -1,34 +1,55 @@
+
 import React, { useState } from 'react';
 import './Modal.css';
 
 export default function Login({ onClose }) {
+  const [showLogin, setShowLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
+  const [City, setCity] = useState('');
+  const [Course, setCourse] = useState('');
   const [error, setError] = useState('');
-  const [showLogin, setShowLogin] = useState(true); // Use showLogin state
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleLogin = () => {
-    // Your login logic here
+    // Simulated user credentials for login (hardcoded for demonstration purposes)
+    const user = {
+      email: 'user@example.com',
+      password: 'password123',
+    };
+
+    // Check if the entered credentials match the hardcoded user data
+    if (email === user.email && password === user.password) {
+      setLoggedIn(true);
+      setError('');
+    } else {
+      setLoggedIn(false);
+      setError('Invalid email or password.');
+    }
   };
 
   const handleSignup = () => {
-    if (showLogin) {
-      // Handle login
+    if (!name || !email || !password || !City || !Course) {
+      setError('Please fill in all fields.');
+    } else if (password !== confirmPassword) {
+      setError("Passwords don't match.");
     } else {
-      if (!name || !email || !password) {
-        setError('Please fill in all fields.');
-      } else {
-        setError('');
-        // Handle successful signup here
-      }
+      setError('');
+      // Implement your signup logic here (in a real application, this would save user data)
+      console.log('Signup successful');
+    
+      // Implement your signup logic here
+      setLoggedIn(true); // For demonstration, considering signup as successful login
     }
   };
 
   return (
     <div className="modal-content">
       <h2>{showLogin ? 'Welcome Back, Log In!' : 'Register'}</h2>
-      {showLogin && (
+      {showLogin ? (
+        // Login Fields
         <>
           <label>Email Id: </label>
           <input
@@ -46,10 +67,10 @@ export default function Login({ onClose }) {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <h3>{showLogin ? 'Forgot Password' : ''}</h3>
+          <h3>Forgot Password</h3>
         </>
-      )}
-      {!showLogin && (
+      ) : (
+        // Signup Fields
         <>
           <label>Your Name:</label>
           <input
@@ -67,6 +88,22 @@ export default function Login({ onClose }) {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          <label>City:</label>
+          <input
+            type="text"
+            placeholder="City"
+            value={City}
+            onChange={(e) => setCity(e.target.value)}
+            required
+          />
+          <label>Course:</label>
+          <input
+            type="text"
+            placeholder="Course"
+            value={Course}
+            onChange={(e) => setCourse(e.target.value)}
+            required
+          />
           <label>Password:</label>
           <input
             type="password"
@@ -75,11 +112,19 @@ export default function Login({ onClose }) {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          
+          <label>Confirm Password:</label>
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
         </>
       )}
       {error && <p className="error">{error}</p>}
-      <button onClick={handleSignup}>
+      {loggedIn ? <p className="success">Login Successful!</p> : null}
+      <button onClick={showLogin ? handleLogin : handleSignup}>
         {showLogin ? 'Log In' : 'Sign Up'}
       </button>
       <p>

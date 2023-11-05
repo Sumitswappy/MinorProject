@@ -1,32 +1,55 @@
-
 import React, { useState } from 'react';
 import './Modal.css';
 
 export default function Signup({ onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState(''); // Add the name state for signup
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState('');
+  const [City, setCity] = useState('');
+  const [Course, setCourse] = useState('');
   const [error, setError] = useState('');
   const [showSignup, setShowSignup] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+
   const handleLogin = () => {
-    // Your login logic here
+  // Simulated user credentials for login (hardcoded for demonstration purposes)
+  const user = {
+    email: 'user@example.com',
+    password: 'password123',
+  };
+
+  // Check if the entered credentials match the hardcoded user data
+  if (email === user.email && password === user.password) {
+    setLoggedIn(true);
+    setError('');
+  } else {
+    setLoggedIn(false);
+    setError('Invalid email or password.');
+  }
   };
 
   const handleSignup = () => {
-    if (!name || !email || !password) {
-        setError('Please fill in all fields.');
-      } else {
-        setError('');
-        // Handle successful signup here
-      }
+    if (!name || !email || !password || !City || !Course) {
+      setError('Please fill in all fields.');
+    } else if (password !== confirmPassword) {
+      setError("Passwords don't match.");
+    } else {
+      setError('');
+      // Implement your signup logic here (in a real application, this would save user data)
+      console.log('Signup successful');
+    
+      // Implement your signup logic here
+      setLoggedIn(true); // For demonstration, considering signup as successful login
+    }
   };
-
 
   return (
     <div className="modal-content">
       <h2>{!showSignup ? 'Register' : 'Welcome Back, Log In!'}</h2>
-      {!showSignup && (
-      <>
+      {!showSignup ? (
+        <>
           <label>Your Name:</label>
           <input
             type="text"
@@ -43,6 +66,22 @@ export default function Signup({ onClose }) {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          <label>City:</label>
+          <input
+            type="text"
+            placeholder="City"
+            value={City}
+            onChange={(e) => setCity(e.target.value)}
+            required
+          />
+          <label>Course:</label>
+          <input
+            type="text"
+            placeholder="Course"
+            value={Course}
+            onChange={(e) => setCourse(e.target.value)}
+            required
+          />
           <label>Password:</label>
           <input
             type="password"
@@ -51,34 +90,40 @@ export default function Signup({ onClose }) {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          
+          <label>Confirm Password:</label>
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </>
+      ) : (
+        <>
+          <label>Email Id: </label>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          /><br />
+          <label>Password: </label>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {showForgotPassword && <h3>Forgot Password</h3>}
         </>
       )}
-            {showSignup && (
-       <>
-       <label>Email Id: </label>
-       <input
-         type="email"
-         placeholder="Email"
-         value={email}
-         onChange={(e) => setEmail(e.target.value)}
-         required
-       /><br />
-       <label>Password: </label>
-       <input
-         type="password"
-         placeholder="Password"
-         value={password}
-         onChange={(e) => setPassword(e.target.value)}
-         required
-       />
-       <h3>{!showSignup ? '' : 'Forgot Password'}</h3>
-     </>
-      )}
+      {error && <p className="error">{error}</p>}
       <button onClick={!showSignup ? handleSignup : handleLogin}>
         {!showSignup ? 'Sign Up' : 'Log In'}
       </button>
-      
       <p>
         {!showSignup ? 'Already have an account?' : 'New to UniFind?'}
         <a href="/login" onClick={(e) => { e.preventDefault(); setShowSignup(!showSignup); }}>
