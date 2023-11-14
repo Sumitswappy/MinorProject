@@ -1,0 +1,20 @@
+
+#navbarScrollingDropdown{
+    color: aliceblue;
+}
+#drops{
+    color: aliceblue;
+}
+#drops-dark{
+    color: rgb(27, 27, 27);
+}
+.brand-link {
+    color: rgb(231, 231, 231); 
+  }
+  .login-register-dropdown {
+    margin-right: 15px; /* Adjust the margin as needed */
+  }
+  .dropdowm{
+    margin-right: 15px;
+  }
+  

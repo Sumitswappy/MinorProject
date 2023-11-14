@@ -1,0 +1,50 @@
+.custom-select {
+    /* Add your custom styles here */
+    width: 500px; /* Adjust the width as needed */
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    margin-right: 10px; /* Add margin to separate selects */
+  }
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(191, 189, 189);
+    padding: 20px;
+  }
+  .search-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+  }
+  
+  .custom-select-container {
+    flex: 1;
+  }
+  
+  .custom-select {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .custom-search-input {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .search-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .custom-select {
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+  }

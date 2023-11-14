@@ -1,0 +1,7 @@
+body {
+    background-color: hsl(0, 0%, 96%);
+  } 
+  /* Style for the input fields when in focus */
+  #form1:focus {
+    border-color: #00589E; /* Desired border color when in focus */
+  }
