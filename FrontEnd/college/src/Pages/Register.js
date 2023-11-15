@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import {
   MDBBtn,
   MDBContainer,
@@ -7,13 +9,43 @@ import {
   MDBCard,
   MDBCardBody,
   MDBInput,
-  MDBCheckbox,
   MDBIcon
 }
 from 'mdb-react-ui-kit';
 import './Register.css';
 function Register() {
+  const navigate = useNavigate();
+  const url="http://localhost:8080/user/add";
+  const[data,setData]=useState({
+    firstName:"",
+    lastName:"",
+    city:"",
+    state:"",
+    phone:"",
+    email:""
+  })
+  function handle(e){
+    const newData={...data}
+    newData[e.target.id]=e.target.value
+    setData(newData)
+  }
+  function submit(e){
+    e.preventDefault();
+    Axios.post(url,{
+      firstName:data.firstName,
+      lastName:data.lastName,
+      city:data.city,
+      state:data.state,
+      phone:data.phone,
+      email:data.email
+    })
+    .then(res=>{
+      console.log(res.data);
+      navigate('/');
+    })
+  }
   return (
+    <form onSubmit={(e)=>submit(e)} >
     <MDBContainer fluid className='p-4'>
 
       <MDBRow>
@@ -45,32 +77,32 @@ function Register() {
 
               <MDBRow>
                 <MDBCol col='6'>
-                  <MDBInput wrapperClass='mb-4' label='First name' id='form1' type='text'/>
+                  <MDBInput wrapperClass='mb-4' label='First name' id='firstName' type='text' onChange={(e)=>handle(e)} value={data.firstName}/>
                 </MDBCol>
 
                 <MDBCol col='6'>
-                  <MDBInput wrapperClass='mb-4' label='Last name' id='form1' type='text'/>
+                  <MDBInput wrapperClass='mb-4' label='Last name' id='lastName' type='text' onChange={(e)=>handle(e)} value={data.lastName}/>
                 </MDBCol>
               </MDBRow>
 
-              <MDBInput wrapperClass='mb-4' label='Email' id='form1' type='email'/>
-              <MDBInput wrapperClass='mb-4' label='Mobile No.' id='form1' type='text'/>
+              <MDBInput wrapperClass='mb-4' label='Email' id='email' type='email' onChange={(e)=>handle(e)} value={data.email}/>
+              <MDBInput wrapperClass='mb-4' label='Mobile No.' id='phone' type='text' onChange={(e)=>handle(e)} value={data.phone}/>
               
               <MDBRow>
                 <MDBCol col='6'>
-                <MDBInput wrapperClass='mb-4' label='City' id='form1' type='text'/>
+                <MDBInput wrapperClass='mb-4' label='City' id='city' type='text' onChange={(e)=>handle(e)} value={data.city}/>
                 </MDBCol>
 
                 <MDBCol col='6'>
-                <MDBInput wrapperClass='mb-4' label='State' id='form1' type='text'/>
+                <MDBInput wrapperClass='mb-4' label='State' id='state' type='text' onChange={(e)=>handle(e)} value={data.state}/>
                 </MDBCol>
               </MDBRow>
               
-              <MDBInput wrapperClass='mb-4' label='Password' id='form1' type='password'/>
-              <MDBInput wrapperClass='mb-4' label='Confirm Password' id='form1' type='password'/>
+              <MDBInput wrapperClass='mb-4' label='Password' id='password' type='password' onChange={(e)=>handle(e)} value={data.password}/>
+              <MDBInput wrapperClass='mb-4' label='Confirm Password' id='confirm-password' type='password'/>
 
 
-              <MDBBtn className='w-100 mb-4' color='primary' size='md'>Register Now</MDBBtn>
+              <MDBBtn className='w-100 mb-4' color='primary' size='md' type='submit'value="Submit">Register Now</MDBBtn>
 
               <div className="text-center">
 
@@ -90,7 +122,7 @@ function Register() {
 
       </MDBRow>
 
-    </MDBContainer>
+    </MDBContainer></form>
   );
 }
 

@@ -38,7 +38,7 @@ export default function AdminLogin() {
 
           
 
-          <MDBBtn className='w-100 mb-4' size='md' href='/AdminDashboard'>sign up</MDBBtn>
+          <MDBBtn className='w-100 mb-4' size='md' href='/AdminDashboard/profile'>sign up</MDBBtn>
 
           <div className="text-center">
 

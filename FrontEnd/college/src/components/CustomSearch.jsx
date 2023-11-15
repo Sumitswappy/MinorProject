@@ -1,8 +1,41 @@
 import React, { useState } from 'react';
+import Axios from 'axios';
 import { MDBBtn } from 'mdb-react-ui-kit';
 import './CustomSearch.css';
 
 export default function CustomSearch() {
+  const url = "http://localhost:8080/get-filtered-college";
+  const [data, setData] = useState({
+    cityName: "",
+    courseName: "",
+  });
+
+  const handleLocationChange = (e) => {
+    setData({ ...data, cityName: e.target.value });
+  };
+
+  const handleCourseChange = (e) => {
+    setData({ ...data, courseName: e.target.value });
+  };
+
+  const handleLocationSearch = (e) => {
+    // Perform any additional search/filter logic if needed
+    setData({ ...data, cityName: e.target.value });
+  };
+
+  const submit = (e) => {
+    e.preventDefault();
+    const query = `?cityName=${data.cityName}&courseName=${data.courseName}`;
+    const fullUrl = `${url}${query}`;
+    
+    Axios.get(fullUrl)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
   const allLocations = [
     "Hyderabad", "Delhi", "Bangalore", "Mumbai", "Kolkata", "Chennai", "Bhubaneswar", "Gurgaon", "Pune",
     "Ahmedabad", "Noida", "Chandigarh", "Visakhapatnam", "Warangal", "Guntur", "Nizamabad", "Rajkot", "Surat",
@@ -26,7 +59,6 @@ export default function CustomSearch() {
     "Puducherry", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Uttar Pradesh", "Uttarakhand", "Telangana", "West Bengal"
   ];
 
-  const [locations, setLocations] = useState(allLocations);
 
   const courses = ["Engineering (B.Tech/B.E)", "Medical (MBBS)", "Dentistry (BDS)", "Pharmacy (B.Pharm/M.Pharm)",
     "Nursing (B.Sc Nursing/M.Sc Nursing)", "Architecture (B.Arch/M.Arch)", "Business Administration (BBA/MBA)",
@@ -38,53 +70,32 @@ export default function CustomSearch() {
     "Medical Laboratory Technology", "Psychology (BA/B.Sc Psychology)", "Sociology (BA/B.Sc Sociology)",
     "Economics (BA/B.Sc Economics)", "Geography (BA/B.Sc Geography)", "History (BA History)",
     "Political Science (BA/B.Sc Political Science)", "Languages (BA Literature/Linguistics)"];
-    const [selectedLocation, setSelectedLocation] = useState('');
-    const [selectedCourse, setSelectedCourse] = useState('');
-    const [locationSearch, setLocationSearch] = useState('');
-  
-    const handleLocationChange = (e) => {
-      setSelectedLocation(e.target.value);
-    };
-  
-    const handleCourseChange = (e) => {
-      setSelectedCourse(e.target.value);
-    };
-  
-    const handleLocationSearch = (e) => {
-      setLocationSearch(e.target.value);
-    };
-  
-    const filteredLocations = allLocations.filter(location =>
-      location.toLowerCase().includes(locationSearch.toLowerCase())
-    );
-  
-    const handleSearch = () => {
-      // Perform search with selectedLocation and selectedCourse
-      console.log('Selected Location:', selectedLocation);
-      console.log('Selected Course:', selectedCourse);
-    };
-  
-    return (
+    const filteredLocations = allLocations.filter((location) =>
+    location.toLowerCase().includes(data.cityName.toLowerCase())
+  );
+
+  return (
+    <form onSubmit={submit}>
       <div className="search-bar">
         <div className="custom-select-container">
-        <input
+          <input
             type="text"
             placeholder="Search Location..."
             className="custom-search-input"
-            value={locationSearch}
+            value={data.cityName}
             onChange={handleLocationSearch}
           />
         </div>
-          <select className="custom-select" value={selectedLocation} onChange={handleLocationChange}>
-            <option value="">Select Location</option>
-            {filteredLocations.map((location, index) => (
-              <option key={index} value={location}>
-                {location}
-              </option>
-            ))}
-          </select>
-  
-        <select className="custom-select" value={selectedCourse} onChange={handleCourseChange}>
+        <select className="custom-select" onChange={handleLocationChange} value={data.cityName}>
+          <option value="">Select Location</option>
+          {filteredLocations.map((location, index) => (
+            <option key={index} value={location}>
+              {location}
+            </option>
+          ))}
+        </select>
+
+        <select className="custom-select" onChange={handleCourseChange} value={data.courseName}>
           <option value="">Select Course</option>
           {courses.map((course, index) => (
             <option key={index} value={course}>
@@ -92,10 +103,11 @@ export default function CustomSearch() {
             </option>
           ))}
         </select>
-  
-        <MDBBtn className="bg-success bg-gradient text-light rounded-5" onClick={handleSearch}>
+
+        <MDBBtn className="bg-success bg-gradient text-light rounded-5" type="submit">
           Search
         </MDBBtn>
       </div>
-    );
-  }
+    </form>
+  );
+}
