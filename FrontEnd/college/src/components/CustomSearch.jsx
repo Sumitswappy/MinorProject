@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
-import { MDBBtn } from 'mdb-react-ui-kit';
+import { MDBBtn, MDBDropdown, MDBDropdownMenu, MDBDropdownToggle} from 'mdb-react-ui-kit';
 import './CustomSearch.css';
 
 export default function CustomSearch() {
@@ -30,33 +30,30 @@ export default function CustomSearch() {
     
     Axios.get(fullUrl)
       .then((res) => {
-        console.log(res.data);
+       console.log(res.data);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.log('Error:', error);
       });
   };
   const allLocations = [
-    "Hyderabad", "Delhi", "Bangalore", "Mumbai", "Kolkata", "Chennai", "Bhubaneswar", "Gurgaon", "Pune",
-    "Ahmedabad", "Noida", "Chandigarh", "Visakhapatnam", "Warangal", "Guntur", "Nizamabad", "Rajkot", "Surat",
-    "Faridabad", "Sonipat", "Rohtak", "Ranchi", "Kolhapur", "Davangere", "Mysore", "Calicut", "Kozhikode",
-    "Kollam", "Bhopal", "Jabalpur", "Aurangabad", "Nagpur", "Ahmednagar", "Amravati", "Sangli", "Gangtok",
-    "Ludhiana", "Faridkot", "Amritsar", "Gurdaspur", "Jalandhar", "Patiala", "Bathinda", "Udaipur", "Vellore",
-    "Tiruvannamalai", "Coimbatore", "Erode", "Madurai", "Tiruchengode", "Salem", "Aligarh", "Ghaziabad", "Agra",
-    "Lucknow", "Mathura", "Muzaffarnagar", "Meerut", "Bijnor", "Burdwan", "Bankura", "Durgapur", "Nashik",
-    "Secunderabad", "Chittoor", "Srikakulam", "Panipat", "Nellore", "Trichy", "Tirupathi", "Chirala", "Guwahati",
-    "Patna", "Raipur", "Vadodara", "Karnal", "Ambala", "Kurukshetra", "Solan", "Jammu", "Mangalore", "Belgaum",
-    "Manipal", "Thiruvananthapuram", "Kochi", "Palakkad", "Cochin", "Kottayam", "Gwalior", "Indore", "Satna", "Beed",
-    "Latur", "Solapur", "Nashik", "Dhule", "Jalgaon", "Srinagar", "Wardha", "Satara", "Akola", "Kurnool", "Greater Noida",
-    "Ajmer", "Alwar", "Jodhpur", "Jaipur", "Kota", "Bikaner", "Anand", "Murshidabad", "Bijapur", "Thrissur", "Jhansi",
-    "Kanpur", "Yamuna Nagar", "Malappuram", "Gulbarga", "Ratnagiri", "Allahabad", "Gandhinagar", "Gorakhpur", "Varanasi",
-    "Bareilly", "Bidar", "Hisar", "Sagar", "Dehradun", "Roorkee", "Kadapa", "Mohali", "Rewa", "Ujjain", "Shillong",
-    "Shimla", "Darbhanga", "Vijayawada", "Karimnagar", "Eluru", "Dharwad", "Hubli", "Kolar", "Rourkela", "Thane",
-    "Berhampur", "Moradabad", "Darjeeling", "Haridwar", "Jamnagar", "Bhavnagar", "Bahadurgarh", "Junagadh", "Kakinada",
-    "Barnala", "Firozpur", "Saharanpur", "Haldwani", "Muzaffarpur", "Trivandrum", "Kanyakumari", "Cuttack", "Hooghly",
-    "Bilaspur", "Panaji", "Andhra Pradesh", "Assam", "Bihar", "Chhattisgarh", "Delhi NCR", "Goa", "Gujarat", "Haryana",
-    "Himachal Pradesh", "Jammu & Kashmir", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Odisha",
-    "Puducherry", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Uttar Pradesh", "Uttarakhand", "Telangana", "West Bengal"
+    "Agra", "Ahmedabad", "Ahmednagar", "Ajmer", "Aligarh", "Allahabad", "Ambala", "Amravati", "Amritsar",
+    "Anand", "Aurangabad", "Bareilly", "Bathinda", "Beed", "Belgaum", "Bhavnagar", "Bhilwara", "Bhopal", "Bhubaneswar",
+    "Bidar", "Bijapur", "Bikaner", "Bilaspur", "Calicut", "Chandigarh", "Chennai", "Chirala", "Chittoor", "Cochin", "Cuttack",
+    "Davangere", "Dehradun", "Delhi", "Dewas", "Dhanbad", "Dhule", "Durg", "Durgapur", "Eluru", "Erode", "Faridabad",
+    "Farrukhabad", "Firozabad", "Gangtok", "Gandhinagar", "Gaya", "Ghaziabad", "Gorakhpur", "Greater Noida",
+    "Gulbarga", "Guna", "Guntur", "Gurgaon", "Guwahati", "Haridwar", "Hisar", "Hooghly", "Howrah", "Hubli","Hyderabad", "Ichalkaranji",
+    "Imphal", "Indore", "Jabalpur", "Jaipur", "Jalandhar", "Jamnagar", "Jamshedpur", "Jammu", "Jhansi", "Jharkhand", "Jodhpur",
+    "Junagadh", "Kadapa", "Kakinada", "Kalyan-Dombivli", "Kanpur", "Karimnagar", "Karnal", "Kochi", "Kolar", "Kolkata", "Kollam",
+    "Kota", "Kozhikode", "Kurnool", "Kurukshetra", "Lucknow", "Ludhiana", "Madhya Pradesh", "Madurai", "Maharashtra", "Malappuram",
+    "Manipal", "Mangalore", "Mathura", "Meerut", "Moradabad", "Mumbai", "Muzaffarnagar", "Muzaffarpur", "Mysore", "Nagpur",
+    "Naihati", "Nanded", "Nashik", "Navi Mumbai", "Nellore", "Nizamabad", "Noida", "Odisha", "Ozhukarai", "Palakkad",
+    "Panchkula", "Panipat", "Panaji", "Patna", "Patiala", "Proddatur", "Puducherry", "Pune", "Raipur", "Rajahmundry", "Rajkot",
+    "Rampur", "Ranchi", "Ratlam", "Rewa", "Roorkee", "Rourkela", "Sagar", "Saharanpur", "Salem", "Sangli", "Satara", "Satna",
+    "Secunderabad", "Shillong", "Shimla", "Shimoga", "Siliguri", "Solan", "Solapur", "Sonipat", "Srinagar", "Srikakulam",
+    "Surat", "Thane", "Thanjavur", "Thiruvananthapuram", "Thrissur", "Tiruchengode", "Tirunelveli", "Tirupathi", "Tirupur",
+    "Udaipur", "Ujjain", "Ulhasnagar", "Uran", "Vadodara", "Vasai", "Vellore", "Vijayawada", "Vijayanagaram", "Visakhapatnam",
+    "Vizianagaram", "Warangal", "Wardha", "Yamuna Nagar"
   ];
 
 
@@ -80,15 +77,15 @@ export default function CustomSearch() {
         <div className="custom-select-container">
           <input
             type="text"
-            placeholder="Search Location..."
+            placeholder="Search City..."
             className="custom-search-input"
             value={data.cityName}
             onChange={handleLocationSearch}
           />
         </div>
         <select className="custom-select" onChange={handleLocationChange} value={data.cityName}>
-          <option value="">Select Location</option>
-          {filteredLocations.map((location, index) => (
+        <option value="">Select City</option>
+        {filteredLocations.map((location, index) => (
             <option key={index} value={location}>
               {location}
             </option>

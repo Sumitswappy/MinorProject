@@ -8,8 +8,8 @@ import Register from './Pages/Register';
 import AdminLogin from './Pages/AdminLogin';
 import AdminDashboard from './Pages/AdminDashboard';
 
-import ProfileContent from './components/ProfileContent';
-import MessageContent from './components/MessageContent';
+import ProfileContent from './components/AdminComponents/ProfileContent';
+import MessageContent from './components/AdminComponents/MessageContent';
 
 export default function App() {
   return (

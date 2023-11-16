@@ -37,7 +37,7 @@ export default function Navbar() {
           <MDBIcon icon='bars' fas />
         </MDBNavbarToggler>
         <MDBCollapse open={openNavColor} navbar>
-          <MDBNavbarNav className='me-auto mb-2 mb-lg-3'>
+          <MDBNavbarNav className='me-auto mb-2 lg-3'>
             <MDBDropdown group className='ms-2'>
               <MDBDropdownToggle className=" bg-warning bg-gradient text-light rounded-5"><MDBIcon fas icon="landmark" size='lg'/> Colleges</MDBDropdownToggle>
               <MDBDropdownMenu dark>
@@ -72,7 +72,7 @@ export default function Navbar() {
           </MDBNavbarNav>
 
           <MDBDropdown group className="login-register-dropdown">
-            <MDBDropdownToggle className=" bg-danger bg-gradient text-light rounded-5"><MDBIcon fas icon="user-graduate" size='lg' /> Login/Register</MDBDropdownToggle>
+            <MDBDropdownToggle className=" bg-danger bg-gradient text-light rounded-5"><MDBIcon fas icon="user-graduate" size='lg' /> Login/SignUp</MDBDropdownToggle>
             <MDBDropdownMenu dark>
               <MDBDropdownItem link href='/Login'>Login</MDBDropdownItem>
               <MDBDropdownItem link href='/Register'>Register</MDBDropdownItem>

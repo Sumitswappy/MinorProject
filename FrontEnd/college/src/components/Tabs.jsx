@@ -47,30 +47,17 @@ export default function Tabs() {
 
       <MDBTabsContent>
         <MDBTabsPane open={justifyActive === 'tab1'}>
-          <MDBCard className='mt-3'>
-            <MDBCardBody>
-              <MDBCardTitle>College 1</MDBCardTitle>
-              <MDBCardText>Details about Engineering College 1.</MDBCardText>
-            </MDBCardBody>
-          </MDBCard>
+          
+         
           {/* Add more college cards for the Engineering Colleges */}
         </MDBTabsPane>
         <MDBTabsPane open={justifyActive === 'tab2'}>
-          <MDBCard className='mt-3'>
-            <MDBCardBody>
-              <MDBCardTitle>College 1</MDBCardTitle>
-              <MDBCardText>Details about Medical College 1.</MDBCardText>
-            </MDBCardBody>
-          </MDBCard>
+          
           {/* Add more college cards for the Medical Colleges */}
         </MDBTabsPane>
         <MDBTabsPane open={justifyActive === 'tab3'}>
-          <MDBCard className='mt-3'>
-            <MDBCardBody>
-              <MDBCardTitle>College 1</MDBCardTitle>
-              <MDBCardText>Details about Arts and Science College 1.</MDBCardText>
-            </MDBCardBody>
-          </MDBCard>
+        
+           
           {/* Add more college cards for the Arts and Science Colleges */}
         </MDBTabsPane>
       </MDBTabsContent>

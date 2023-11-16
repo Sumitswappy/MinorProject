@@ -1,6 +1,6 @@
 
 import React from 'react';
-import AdminSidenav from '../components/AdminSidenav';
+import AdminSidenav from '../components/AdminComponents/AdminSidenav';
 import { Outlet } from 'react-router-dom';
 
 const AdminDashboard = () => {
