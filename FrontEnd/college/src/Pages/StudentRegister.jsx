@@ -12,7 +12,7 @@ import {
   MDBIcon
 }
 from 'mdb-react-ui-kit';
-import './Register.css';
+import './StudentRegister.css';
 function Register() {
   const navigate = useNavigate();
   const url="http://localhost:8080/user/add";
@@ -22,7 +22,8 @@ function Register() {
     city:"",
     state:"",
     phone:"",
-    email:""
+    email:"",
+    password:""
   })
   function handle(e){
     const newData={...data}
@@ -37,7 +38,8 @@ function Register() {
       city:data.city,
       state:data.state,
       phone:data.phone,
-      email:data.email
+      email:data.email,
+      password:data.password
     })
     .then(res=>{
       console.log(res.data);
@@ -56,7 +58,7 @@ function Register() {
   Explore Your Future in Education <br />
   <span className="text-primary">with Unifind.in</span>
 </h1>
-
+<div className='px'>
 <p className='px-3' style={{color: 'hsl(217, 10%, 50.8%)'}}>
   Welcome to Unifind.in - your gateway to a world of educational opportunities! 🎓 Whether you're planning your academic journey or looking to enhance your skills, we've got you covered. Register with us to unlock a host of features and benefits:</p><p className='px-3' style={{color: 'hsl(217, 10%, 50.8%)'}}>
 
@@ -66,7 +68,7 @@ function Register() {
   - Connect with Peers: Join a community of like-minded individuals and share insights.</p><p className='px-3' style={{color: 'hsl(217, 10%, 50.8%)'}}>
 
   Your future begins here! Register now and embark on a journey towards academic excellence. 🚀
-</p>
+</p></div>
 
         </MDBCol>
 

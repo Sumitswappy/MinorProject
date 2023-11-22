@@ -1,23 +1,18 @@
+// AdminSidenav.js
 import React, { useState } from 'react';
 import {
-  MDBRow,
-  MDBCol,
-  MDBCollapse,
+  MDBAccordion,
+  MDBAccordionItem,
+  
   MDBNavbarLink,
-  MDBNavbar,
   MDBContainer,
-  MDBNavbarToggler,
   MDBIcon,
-  MDBNavbarBrand,
-  MDBNavbarNav,
 } from 'mdb-react-ui-kit';
-import './AdminSidenav.css';
 import { NavLink } from 'react-router-dom';
+import './AdminSidenav.css'; // Uncomment this line to import the CSS file
 
 export default function AdminSidenav() {
   const [verticalActive, setVerticalActive] = useState('tab1');
-  const [openNavSecond, setOpenNavSecond] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(false);
 
   const handleVerticalClick = (value) => {
     if (value === verticalActive) {
@@ -27,81 +22,41 @@ export default function AdminSidenav() {
   };
 
   return (
-    <>
-      <div className="d-lg-none">
-        <MDBNavbar expand="lg" light bgColor="light">
-          <MDBContainer fluid>
-            <MDBNavbarToggler
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-              onClick={() => setOpenNavSecond(!openNavSecond)}
+    
+        <MDBContainer tag="nav" className="d-lg-block sidebar" style={{overflow: 'hidden'}}>
+          <MDBIcon fas icon="book-open" size="2x" />
+          <h5>Unifind.in</h5>
+          <div className="position-sticky">
+            <MDBNavbarLink
+              onClick={() => handleVerticalClick('tab1')}
+              active={verticalActive === 'tab1'}
+              tag={NavLink}
+              to="/AdminHome/dashboard"
             >
-              <MDBIcon color="primary" icon="bars" fas size="2x" />
-            </MDBNavbarToggler>
-
-            <MDBNavbarBrand href="/">Unifind.in</MDBNavbarBrand>
-            <MDBCollapse navbar open={openNavSecond}>
-              <MDBNavbarNav className="flex-column">
-                <NavLink
-                  to="/AdminDashboard"
+              Dashboard
+            </MDBNavbarLink>
+            <MDBAccordion flush>
+              <MDBAccordionItem collapseId={1} headerTitle="User">
+                <MDBNavbarLink
                   onClick={() => handleVerticalClick('tab1')}
-                  className="nav-link"
-                  activeClassName="active"
+                  active={verticalActive === 'tab1'}
+                  tag={NavLink}
+                  to="/AdminHome/add-user"
                 >
-                  Home
-                </NavLink>
-                <NavLink
-                  to="/AdminDashboard/profile"
+                  Add User
+                </MDBNavbarLink>
+                <MDBNavbarLink
                   onClick={() => handleVerticalClick('tab2')}
-                  className="nav-link"
-                  activeClassName="active"
+                  active={verticalActive === 'tab2'}
+                  tag={NavLink}
+                  to="/AdminHome/view-user"
                 >
-                  Profile
-                </NavLink>
-                <NavLink
-                  to="/AdminDashboard/message"
-                  onClick={() => handleVerticalClick('tab3')}
-                  className="nav-link"
-                  activeClassName="active"
-                >
-                  Messages
-                </NavLink>
-              </MDBNavbarNav>
-            </MDBCollapse>
-          </MDBContainer>
-        </MDBNavbar>
-      </div>
-
-      <MDBCollapse
-        show={showSidebar}
-        tag="nav"
-        className="d-lg-block bg-white sidebar"
-      >
-        <MDBIcon fas icon="book-open" size="2x" style={{ color: '#709085' }} />
-        <h5>Unifind.in</h5>
-        <div className="position-sticky">
-          <MDBRow>
-            <MDBCol>
-              <MDBNavbarLink
-                onClick={() => handleVerticalClick('tab1')}
-                active={verticalActive === 'tab1'}
-                tag={NavLink}
-                to="/AdminDashboard/profile"
-              >
-                Profile
-              </MDBNavbarLink>
-              <MDBNavbarLink
-                onClick={() => handleVerticalClick('tab2')}
-                active={verticalActive === 'tab2'}
-                tag={NavLink}
-                to="/AdminDashboard/message"
-              >
-                Messages
-              </MDBNavbarLink>
-            </MDBCol>
-          </MDBRow>
-        </div>
-      </MDBCollapse>
-    </>
+                  View User
+                </MDBNavbarLink>
+              </MDBAccordionItem>
+            </MDBAccordion>
+          </div>
+        </MDBContainer>
+   
   );
 }

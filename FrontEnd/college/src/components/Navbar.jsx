@@ -39,7 +39,7 @@ export default function Navbar() {
         <MDBCollapse open={openNavColor} navbar>
           <MDBNavbarNav className='me-auto mb-2 lg-3'>
             <MDBDropdown group className='ms-2'>
-              <MDBDropdownToggle className=" bg-warning bg-gradient text-light rounded-5"><MDBIcon fas icon="landmark" size='lg'/> Colleges</MDBDropdownToggle>
+              <MDBDropdownToggle outline rounded color='warning' className='nav-button-1'><MDBIcon fas icon="landmark" size='lg'/> Colleges</MDBDropdownToggle>
               <MDBDropdownMenu dark>
                 <MDBDropdownItem link>Action</MDBDropdownItem>
                 <MDBDropdownItem link>Another action</MDBDropdownItem>
@@ -49,7 +49,7 @@ export default function Navbar() {
             
             
             <MDBDropdown group className='ms-2'>
-              <MDBDropdownToggle className=" bg-warning bg-gradient text-light rounded-5"><MDBIcon fas icon="graduation-cap" size='lg'/> Courses</MDBDropdownToggle>
+              <MDBDropdownToggle outline rounded color='warning' className='nav-button-1' ><MDBIcon fas icon="graduation-cap" size='lg'/> Courses</MDBDropdownToggle>
               <MDBDropdownMenu dark>
                 <MDBDropdownItem link>Action</MDBDropdownItem>
                 <MDBDropdownItem link>Another action</MDBDropdownItem>
@@ -59,7 +59,7 @@ export default function Navbar() {
             
             
             <MDBDropdown group className='ms-2'>
-              <MDBDropdownToggle className=" bg-warning bg-gradient text-light rounded-5"><MDBIcon fas icon="award" size='lg'/> Exams</MDBDropdownToggle>
+              <MDBDropdownToggle outline rounded color='warning' className='nav-button-1'><MDBIcon fas icon="award" size='lg'/> Exams</MDBDropdownToggle>
               <MDBDropdownMenu dark>
                 <MDBDropdownItem link>Action</MDBDropdownItem>
                 <MDBDropdownItem link>Another action</MDBDropdownItem>
@@ -72,17 +72,20 @@ export default function Navbar() {
           </MDBNavbarNav>
 
           <MDBDropdown group className="login-register-dropdown">
-            <MDBDropdownToggle className=" bg-danger bg-gradient text-light rounded-5"><MDBIcon fas icon="user-graduate" size='lg' /> Login/SignUp</MDBDropdownToggle>
+            <MDBDropdownToggle outline rounded color='danger' className='nav-button-2'><MDBIcon fas icon="user-graduate" size='lg' /> Login/SignUp</MDBDropdownToggle>
             <MDBDropdownMenu dark>
-              <MDBDropdownItem link href='/Login'>Login</MDBDropdownItem>
-              <MDBDropdownItem link href='/Register'>Register</MDBDropdownItem>
+              <MDBDropdownItem link href='/Login'>Student Login</MDBDropdownItem>
+              <MDBDropdownItem link href='/Register'>Student Register</MDBDropdownItem>
+              <MDBDropdownItem link href='/College-register'>College Register</MDBDropdownItem>
               <MDBDropdownItem link href='/AdminLogin'>Admin Login</MDBDropdownItem>
             </MDBDropdownMenu>
           </MDBDropdown>
 
           <form className='d-flex input-group w-auto'>
-            <input type='search' className='form-control' style={{ width: '300px' }} placeholder='Search here' aria-label='Search' />
-            <MDBBtn color='success'><MDBIcon fas icon="search" size='lg'/></MDBBtn>
+            <input type='search' className='form-control' style={{ width: '100%' }} placeholder='Search here' aria-label='Search' />
+            <MDBBtn outline color='success' className='nav-search mt-0 p-2'>
+              <MDBIcon fas icon="search" size='lg' />
+            </MDBBtn>
           </form>
         </MDBCollapse>
       </MDBContainer>

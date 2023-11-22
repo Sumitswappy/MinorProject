@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import Axios from 'axios';
-import { MDBBtn, MDBDropdown, MDBDropdownMenu, MDBDropdownToggle} from 'mdb-react-ui-kit';
+
+import { useNavigate } from 'react-router-dom';
+import { MDBBtn} from 'mdb-react-ui-kit';
 import './CustomSearch.css';
 
 export default function CustomSearch() {
-  const url = "http://localhost:8080/get-filtered-college";
+ 
   const [data, setData] = useState({
     cityName: "",
     courseName: "",
   });
+  const navigate = useNavigate();
 
   const handleLocationChange = (e) => {
     setData({ ...data, cityName: e.target.value });
@@ -22,20 +24,13 @@ export default function CustomSearch() {
     // Perform any additional search/filter logic if needed
     setData({ ...data, cityName: e.target.value });
   };
+  const handleButtonClick=(e)=>{
+    //console.log(e);
+    navigate("/Colleges", { state: { cityName: e.cityName, courseName: e.courseName} })
+    // navigate('/Colleges/${data.cityName}/${data.courseName}');
+  }
 
-  const submit = (e) => {
-    e.preventDefault();
-    const query = `?cityName=${data.cityName}&courseName=${data.courseName}`;
-    const fullUrl = `${url}${query}`;
-    
-    Axios.get(fullUrl)
-      .then((res) => {
-       console.log(res.data);
-      })
-      .catch((error) => {
-        console.log('Error:', error);
-      });
-  };
+  
   const allLocations = [
     "Agra", "Ahmedabad", "Ahmednagar", "Ajmer", "Aligarh", "Allahabad", "Ambala", "Amravati", "Amritsar",
     "Anand", "Aurangabad", "Bareilly", "Bathinda", "Beed", "Belgaum", "Bhavnagar", "Bhilwara", "Bhopal", "Bhubaneswar",
@@ -72,8 +67,8 @@ export default function CustomSearch() {
   );
 
   return (
-    <form onSubmit={submit}>
-      <div className="search-bar">
+    <form >
+      <div className="search-bar" >
         <div className="custom-select-container">
           <input
             type="text"
@@ -101,7 +96,7 @@ export default function CustomSearch() {
           ))}
         </select>
 
-        <MDBBtn className="bg-success bg-gradient text-light rounded-5" type="submit">
+        <MDBBtn className='search'outline rounded color='light' type="submit" onClick={()=>handleButtonClick(data)} >
           Search
         </MDBBtn>
       </div>

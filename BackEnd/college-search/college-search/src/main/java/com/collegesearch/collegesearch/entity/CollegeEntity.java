@@ -13,6 +13,7 @@ public class CollegeEntity {
     String College;
     @ManyToOne
     CourseEntity courseEntity;
+    String state;
     @ManyToOne
     CityEntity cityEntity;
 }

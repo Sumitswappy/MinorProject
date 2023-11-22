@@ -1,33 +1,48 @@
 import React, { useState } from 'react';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import {
   MDBBtn,
   MDBContainer,
   MDBRow,
   MDBCol,
   MDBIcon,
-  MDBInput,
-  MDBSpinner
+  MDBInput
 } from 'mdb-react-ui-kit';
+import './StudentLogin.css';
 
 function Login() {
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = () => {
-    // Simulate an async login process
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      // Perform actual login logic here
-    }, 2000); // Simulating a 2-second login process
-  };
-
+  const navigate = useNavigate();
+  const url="http://localhost:8080/user/get";
+const[data,setData]=useState({
+  email:"",
+})
+function handle(e){
+  const newData={...data}
+  newData[e.target.id]=e.target.value
+  setData(newData)
+}
+function submit(e){
+  e.preventDefault();
+  var i=0;
+  Axios.get(url)
+  .then(res=>{
+    while(i<res.data.length){
+    if(res.data[i].email==data.email)
+    {
+      console.log("User Found");
+      navigate('/');
+      break;
+    }else{i++;}}
+    if (i === res.data.length) {
+      console.log("User not found");
+      i=0;
+    }
+  })
+}
   return (
     <>
-      {loading && (
-        <MDBSpinner role='status'>
-          <span className='visually-hidden'>Loading...</span>
-        </MDBSpinner>
-      )}
+    <form onSubmit={(e)=>submit(e)} >
       <MDBContainer fluid>
         <MDBRow>
           <MDBCol sm='6'>
@@ -38,8 +53,8 @@ function Login() {
 
             <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4'>
               <h3 className="fw-normal mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Log in</h3>
-              <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Email address' id='formControlLg' type='email' size="lg" />
-              <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Password' id='formControlLg' type='password' size="lg" />
+              <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Email address' id='email' type='email' size="lg" onChange={(e)=>handle(e)} value={data.email} />
+              <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Password' id='password' type='password' size="lg" />
 
               <MDBBtn className="mb-4 px-5 mx-5 w-100" color='primary' size='lg'>Login</MDBBtn>
               <p className="small mb-5 pb-lg-3 ms-5"><a className="text-muted" href="#!">Forgot password?</a></p>
@@ -53,6 +68,7 @@ function Login() {
           </MDBCol>
         </MDBRow>
       </MDBContainer>
+      </form>
     </>
   );
 }

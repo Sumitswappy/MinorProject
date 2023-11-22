@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +19,16 @@ public class UserService {
     public List<UserEntity> getUser(){
         List<UserEntity> usrdet=new ArrayList<UserEntity>(userRepository.findAll());
         return usrdet;
+    }
+    public Optional<UserEntity> getUserById(int id) {
+        return userRepository.findById(id);
+    }
+    public void deleteUser(int id){ userRepository.deleteById(id);}
+    public void updateUser(int id,UserEntity user){
+        if(userRepository.existsById(id)){
+            user.setId(id);
+            userRepository.save(user);
+        }
     }
 
 }
