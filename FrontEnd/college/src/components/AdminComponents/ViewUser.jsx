@@ -93,9 +93,9 @@ const ViewUser = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users.map((user,index) => (
               <tr key={user.id} className="table-row">
-                <td>{user.id}</td>
+                <td>{index+1}</td>
                 <td>{user.firstName}</td>
                 <td>{user.lastName}</td>
                 <td>{user.email}</td>

@@ -10,121 +10,240 @@ import {
   MDBCardBody,
   MDBInput,
   MDBIcon
-}
-from 'mdb-react-ui-kit';
+} from 'mdb-react-ui-kit';
 import './StudentRegister.css';
+
 function Register() {
   const navigate = useNavigate();
-  const url="http://localhost:8080/user/add";
-  const[data,setData]=useState({
-    firstName:"",
-    lastName:"",
-    city:"",
-    state:"",
-    phone:"",
-    email:"",
-    password:""
-  })
-  function handle(e){
-    const newData={...data}
-    newData[e.target.id]=e.target.value
-    setData(newData)
+  const url = "http://localhost:8080/user/add";
+  const [data, setData] = useState({
+    firstName: "",
+    lastName: "",
+    city: "",
+    state: "",
+    phone: "",
+    email: "",
+    password: "",
+    confirmPassword: "", // Add confirmPassword to the state
+  });
+
+  const [errors, setErrors] = useState({});
+
+  function handle(e) {
+    const newData = { ...data };
+    newData[e.target.id] = e.target.value;
+    setData(newData);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [e.target.id]: '', // Clear the error message when the user starts typing
+    }));
   }
-  function submit(e){
+
+  function validateForm() {
+    let valid = true;
+    const newErrors = {};
+
+    // Add your validation logic here
+    if (!data.firstName.trim()) {
+      newErrors.firstName = '*First name is required';
+      valid = false;
+    }
+
+    if (!data.lastName.trim()) {
+      newErrors.lastName = '*Last name is required';
+      valid = false;
+    }
+
+    if (!data.email.trim() || !/\S+@\S+\.\S+/.test(data.email.trim())) {
+      newErrors.email = '*Valid email address is required';
+      valid = false;
+    }
+
+    if (!data.phone.trim() || !/^\d{10}$/.test(data.phone.trim())) {
+      newErrors.phone = '*Phone number should be 10 digits';
+      valid = false;
+    }
+
+    if (!data.city.trim()) {
+      newErrors.city = '*City is required';
+      valid = false;
+    }
+
+    if (!data.state.trim()) {
+      newErrors.state = '*State is required';
+      valid = false;
+    }
+
+
+    setErrors(newErrors);
+    return valid;
+  }
+
+  function submit(e) {
     e.preventDefault();
-    Axios.post(url,{
-      firstName:data.firstName,
-      lastName:data.lastName,
-      city:data.city,
-      state:data.state,
-      phone:data.phone,
-      email:data.email,
-      password:data.password
-    })
-    .then(res=>{
-      console.log(res.data);
-      navigate('/');
-    })
+
+    if (validateForm()) {
+      Axios.post(url, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        city: data.city,
+        state: data.state,
+        phone: data.phone,
+        email: data.email,
+        password: data.password,
+      })
+        .then(res => {
+          console.log(res.data);
+          navigate('/');
+        })
+    }
   }
+
   return (
-    <form onSubmit={(e)=>submit(e)} >
-    <MDBContainer fluid className='p-4'>
+    <form onSubmit={(e) => submit(e)}>
+      <MDBContainer fluid className='p-4'>
 
-      <MDBRow>
+        <MDBRow>
 
-        <MDBCol md='6' className='text-center text-md-start d-flex flex-column justify-content-center'>
+          <MDBCol md='6' className='text-center text-md-start d-flex flex-column justify-content-center'>
 
-        <h1 className="my-5 display-3 fw-bold ls-tight px-3">
-  Explore Your Future in Education <br />
-  <span className="text-primary">with Unifind.in</span>
-</h1>
-<div className='px'>
-<p className='px-3' style={{color: 'hsl(217, 10%, 50.8%)'}}>
-  Welcome to Unifind.in - your gateway to a world of educational opportunities! 🎓 Whether you're planning your academic journey or looking to enhance your skills, we've got you covered. Register with us to unlock a host of features and benefits:</p><p className='px-3' style={{color: 'hsl(217, 10%, 50.8%)'}}>
+            <h1 className="my-5 display-3 fw-bold ls-tight px-3">
+              Explore Your Future in Education <br />
+              <span className="text-primary">with Unifind.in</span>
+            </h1>
+            <div className='px'>
+              <p className='px-3' style={{ color: 'hsl(217, 10%, 50.8%)' }}>
+                Welcome to Unifind.in - your gateway to a world of educational opportunities! 🎓 Whether you're planning your academic journey or looking to enhance your skills, we've got you covered. Register with us to unlock a host of features and benefits:</p>
+              <p className='px-3' style={{ color: 'hsl(217, 10%, 50.8%)' }}>
 
-  - Discover Diverse Colleges: Explore a wide range of colleges across different cities and courses.</p><p className='px-3' style={{color: 'hsl(217, 10%, 50.8%)'}}>
-  - Personalized Recommendations: Receive tailored suggestions based on your interests and preferences.</p><p className='px-3' style={{color: 'hsl(217, 10%, 50.8%)'}}>
-  - Stay Informed: Get the latest updates on admission deadlines, courses, and more.</p><p className='px-3' style={{color: 'hsl(217, 10%, 50.8%)'}}>
-  - Connect with Peers: Join a community of like-minded individuals and share insights.</p><p className='px-3' style={{color: 'hsl(217, 10%, 50.8%)'}}>
+                - Discover Diverse Colleges: Explore a wide range of colleges across different cities and courses.</p><p className='px-3' style={{ color: 'hsl(217, 10%, 50.8%)' }}>
+                - Personalized Recommendations: Receive tailored suggestions based on your interests and preferences.</p><p className='px-3' style={{ color: 'hsl(217, 10%, 50.8%)' }}>
+                - Stay Informed: Get the latest updates on admission deadlines, courses, and more.</p><p className='px-3' style={{ color: 'hsl(217, 10%, 50.8%)' }}>
+                - Connect with Peers: Join a community of like-minded individuals and share insights.</p><p className='px-3' style={{ color: 'hsl(217, 10%, 50.8%)' }}>
 
-  Your future begins here! Register now and embark on a journey towards academic excellence. 🚀
-</p></div>
+                Your future begins here! Register now and embark on a journey towards academic excellence. 🚀
+              </p></div>
 
-        </MDBCol>
+          </MDBCol>
 
-        <MDBCol md='6'>
+          <MDBCol md='6'>
 
-          <MDBCard className='my-5'>
-            <MDBCardBody className='p-5'>
+            <MDBCard className='my-5'>
+              <MDBCardBody className='p-5'>
 
-              <MDBRow>
-                <MDBCol col='6'>
-                  <MDBInput wrapperClass='mb-4' label='First name' id='firstName' type='text' onChange={(e)=>handle(e)} value={data.firstName}/>
-                </MDBCol>
+                <MDBRow>
+                  <MDBCol col='6'>
+                    <MDBInput
+                      wrapperClass='mb-4'
+                      label='First name'
+                      id='firstName'
+                      type='text'
+                      onChange={(e) => handle(e)}
+                      value={data.firstName}
+                    />
+                    {errors.firstName && <div className="text-danger">{errors.firstName}</div>}
+                  </MDBCol>
 
-                <MDBCol col='6'>
-                  <MDBInput wrapperClass='mb-4' label='Last name' id='lastName' type='text' onChange={(e)=>handle(e)} value={data.lastName}/>
-                </MDBCol>
-              </MDBRow>
+                  <MDBCol col='6'>
+                    <MDBInput
+                      wrapperClass='mb-4'
+                      label='Last name'
+                      id='lastName'
+                      type='text'
+                      onChange={(e) => handle(e)}
+                      value={data.lastName}
+                    />
+                    {errors.lastName && <div className="text-danger">{errors.lastName}</div>}
+                  </MDBCol>
+                </MDBRow>
 
-              <MDBInput wrapperClass='mb-4' label='Email' id='email' type='email' onChange={(e)=>handle(e)} value={data.email}/>
-              <MDBInput wrapperClass='mb-4' label='Mobile No.' id='phone' type='text' onChange={(e)=>handle(e)} value={data.phone}/>
-              
-              <MDBRow>
-                <MDBCol col='6'>
-                <MDBInput wrapperClass='mb-4' label='City' id='city' type='text' onChange={(e)=>handle(e)} value={data.city}/>
-                </MDBCol>
+                <MDBInput
+                  wrapperClass='mb-4'
+                  label='Email'
+                  id='email'
+                  type='email'
+                  onChange={(e) => handle(e)}
+                  value={data.email}
+                />
+                {errors.email && <div className="text-danger">{errors.email}</div>}
 
-                <MDBCol col='6'>
-                <MDBInput wrapperClass='mb-4' label='State' id='state' type='text' onChange={(e)=>handle(e)} value={data.state}/>
-                </MDBCol>
-              </MDBRow>
-              
-              <MDBInput wrapperClass='mb-4' label='Password' id='password' type='password' onChange={(e)=>handle(e)} value={data.password}/>
-              <MDBInput wrapperClass='mb-4' label='Confirm Password' id='confirm-password' type='password'/>
+                <MDBInput
+                  wrapperClass='mb-4'
+                  label='Mobile No.'
+                  id='phone'
+                  type='text'
+                  onChange={(e) => handle(e)}
+                  value={data.phone}
+                />
+                {errors.phone && <div className="text-danger">{errors.phone}</div>}
 
+                <MDBRow>
+                  <MDBCol col='6'>
+                    <MDBInput
+                      wrapperClass='mb-4'
+                      label='City'
+                      id='city'
+                      type='text'
+                      onChange={(e) => handle(e)}
+                      value={data.city}
+                    />
+                    {errors.city && <div className="text-danger">{errors.city}</div>}
+                  </MDBCol>
 
-              <MDBBtn className='w-100 mb-4' color='primary' size='md' type='submit'value="Submit">Register Now</MDBBtn>
+                  <MDBCol col='6'>
+                    <MDBInput
+                      wrapperClass='mb-4'
+                      label='State'
+                      id='state'
+                      type='text'
+                      onChange={(e) => handle(e)}
+                      value={data.state}
+                    />
+                    {errors.state && <div className="text-danger">{errors.state}</div>}
+                  </MDBCol>
+                </MDBRow>
 
-              <div className="text-center">
+                <MDBInput
+                  wrapperClass='mb-4'
+                  label='Password'
+                  id='password'
+                  type='password'
+                  onChange={(e) => handle(e)}
+                  value={data.password}
+                />
+                {errors.password && <div className="text-danger">{errors.password}</div>}
 
-                <p>or sign up with:</p>
+                <MDBInput
+                  wrapperClass='mb-4'
+                  label='Confirm Password'
+                  id='confirmPassword'
+                  type='password'
+                  onChange={(e) => handle(e)}
+                  value={data.confirmPassword}
+                />
+                {errors.confirmPassword && <div className="text-danger">{errors.confirmPassword}</div>}
 
-                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#00589E' }}>
-                  <MDBIcon fab icon='google' size="lg"/>
-                </MDBBtn>
+                <MDBBtn className='w-100 mb-4' color='primary' size='md' type='submit' value="Submit">Register Now</MDBBtn>
 
+                <div className="text-center">
 
-              </div>
+                  <p>or sign up with:</p>
 
-            </MDBCardBody>
-          </MDBCard>
+                  <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#00589E' }}>
+                    <MDBIcon fab icon='google' size="lg" />
+                  </MDBBtn>
 
-        </MDBCol>
+                </div>
 
-      </MDBRow>
+              </MDBCardBody>
+            </MDBCard>
 
-    </MDBContainer></form>
+          </MDBCol>
+
+        </MDBRow>
+
+      </MDBContainer>
+    </form>
   );
 }
 

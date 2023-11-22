@@ -11,10 +11,10 @@ import {
   MDBCard,
   MDBCardBody,
   MDBInput,
-  MDBIcon,
 } from "mdb-react-ui-kit";
-import "./AddUser.css"; // Create a new CSS file for styling
-import {NavLink} from "react-router-dom";
+import "./AddUser.css";
+import { NavLink } from "react-router-dom";
+
 const AddUser = () => {
   const navigate = useNavigate();
   const url = "http://localhost:8080/user/add";
@@ -27,32 +27,107 @@ const AddUser = () => {
     email: "",
     password: "",
   });
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    city: "",
+    state: "",
+  });
+
   function handle(e) {
     const newData = { ...data };
     newData[e.target.id] = e.target.value;
     setData(newData);
   }
+
+  function validateForm() {
+    let valid = true;
+    const newErrors = { ...errors };
+
+    if (!data.firstName.trim()) {
+      newErrors.firstName = "*First Name is required";
+      valid = false;
+    } else {
+      newErrors.firstName = "";
+    }
+
+    if (!data.lastName.trim()) {
+      newErrors.lastName = "*Last Name is required";
+      valid = false;
+    } else {
+      newErrors.lastName = "";
+    }
+
+    if (!data.email.trim()) {
+      newErrors.email = "*Email is required";
+      valid = false;
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email)) {
+        newErrors.email = "Invalid email format";
+        valid = false;
+      } else {
+        newErrors.email = "";
+      }
+    }
+
+    if (!data.phone.trim()) {
+      newErrors.phone = "*Phone number is required";
+      valid = false;
+    } else {
+      const phoneRegex = /^\d{10}$/;
+      if (!phoneRegex.test(data.phone)) {
+        newErrors.phone = "*Invalid phone number format";
+        valid = false;
+      } else {
+        newErrors.phone = "";
+      }
+    }
+
+    if (!data.city.trim()) {
+      newErrors.city = "*City is required";
+      valid = false;
+    } else {
+      newErrors.city = "";
+    }
+
+    if (!data.state.trim()) {
+      newErrors.state = "*State is required";
+      valid = false;
+    } else {
+      newErrors.state = "";
+    }
+
+    setErrors(newErrors);
+    return valid;
+  }
+
   function submit(e) {
     e.preventDefault();
-    Axios.post(url, {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      city: data.city,
-      state: data.state,
-      phone: data.phone,
-      email: data.email,
-      password: data.password,
-    }).then((res) => {
-      alert("New User Added...");
-      handleRefresh();
-      navigate("/AdminHome/add-user");
-    });
-  }
-  
 
-  function handleRefresh(){
+    if (validateForm()) {
+      Axios.post(url, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        city: data.city,
+        state: data.state,
+        phone: data.phone,
+        email: data.email,
+        password: data.password,
+      }).then((res) => {
+        alert("New User Added...");
+        handleRefresh();
+        navigate("/AdminHome/add-user");
+      });
+    }
+  }
+
+  function handleRefresh() {
     window.location.reload();
-  };
+  }
+
   return (
     <div className="add-user">
       <form onSubmit={(e) => submit(e)}>
@@ -80,16 +155,17 @@ const AddUser = () => {
             </MDBBreadcrumbItem>
           </MDBBreadcrumb>
           <MDBContainer fluid className="heading">
-        <h2 className="view-heading">Add User</h2>
-          <NavLink to="/AdminHome/view-user" className="add-user-button">
-            View User
-          </NavLink>
-        </MDBContainer>
-          <MDBCol >
+            <h2 className="view-heading">Add User</h2>
+            <NavLink to="/AdminHome/view-user" className="add-user-button">
+              View User
+            </NavLink>
+          </MDBContainer>
+          <MDBCol>
             <MDBCard className="my-5">
               <MDBCardBody className="p-5">
                 <MDBRow>
                   <MDBCol col="6">
+                  <div className="text-danger">{errors.firstName}</div>
                     <MDBInput
                       wrapperClass="mb-4"
                       label="First name"
@@ -98,9 +174,11 @@ const AddUser = () => {
                       onChange={(e) => handle(e)}
                       value={data.firstName}
                     />
+                    
                   </MDBCol>
 
                   <MDBCol col="6">
+                  <div className="text-danger">{errors.lastName}</div>
                     <MDBInput
                       wrapperClass="mb-4"
                       label="Last name"
@@ -111,7 +189,7 @@ const AddUser = () => {
                     />
                   </MDBCol>
                 </MDBRow>
-
+                <div className="text-danger">{errors.email}</div>
                 <MDBInput
                   wrapperClass="mb-4"
                   label="Email"
@@ -120,6 +198,7 @@ const AddUser = () => {
                   onChange={(e) => handle(e)}
                   value={data.email}
                 />
+                <div className="text-danger">{errors.phone}</div>
                 <MDBInput
                   wrapperClass="mb-4"
                   label="Mobile No."
@@ -131,6 +210,7 @@ const AddUser = () => {
 
                 <MDBRow>
                   <MDBCol col="6">
+                  <div className="text-danger">{errors.city}</div>
                     <MDBInput
                       wrapperClass="mb-4"
                       label="City"
@@ -142,6 +222,7 @@ const AddUser = () => {
                   </MDBCol>
 
                   <MDBCol col="6">
+                  <div className="text-danger">{errors.state}</div>
                     <MDBInput
                       wrapperClass="mb-4"
                       label="State"
@@ -150,6 +231,7 @@ const AddUser = () => {
                       onChange={(e) => handle(e)}
                       value={data.state}
                     />
+                    
                   </MDBCol>
                 </MDBRow>
 
@@ -162,7 +244,7 @@ const AddUser = () => {
                   value={data.password}
                 />
                 <div style={{ float: "left" }}>
-                <MDBBtn
+                  <MDBBtn
                     className="w-10 mb-4"
                     color="success"
                     size="md"
@@ -181,7 +263,6 @@ const AddUser = () => {
                   >
                     Reset
                   </MDBBtn>
-                  
                 </div>
               </MDBCardBody>
             </MDBCard>

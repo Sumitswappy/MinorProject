@@ -40,7 +40,7 @@ export default function Navbar() {
           <MDBNavbarNav className='me-auto mb-2 lg-3'>
             <MDBDropdown group className='ms-2'>
               <MDBDropdownToggle outline rounded color='warning' className='nav-button-1'><MDBIcon fas icon="landmark" size='lg'/> Colleges</MDBDropdownToggle>
-              <MDBDropdownMenu dark>
+              <MDBDropdownMenu dark >
                 <MDBDropdownItem link>Action</MDBDropdownItem>
                 <MDBDropdownItem link>Another action</MDBDropdownItem>
                 <MDBDropdownItem link>Something else here</MDBDropdownItem>
