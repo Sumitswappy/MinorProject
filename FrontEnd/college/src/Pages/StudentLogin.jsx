@@ -30,12 +30,12 @@ function submit(e){
     while(i<res.data.length){
     if(res.data[i].email==data.email)
     {
-      console.log("User Found");
+      alert("User Found");
       navigate('/');
       break;
     }else{i++;}}
     if (i === res.data.length) {
-      console.log("User not found");
+      alert("User not found");
       i=0;
     }
   })

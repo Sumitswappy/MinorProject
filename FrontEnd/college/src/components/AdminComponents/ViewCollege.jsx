@@ -11,13 +11,13 @@ import {
   MDBBtn
 } from "mdb-react-ui-kit";
 import{NavLink} from "react-router-dom";
-import "./ViewUser.css"; // Create a new CSS file for styling
+import "./ViewCollege.css"; // Create a new CSS file for styling
 import Axios from "axios";
 
-const ViewUser = () => {
+const ViewCollege = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-  const url = "http://localhost:8080/user";
+  const url = "http://localhost:8080/College";
   const getQuery=`/get`;
   const getUrl=`${url}${getQuery}`;
 
@@ -42,15 +42,12 @@ const ViewUser = () => {
       console.error("Error fetching user data:", error);
     });
     }
-    const onHandleEdit = (user) => {
-      console.log("Editing user:", user);
-      const userId = user.id;
-      console.log("User ID:", userId);
-      navigate("/AdminHome/edit-user", { state: { id: userId } });
+
+    const onHandleEdit = (e) => {
+      const userId = e.id;
+      alert(userId);
+      navigate("/AdminHome/edit-user", { state: { id:userId } });
     };
-    
-    
-    
   return (
     <div className="view-user">
       <MDBContainer fluid>
@@ -67,31 +64,28 @@ const ViewUser = () => {
           </MDBBreadcrumbItem>
           <MDBBreadcrumbItem>
             <a href="" className="text-reset">
-              User
+              College
             </a>
           </MDBBreadcrumbItem>
           <MDBBreadcrumbItem>
             <a href="/AdminHome/add-user" className="text-reset">
-              <u>View User</u>
+              <u>View College</u>
             </a>
           </MDBBreadcrumbItem>
         </MDBBreadcrumb>
         <MDBContainer fluid className="heading">
-        <h2 className="view-heading">View User</h2>
-          <NavLink to="/AdminHome/add-user" className="add-user-button">
-            Add User
+        <h2 className="view-heading">View College</h2>
+          <NavLink to="/AdminHome/add-college" className="add-user-button">
+            Add College
           </NavLink>
         </MDBContainer>
         <table className="table-container">
           <thead>
             <tr>
               <th className="table-header">SLNo.</th>
-              <th className="table-header">First Name</th>
-              <th className="table-header">Last Name</th>
-              <th className="table-header">Email Id</th>
+              <th className="table-header">College Name</th>
               <th className="table-header">City</th>
-              <th className="table-header">State</th>
-              <th className="table-header">Mobile</th>
+              <th className="table-header">Course</th>
               <th className="table-header">Action</th>
             </tr>
           </thead>
@@ -99,12 +93,9 @@ const ViewUser = () => {
             {users.map((user,index) => (
               <tr key={user.id} className="table-row">
                 <td>{index+1}</td>
-                <td>{user.firstName}</td>
-                <td>{user.lastName}</td>
-                <td>{user.email}</td>
-                <td>{user.city}</td>
-                <td>{user.state}</td>
-                <td>{user.phone}</td>
+                <td>{user.college}</td>
+                <td>{user.cityEntity.cityName}</td>
+                <td>{user.courseEntity.courseName}</td>
                 <td>
                   <MDBDropdown className="btn-group">
                     <MDBBtn size="sm" color="success">
@@ -130,4 +121,4 @@ const ViewUser = () => {
   );
 };
 
-export default ViewUser;
+export default ViewCollege;

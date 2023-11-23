@@ -134,7 +134,7 @@ const AddUser = () => {
         <MDBContainer fluid>
           <MDBBreadcrumb className="add-breadcrumb" bold>
             <MDBBreadcrumbItem>
-              <a href="/AdminHome" className="text-reset">
+              <a href="/" className="text-reset">
                 Home
               </a>
             </MDBBreadcrumbItem>

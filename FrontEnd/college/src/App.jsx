@@ -13,11 +13,15 @@ import ViewUser from './components/AdminComponents/ViewUser';
 import CollegeList from './Pages/CollegeList';
 import EditUser from './components/AdminComponents/EditUser';
 import CollegeRegister from './Pages/CollegeRegister';
+import CollegeDetail from './Pages/CollegeDetail';
+import AddCollege from './components/AdminComponents/AddCollege';
+import ViewCollege from './components/AdminComponents/ViewCollege';
 
 export default function App() {
   return (
     <Router>
       <div className='App'>
+        
         <Routes>
         
           <Route path="/" element={<Home />} />
@@ -31,6 +35,8 @@ export default function App() {
             <Route path="add-user" element={<AddUser/>}/>
             <Route path="view-user" element={<ViewUser/>}/>
             <Route path="edit-user" element={<EditUser/>}/>
+            <Route path="add-college" element={<AddCollege/>}/>
+            <Route path="view-college" element={<ViewCollege/>}/>
             </Route>
         </Routes> 
       </div>

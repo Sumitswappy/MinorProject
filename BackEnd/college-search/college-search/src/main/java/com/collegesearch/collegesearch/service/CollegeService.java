@@ -23,4 +23,5 @@ public class CollegeService {
     public void addCollege(CollegeEntity college){
         collegeRepository.save(college);
     }
+    public void deleteCollege(int id){ collegeRepository.deleteById(id);}
 }

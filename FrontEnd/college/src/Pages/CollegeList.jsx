@@ -5,10 +5,12 @@ import {
   MDBCardTitle,
   MDBCardText,
   MDBContainer,
+  MDBRow,MDBCol
 } from "mdb-react-ui-kit";
 import { useLocation } from "react-router-dom";
 import Axios from "axios";
 import SidebarFilters from "../components/SideBarFilters";
+import Navbar from "../components/Navbar.jsx";
 import './CollegeList.css';
 const CollegeList = () => {
   const [filters, setFilters] = useState({
@@ -20,7 +22,7 @@ const CollegeList = () => {
     setFilters(newFilters);
   };
 
-  const url = "http://localhost:8080/get-filtered-college"; 
+  const url = "http://localhost:8080/College/get-filtered"; 
 
 
   const searchdata = useLocation();
@@ -42,8 +44,14 @@ const CollegeList = () => {
 
   return (
     <div style={{ display: 'flex' }}>
-      <SidebarFilters onFilterChange={handleFilterChange} />
-      <MDBContainer style={{ flex: 1, paddingLeft: '400px' }}>
+      <MDBContainer fluid>
+      <Navbar/>
+   <MDBRow>
+    <MDBCol size='2'>
+    <SidebarFilters onFilterChange={handleFilterChange} />
+    </MDBCol>
+      <MDBCol>
+      <MDBContainer style={{ flex: 1, paddingLeft: '20px', marginTop: '75px' }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "10px" }}>
           {collegeDetails.map((college, index) => (
             <MDBCard key={index} style={{ width: '75%', margin: '10px' }}>
@@ -69,7 +77,11 @@ const CollegeList = () => {
           ))}
         </div>
       </MDBContainer>
+      </MDBCol>
+      </MDBRow>
+      </MDBContainer>
     </div>
+    
   );
 };
 

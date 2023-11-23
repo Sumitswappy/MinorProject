@@ -10,4 +10,5 @@
 .sidebar{
     overflow-y: auto; /* Enable vertical scrollbar */
     max-height: 700px; /* Set the maximum height */
+    margin-top: 20px;
 }  

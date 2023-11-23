@@ -55,6 +55,26 @@ export default function AdminSidenav() {
                 </MDBNavbarLink>
               </MDBAccordionItem>
             </MDBAccordion>
+            <MDBAccordion flush>
+              <MDBAccordionItem collapseId={2} headerTitle="College">
+                <MDBNavbarLink
+                  onClick={() => handleVerticalClick('tab1')}
+                  active={verticalActive === 'tab1'}
+                  tag={NavLink}
+                  to="/AdminHome/add-college"
+                >
+                  Add College
+                </MDBNavbarLink>
+                <MDBNavbarLink
+                  onClick={() => handleVerticalClick('tab2')}
+                  active={verticalActive === 'tab2'}
+                  tag={NavLink}
+                  to="/AdminHome/view-college"
+                >
+                  View College
+                </MDBNavbarLink>
+              </MDBAccordionItem>
+            </MDBAccordion>
           </div>
         </MDBContainer>
    

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   MDBBreadcrumb,
   MDBBreadcrumbItem,
@@ -12,13 +12,12 @@ import {
   MDBCardBody,
   MDBInput,
 } from "mdb-react-ui-kit";
-import "./AddUser.css"; // Create a new CSS file for styling
+import "./AddCollege.css";
 import { NavLink } from "react-router-dom";
 
-const EditUser = () => {
+const AddCollege = () => {
   const navigate = useNavigate();
-  const url = "http://localhost:8080/user/";
-  const location = useLocation();
+  const url = "http://localhost:8080/user/add";
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -28,60 +27,107 @@ const EditUser = () => {
     email: "",
     password: "",
   });
-  const [users, setUsers] = useState([]);
-  useEffect(() => {
-    if (location.state && location.state.id) {
-      // Set data based on the location state
-      // For example, you can fetch user details based on location.state.id
-      const userId = location.state.id;
-      const getQuery=`get/${userId}`
-      Axios.get(`${url}${getQuery}`).then((res) => {
-        setUsers(res.data);
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      })
-    }
-  }, [location]);
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    city: "",
+    state: "",
+  });
 
   function handle(e) {
     const newData = { ...data };
     newData[e.target.id] = e.target.value;
     setData(newData);
   }
- console.log(data);
- const userId = users.id;
- const putQuery=`update/${userId}`;
- const fullurl=`${url}${putQuery}`;
- console.log(fullurl);
-  const submit = (e) => {
-    e.preventDefault();
-    Axios.put(fullurl, {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      city: data.city,
-      state: data.state,
-      phone: data.phone,
-      email: data.email,
-      password: data.password,
-    }).then((res) => {
-      console.log(res.data);
-      alert("Updated...");
-       navigate("/AdminHome/view-user");
-    });
-  };
 
-  if (!users.id) {
-    // Handle the case when the user ID is not available
-    return (
-      <div>
-        <p>Error: User ID not available</p>
-      </div>
-    );
+  function validateForm() {
+    let valid = true;
+    const newErrors = { ...errors };
+
+    if (!data.firstName.trim()) {
+      newErrors.firstName = "*First Name is required";
+      valid = false;
+    } else {
+      newErrors.firstName = "";
+    }
+
+    if (!data.lastName.trim()) {
+      newErrors.lastName = "*Last Name is required";
+      valid = false;
+    } else {
+      newErrors.lastName = "";
+    }
+
+    if (!data.email.trim()) {
+      newErrors.email = "*Email is required";
+      valid = false;
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email)) {
+        newErrors.email = "Invalid email format";
+        valid = false;
+      } else {
+        newErrors.email = "";
+      }
+    }
+
+    if (!data.phone.trim()) {
+      newErrors.phone = "*Phone number is required";
+      valid = false;
+    } else {
+      const phoneRegex = /^\d{10}$/;
+      if (!phoneRegex.test(data.phone)) {
+        newErrors.phone = "*Invalid phone number format";
+        valid = false;
+      } else {
+        newErrors.phone = "";
+      }
+    }
+
+    if (!data.city.trim()) {
+      newErrors.city = "*City is required";
+      valid = false;
+    } else {
+      newErrors.city = "";
+    }
+
+    if (!data.state.trim()) {
+      newErrors.state = "*State is required";
+      valid = false;
+    } else {
+      newErrors.state = "";
+    }
+
+    setErrors(newErrors);
+    return valid;
   }
 
- 
+  function submit(e) {
+    e.preventDefault();
+
+    if (validateForm()) {
+      Axios.post(url, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        city: data.city,
+        state: data.state,
+        phone: data.phone,
+        email: data.email,
+        password: data.password,
+      }).then((res) => {
+        alert("New User Added...");
+        handleRefresh();
+        navigate("/AdminHome/add-user");
+      });
+    }
+  }
+
+  function handleRefresh() {
+    window.location.reload();
+  }
+
   return (
     <div className="add-user">
       <form onSubmit={(e) => submit(e)}>
@@ -99,26 +145,27 @@ const EditUser = () => {
             </MDBBreadcrumbItem>
             <MDBBreadcrumbItem>
               <a href="" className="text-reset">
-                User
+                College
               </a>
             </MDBBreadcrumbItem>
             <MDBBreadcrumbItem>
               <a href="/AdminHome/add-user" className="text-reset">
-                <u>Edit User</u>
+                <u>Add College</u>
               </a>
             </MDBBreadcrumbItem>
           </MDBBreadcrumb>
           <MDBContainer fluid className="heading">
-        <h2 className="view-heading">Edit User</h2>
-          <NavLink to="/AdminHome/view-user" className="add-user-button">
-            View User
-          </NavLink>
-        </MDBContainer>
-          <MDBCol >
+            <h2 className="view-heading">Add User</h2>
+            <NavLink to="/AdminHome/view-college" className="add-user-button">
+              View College
+            </NavLink>
+          </MDBContainer>
+          <MDBCol>
             <MDBCard className="my-5">
               <MDBCardBody className="p-5">
                 <MDBRow>
                   <MDBCol col="6">
+                  <div className="text-danger">{errors.firstName}</div>
                     <MDBInput
                       wrapperClass="mb-4"
                       label="First name"
@@ -127,9 +174,11 @@ const EditUser = () => {
                       onChange={(e) => handle(e)}
                       value={data.firstName}
                     />
+                    
                   </MDBCol>
 
                   <MDBCol col="6">
+                  <div className="text-danger">{errors.lastName}</div>
                     <MDBInput
                       wrapperClass="mb-4"
                       label="Last name"
@@ -140,7 +189,7 @@ const EditUser = () => {
                     />
                   </MDBCol>
                 </MDBRow>
-
+                <div className="text-danger">{errors.email}</div>
                 <MDBInput
                   wrapperClass="mb-4"
                   label="Email"
@@ -149,6 +198,7 @@ const EditUser = () => {
                   onChange={(e) => handle(e)}
                   value={data.email}
                 />
+                <div className="text-danger">{errors.phone}</div>
                 <MDBInput
                   wrapperClass="mb-4"
                   label="Mobile No."
@@ -160,6 +210,7 @@ const EditUser = () => {
 
                 <MDBRow>
                   <MDBCol col="6">
+                  <div className="text-danger">{errors.city}</div>
                     <MDBInput
                       wrapperClass="mb-4"
                       label="City"
@@ -171,6 +222,7 @@ const EditUser = () => {
                   </MDBCol>
 
                   <MDBCol col="6">
+                  <div className="text-danger">{errors.state}</div>
                     <MDBInput
                       wrapperClass="mb-4"
                       label="State"
@@ -179,6 +231,7 @@ const EditUser = () => {
                       onChange={(e) => handle(e)}
                       value={data.state}
                     />
+                    
                   </MDBCol>
                 </MDBRow>
 
@@ -191,7 +244,7 @@ const EditUser = () => {
                   value={data.password}
                 />
                 <div style={{ float: "left" }}>
-                <MDBBtn
+                  <MDBBtn
                     className="w-10 mb-4"
                     color="success"
                     size="md"
@@ -210,7 +263,6 @@ const EditUser = () => {
                   >
                     Reset
                   </MDBBtn>
-                  
                 </div>
               </MDBCardBody>
             </MDBCard>
@@ -221,4 +273,4 @@ const EditUser = () => {
   );
 };
 
-export default EditUser;
+export default AddCollege;
