@@ -73,7 +73,18 @@ function Register() {
       newErrors.state = '*State is required';
       valid = false;
     }
-
+    if(!data.password.trim()){
+      newErrors.password = '*Password is required';
+      valid = false;
+    }
+    if(!data.confirmPassword.trim()){
+      newErrors.confirmPassword = '*Confirm Your Password';
+      valid = false;
+    }
+    if(data.password!=data.confirmPassword){
+      newErrors.confirmPassword = '*Password and Confirm Password not matched';
+      valid = false;
+    }
 
     setErrors(newErrors);
     return valid;
@@ -133,6 +144,7 @@ function Register() {
 
                 <MDBRow>
                   <MDBCol col='6'>
+                  {errors.firstName && <div className="text-danger">{errors.firstName}</div>}
                     <MDBInput
                       wrapperClass='mb-4'
                       label='First name'
@@ -141,10 +153,11 @@ function Register() {
                       onChange={(e) => handle(e)}
                       value={data.firstName}
                     />
-                    {errors.firstName && <div className="text-danger">{errors.firstName}</div>}
+                    
                   </MDBCol>
 
                   <MDBCol col='6'>
+                  {errors.lastName && <div className="text-danger">{errors.lastName}</div>}
                     <MDBInput
                       wrapperClass='mb-4'
                       label='Last name'
@@ -153,10 +166,10 @@ function Register() {
                       onChange={(e) => handle(e)}
                       value={data.lastName}
                     />
-                    {errors.lastName && <div className="text-danger">{errors.lastName}</div>}
+                    
                   </MDBCol>
                 </MDBRow>
-
+                {errors.email && <div className="text-danger">{errors.email}</div>}
                 <MDBInput
                   wrapperClass='mb-4'
                   label='Email'
@@ -165,8 +178,8 @@ function Register() {
                   onChange={(e) => handle(e)}
                   value={data.email}
                 />
-                {errors.email && <div className="text-danger">{errors.email}</div>}
-
+                
+                {errors.phone && <div className="text-danger">{errors.phone}</div>}
                 <MDBInput
                   wrapperClass='mb-4'
                   label='Mobile No.'
@@ -175,8 +188,8 @@ function Register() {
                   onChange={(e) => handle(e)}
                   value={data.phone}
                 />
-                {errors.phone && <div className="text-danger">{errors.phone}</div>}
-
+                
+                {errors.city && <div className="text-danger">{errors.city}</div>}
                 <MDBRow>
                   <MDBCol col='6'>
                     <MDBInput
@@ -187,7 +200,7 @@ function Register() {
                       onChange={(e) => handle(e)}
                       value={data.city}
                     />
-                    {errors.city && <div className="text-danger">{errors.city}</div>}
+                    
                   </MDBCol>
 
                   <MDBCol col='6'>
@@ -202,7 +215,7 @@ function Register() {
                     {errors.state && <div className="text-danger">{errors.state}</div>}
                   </MDBCol>
                 </MDBRow>
-
+                {errors.password && <div className="text-danger">{errors.password}</div>}
                 <MDBInput
                   wrapperClass='mb-4'
                   label='Password'
@@ -211,8 +224,8 @@ function Register() {
                   onChange={(e) => handle(e)}
                   value={data.password}
                 />
-                {errors.password && <div className="text-danger">{errors.password}</div>}
-
+               
+               {errors.confirmPassword && <div className="text-danger">{errors.confirmPassword}</div>}
                 <MDBInput
                   wrapperClass='mb-4'
                   label='Confirm Password'
@@ -221,7 +234,7 @@ function Register() {
                   onChange={(e) => handle(e)}
                   value={data.confirmPassword}
                 />
-                {errors.confirmPassword && <div className="text-danger">{errors.confirmPassword}</div>}
+                
 
                 <MDBBtn className='w-100 mb-4' color='primary' size='md' type='submit' value="Submit">Register Now</MDBBtn>
 
