@@ -59,7 +59,12 @@ function Register() {
       valid = false;
     }
 
-    if (!data.phone.trim() || !/^\d{10}$/.test(data.phone.trim())) {
+    if (!data.phone.trim()) {
+      newErrors.phone = '*Phone number is required';
+      valid = false;
+    }
+
+    if (!/^\d{10}$/.test(data.phone.trim())) {
       newErrors.phone = '*Phone number should be 10 digits';
       valid = false;
     }
@@ -73,14 +78,23 @@ function Register() {
       newErrors.state = '*State is required';
       valid = false;
     }
-    if(!data.password.trim()){
+
+    if (!data.password.trim()) {
       newErrors.password = '*Password is required';
       valid = false;
     }
+    
+    if (!/^.{8,}$/.test(data.password.trim())) {
+      newErrors.password = '*Password must be at least 8 characters';
+      valid = false;
+    }
+    
+
     if(!data.confirmPassword.trim()){
       newErrors.confirmPassword = '*Confirm Your Password';
       valid = false;
     }
+
     if(data.password!=data.confirmPassword){
       newErrors.confirmPassword = '*Password and Confirm Password not matched';
       valid = false;
@@ -189,9 +203,9 @@ function Register() {
                   value={data.phone}
                 />
                 
-                {errors.city && <div className="text-danger">{errors.city}</div>}
                 <MDBRow>
                   <MDBCol col='6'>
+                  {errors.city && <div className="text-danger">{errors.city}</div>}
                     <MDBInput
                       wrapperClass='mb-4'
                       label='City'
@@ -204,6 +218,7 @@ function Register() {
                   </MDBCol>
 
                   <MDBCol col='6'>
+                  {errors.state && <div className="text-danger">{errors.state}</div>}
                     <MDBInput
                       wrapperClass='mb-4'
                       label='State'
@@ -212,7 +227,7 @@ function Register() {
                       onChange={(e) => handle(e)}
                       value={data.state}
                     />
-                    {errors.state && <div className="text-danger">{errors.state}</div>}
+                    
                   </MDBCol>
                 </MDBRow>
                 {errors.password && <div className="text-danger">{errors.password}</div>}
