@@ -52,7 +52,6 @@
 }
 
 .table-row {
- 
   border-bottom: 1px solid #ddd;
 }
 .table-row td{
@@ -61,6 +60,7 @@
 }
 .add-user-button{
   color: rgb(0, 106, 255);
+  font-weight: bold;
   padding-left: 15px;
   padding-top: 3px;
   padding-bottom: 3px;

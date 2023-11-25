@@ -24,11 +24,15 @@ export default function CustomSearch() {
     // Perform any additional search/filter logic if needed
     setData({ ...data, cityName: e.target.value });
   };
-  const handleButtonClick=(e)=>{
-    //console.log(e);
-    navigate("/Colleges", { state: { cityName: e.cityName, courseName: e.courseName} })
-    // navigate('/Colleges/${data.cityName}/${data.courseName}');
-  }
+  const handleButtonClick = () => {
+    // Check if both cityName and courseName are present before navigating
+    if (data.cityName && data.courseName) {
+      navigate("/Colleges", { state: { cityName: data.cityName, courseName: data.courseName } });
+    } else {
+      // Handle the case where either cityName or courseName is not selected
+      alert("Please select both city and course to perform the search.");
+    }
+  };
 
   
   const allLocations = [
@@ -78,7 +82,7 @@ export default function CustomSearch() {
             onChange={handleLocationSearch}
           />
         </div>
-        <select className="custom-select" onChange={handleLocationChange} value={data.cityName}>
+        <select className="custom-select" onChange={handleLocationChange} value={data.cityName} required>
         <option value="">Select City</option>
         {filteredLocations.map((location, index) => (
             <option key={index} value={location}>
@@ -87,7 +91,7 @@ export default function CustomSearch() {
           ))}
         </select>
 
-        <select className="custom-select" onChange={handleCourseChange} value={data.courseName}>
+        <select className="custom-select" onChange={handleCourseChange} value={data.courseName} required>
           <option value="">Select Course</option>
           {courses.map((course, index) => (
             <option key={index} value={course}>

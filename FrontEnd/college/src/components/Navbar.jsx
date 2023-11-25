@@ -23,8 +23,12 @@ export default function Navbar() {
   const navigate=useNavigate();
   const handleLogOut = () => {
     sessionStorage.removeItem("email");
+handleRefresh();
     navigate("/");
   };
+  function handleRefresh() {
+    window.location.reload();
+  }
 
   useEffect(()=>{
     if(sessionStorage.getItem("email")!=null){
@@ -99,9 +103,10 @@ export default function Navbar() {
               <MDBDropdownItem link href='/AdminLogin'>Admin Login</MDBDropdownItem>
             </MDBDropdownMenu>
           </MDBDropdown>
-          <MDBDropdown id="logout-navbar" className="logout-dropdown">
+          <MDBDropdown id="logout-navbar"  group className="logout-dropdown">
       <MDBDropdownToggle outline rounded color='light' className='nav-button-3'>Hi, {sessionStorage.getItem("email")}</MDBDropdownToggle>
-      <MDBDropdownMenu>
+      <MDBDropdownMenu dark>
+        <MDBDropdownItem ></MDBDropdownItem>
         <MDBDropdownItem link tag='a' onClick={handleLogOut}>Log out</MDBDropdownItem>
       </MDBDropdownMenu>
     </MDBDropdown>

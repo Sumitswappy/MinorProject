@@ -31,6 +31,7 @@ public class UserService {
     public void updateUser(int id,UserEntity user){
         if(userRepository.existsById(id)){
             user.setId(id);
+            user.setPassword(securityManager.encryptPassword(user.getPassword()));
             userRepository.save(user);
         }
     }

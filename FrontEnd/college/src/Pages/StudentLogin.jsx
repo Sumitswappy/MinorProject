@@ -40,24 +40,7 @@ function submit(e){
     }
   })
 }
-// function submit(e){
-//   e.preventDefault();
-//   var i=0;
-//   Axios.get(url)
-//   .then(res=>{
-//     while(i<res.data.length){
-//     if(res.data[i].email==data.email)
-//     {
-//       alert("User Found");
-//       navigate('/');
-//       break;
-//     }else{i++;}}
-//     if (i === res.data.length) {
-//       alert("User not found");
-//       i=0;
-//     }
-//   })
-// }
+
   return (
     <>
     <form onSubmit={(e)=>submit(e)} >

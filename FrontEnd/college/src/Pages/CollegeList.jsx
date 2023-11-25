@@ -47,9 +47,11 @@ const CollegeList = () => {
     const collegeId = college.id;
     console.log("College ID:", collegeId);
     navigate("/CollegesProfile", { state: { id: collegeId } });
+    
     }
     else{
       navigate("/login");
+      alert("Please Log In...");
     }
   };
   return (
