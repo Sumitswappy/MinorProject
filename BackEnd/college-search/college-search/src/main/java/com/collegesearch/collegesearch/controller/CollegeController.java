@@ -28,6 +28,14 @@ public class CollegeController {
    {
        return collegeService.filterCollege(cityName,courseName);
    }
+   @GetMapping("get/{id}")
+   public CollegeEntity getCollegeById(@PathVariable int id){
+       return collegeService.getCollegeById(id)
+               .orElseThrow(() -> {
+                   throw new RuntimeException("College not found");
+               });
+
+   }
    @DeleteMapping("delete/{id}")
    public void deleteCollege(@PathVariable int id){collegeService.deleteCollege(id);}
 }

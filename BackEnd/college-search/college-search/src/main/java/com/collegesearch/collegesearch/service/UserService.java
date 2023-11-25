@@ -1,5 +1,6 @@
 package com.collegesearch.collegesearch.service;
 
+import com.collegesearch.collegesearch.Util.SecurityManager;
 import com.collegesearch.collegesearch.entity.UserEntity;
 import com.collegesearch.collegesearch.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,9 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService {
     private UserRepository userRepository;
+    private SecurityManager securityManager;
     public void addUser(UserEntity user){
+        user.setPassword(securityManager.encryptPassword(user.getPassword()));
         userRepository.save(user);
     }
     public List<UserEntity> getUser(){

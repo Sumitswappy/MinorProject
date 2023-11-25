@@ -16,9 +16,28 @@ import {
   MDBDropdownItem
 } from 'mdb-react-ui-kit';
 import './Navbar.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
+  const navigate=useNavigate();
+  const handleLogOut = () => {
+    sessionStorage.removeItem("email");
+    navigate("/");
+  };
+
+  useEffect(()=>{
+    if(sessionStorage.getItem("email")!=null){
+      document.getElementById("login-navbar").style.display="none";
+      document.getElementById("logout-navbar").style.display="block";
+    }
+    else{
+      document.getElementById("login-navbar").style.display="block";
+      document.getElementById("logout-navbar").style.display="none";
+    }
+   
+  })
+  
   const [openNavColor, setOpenNavColor] = useState(false);
 
   return (
@@ -71,7 +90,7 @@ export default function Navbar() {
             </MDBNavbarItem>
           </MDBNavbarNav>
 
-          <MDBDropdown group className="login-register-dropdown">
+          <MDBDropdown id="login-navbar" group className="login-register-dropdown">
             <MDBDropdownToggle outline rounded color='danger' className='nav-button-2'><MDBIcon fas icon="user-graduate" size='lg' /> Login/SignUp</MDBDropdownToggle>
             <MDBDropdownMenu dark>
               <MDBDropdownItem link href='/Login'>Student Login</MDBDropdownItem>
@@ -80,7 +99,12 @@ export default function Navbar() {
               <MDBDropdownItem link href='/AdminLogin'>Admin Login</MDBDropdownItem>
             </MDBDropdownMenu>
           </MDBDropdown>
-
+          <MDBDropdown id="logout-navbar" className="logout-dropdown">
+      <MDBDropdownToggle outline rounded color='light' className='nav-button-3'>Hi, {sessionStorage.getItem("email")}</MDBDropdownToggle>
+      <MDBDropdownMenu>
+        <MDBDropdownItem link tag='a' onClick={handleLogOut}>Log out</MDBDropdownItem>
+      </MDBDropdownMenu>
+    </MDBDropdown>
           <form className='d-flex input-group w-auto'>
             <input type='search' className='form-control' style={{ width: '100%' }} placeholder='Search here' aria-label='Search' />
             <MDBBtn outline color='success' className='nav-search mt-0 p-2'>

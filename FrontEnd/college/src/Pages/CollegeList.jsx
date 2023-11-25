@@ -7,7 +7,7 @@ import {
   MDBContainer,
   MDBRow,MDBCol
 } from "mdb-react-ui-kit";
-import { useLocation } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import Axios from "axios";
 import SidebarFilters from "../components/SideBarFilters";
 import Navbar from "../components/Navbar.jsx";
@@ -17,7 +17,7 @@ const CollegeList = () => {
     cityName: '',
     courseName: '',
   });
-
+  const navigate = useNavigate();
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
   };
@@ -41,7 +41,17 @@ const CollegeList = () => {
     };
     college();
   }, [searchdata]);
-
+  const onHandle = (college) => {
+    if(sessionStorage.getItem("email")!=null){
+    console.log("Editing user:", college);
+    const collegeId = college.id;
+    console.log("College ID:", collegeId);
+    navigate("/CollegesProfile", { state: { id: collegeId } });
+    }
+    else{
+      navigate("/login");
+    }
+  };
   return (
     <div style={{ display: 'flex' }}>
       <MDBContainer fluid>
@@ -69,7 +79,7 @@ const CollegeList = () => {
    {college.cityEntity.cityName} <br/>
    {college.courseEntity.courseName}
 </MDBCardText>
-
+        <button className="btn btn-primary" onClick={()=>onHandle(college)}>View Details</button>
                   </div>
                 </div>
               </MDBCardBody>

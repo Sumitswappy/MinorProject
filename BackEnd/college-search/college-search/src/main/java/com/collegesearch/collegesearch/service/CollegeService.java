@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class CollegeService {
@@ -19,6 +21,9 @@ public class CollegeService {
 
     public List<CollegeEntity> filterCollege(String cityName, String courseName){
         return collegeRepository.findByCityEntityCityNameAndCourseEntityCourseName(cityName,courseName);
+    }
+    public Optional<CollegeEntity> getCollegeById(int id) {
+        return collegeRepository.findById(id);
     }
     public void addCollege(CollegeEntity college){
         collegeRepository.save(college);

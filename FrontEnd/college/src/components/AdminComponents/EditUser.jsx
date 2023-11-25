@@ -34,7 +34,7 @@ const EditUser = () => {
       // Set data based on the location state
       // For example, you can fetch user details based on location.state.id
       const userId = location.state.id;
-      const getQuery=`get/${userId}`
+      const getQuery=`get/${userId}`;
       Axios.get(`${url}${getQuery}`).then((res) => {
         setUsers(res.data);
         setData(res.data);

@@ -30,6 +30,7 @@ export default function App() {
           <Route path="/College-register" element={<CollegeRegister/>}/>
           <Route path="/AdminLogin" element={<AdminLogin />} />
           <Route path="/Colleges" element={<CollegeList/>}/>
+          <Route path="/CollegesProfile" element={<CollegeDetail/>} />
           <Route path="/AdminHome" element={<AdminHome />} >
         <Route path="dashboard" element={<AdminDashboard/>}/>
             <Route path="add-user" element={<AddUser/>}/>

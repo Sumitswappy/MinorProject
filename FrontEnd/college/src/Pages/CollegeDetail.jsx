@@ -1,39 +1,49 @@
-// Import necessary React modules
-import React, { useState } from 'react';
 
-// Sample data (replace this with your actual data)
-const collegeData = {
-  name: 'Sample College',
-  location: 'Sample City, State',
-  affiliation: 'Sample University',
-  certification: 'Sample Certification',
-  placements: [
-    { year: 2022, percentage: 90 },
-    // Add more years as needed
-  ],
-  reviews: [
-    { id: 1, text: 'Great college!', rating: 5 },
-    // Add more reviews as needed
-  ],
-};
-
-// Define the CollegeDetail component
+import React, { useEffect, useState } from "react";
+import Navbar from '../components/Navbar';
+import { useParams } from "react-router-dom";
+import Axios from "axios";
+import { MDBContainer, MDBRow, MDBCol, MDBTabsItem, MDBTabsLink, MDBTabsContent,MDBTabsPane, MDBCard, MDBCardBody, MDBTabs } from "mdb-react-ui-kit";
+import {  useLocation } from "react-router-dom";
+import "./CollegeDetail.css";
 const CollegeDetail = () => {
-  // State to manage the active tab
+  const { id } = useParams();
+  const [collegeData, setCollegeData] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
+  const url = "http://localhost:8080/College/"; 
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state && location.state.id) {
+      // Set data based on the location state
+      // For example, you can fetch user details based on location.state.id
+      const collegeId = location.state.id;
+      const getQuery=`get/${collegeId}`;
+      Axios.get(`${url}${getQuery}`).then((res) => {
+        setCollegeData(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      })
+    }
+  }, [location]);
 
-  // Function to render the content based on the active tab
+  if (!collegeData) {
+    return <div>Loading...</div>;
+  }
+console.log(collegeData.cityEntity.cityName);
+  // State to manage the active tab
+
   const renderContent = () => {
     switch (activeTab) {
-      case 'overview':
+      case "overview":
         return (
           <div>
             <h2>Overview</h2>
             <p>
-              <strong>Name:</strong> {collegeData.name}
+              <strong>Name:</strong> {collegeData.college}
             </p>
             <p>
-              <strong>Location:</strong> {collegeData.location}
+              <strong>Location:</strong> {collegeData.cityEntity.cityName}
             </p>
             <p>
               <strong>Affiliation:</strong> {collegeData.affiliation}
@@ -41,10 +51,9 @@ const CollegeDetail = () => {
             <p>
               <strong>Certification:</strong> {collegeData.certification}
             </p>
-            <img src="/path/to/college-picture.jpg" alt="College" />
           </div>
         );
-      case 'placements':
+      case "placements":
         return (
           <div>
             <h2>Placements</h2>
@@ -57,7 +66,7 @@ const CollegeDetail = () => {
             </ul>
           </div>
         );
-      case 'reviews':
+      case "reviews":
         return (
           <div>
             <h2>Student Reviews</h2>
@@ -78,23 +87,55 @@ const CollegeDetail = () => {
 
   return (
     <div>
-      <h1>{collegeData.name}</h1>
+     <Navbar/>
+    <MDBContainer fluid>
+      <MDBRow>
+        <MDBCol>
+          <MDBCard style={{ flex: 1, paddingLeft: '20px', marginTop: '75px' }}>
+            <MDBCardBody className="college-detail-card">
+              <h1>{collegeData.college}</h1>
 
-      {/* Navigation tabs */}
-      <div>
-        <button onClick={() => setActiveTab('overview')}>Overview</button>
-        <button onClick={() => setActiveTab('placements')}>Placements</button>
-        <button onClick={() => setActiveTab('reviews')}>Reviews</button>
-      </div>
+              {/* Navigation buttons */}
+              <MDBTabs pills justify className='mb-3'>
+                <MDBTabsItem>
+                  <MDBTabsLink
+                    active={activeTab === "overview"}
+                    onClick={() => setActiveTab("overview")}
+                  >
+                    Overview
+                  </MDBTabsLink>
+                </MDBTabsItem>
+                <MDBTabsItem>
+                  <MDBTabsLink
+                    active={activeTab === "placements"}
+                    onClick={() => setActiveTab("placements")}
+                  >
+                    Placements
+                  </MDBTabsLink>
+                </MDBTabsItem>
+                <MDBTabsItem>
+                  <MDBTabsLink
+                    active={activeTab === "reviews"}
+                    onClick={() => setActiveTab("reviews")}
+                  >
+                    Reviews
+                  </MDBTabsLink>
+                </MDBTabsItem>
+              </MDBTabs>
 
-      {/* Render the content based on the active tab */}
-      {renderContent()}
+              {/* Render the content based on the active tab */}
+              {renderContent()}
 
-      {/* Apply Now and Download Brochure buttons */}
-      <div>
-        <button>Apply Now</button>
-        <button>Download Brochure</button>
-      </div>
+              {/* Apply Now and Download Brochure buttons */}
+              <div className="action-buttons">
+                <button className="btn btn-primary">Apply Now</button>
+                <button className="btn btn-secondary">Download Brochure</button>
+              </div>
+            </MDBCardBody>
+          </MDBCard>
+        </MDBCol>
+      </MDBRow>
+    </MDBContainer>
     </div>
   );
 };

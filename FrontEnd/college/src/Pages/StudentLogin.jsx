@@ -13,9 +13,10 @@ import './StudentLogin.css';
 
 function Login() {
   const navigate = useNavigate();
-  const url="http://localhost:8080/user/get";
+  const url="http://localhost:8080/login";
 const[data,setData]=useState({
-  email:"",
+  userName:"",
+  password:"",
 })
 function handle(e){
   const newData={...data}
@@ -24,22 +25,39 @@ function handle(e){
 }
 function submit(e){
   e.preventDefault();
-  var i=0;
-  Axios.get(url)
-  .then(res=>{
-    while(i<res.data.length){
-    if(res.data[i].email==data.email)
-    {
-      alert("User Found");
-      navigate('/');
-      break;
-    }else{i++;}}
-    if (i === res.data.length) {
-      alert("User not found");
-      i=0;
+  Axios.post(url,{
+    userName:data.userName,
+    password:data.password
+  }).then((res)=>{
+    if(res.data==true){
+      sessionStorage.setItem("email",data.userName);
+      console.log(res.data);
+      navigate("/");
+      alert("Login Successful...");
+    }
+    else{
+      alert("User Not Found, Register first...");
     }
   })
 }
+// function submit(e){
+//   e.preventDefault();
+//   var i=0;
+//   Axios.get(url)
+//   .then(res=>{
+//     while(i<res.data.length){
+//     if(res.data[i].email==data.email)
+//     {
+//       alert("User Found");
+//       navigate('/');
+//       break;
+//     }else{i++;}}
+//     if (i === res.data.length) {
+//       alert("User not found");
+//       i=0;
+//     }
+//   })
+// }
   return (
     <>
     <form onSubmit={(e)=>submit(e)} >
@@ -53,8 +71,8 @@ function submit(e){
 
             <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4'>
               <h3 className="fw-normal mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Log in</h3>
-              <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Email address' id='email' type='email' size="lg" onChange={(e)=>handle(e)} value={data.email} />
-              <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Password' id='password' type='password' size="lg" />
+              <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Email address' id='userName' type='email' size="lg" onChange={(e)=>handle(e)} value={data.userName} />
+              <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Password' id='password' type='password' size="lg" onChange={(e)=>handle(e)} value={data.password} />
 
               <MDBBtn className="mb-4 px-5 mx-5 w-100" color='primary' size='lg'>Login</MDBBtn>
               <p className="small mb-5 pb-lg-3 ms-5"><a className="text-muted" href="#!">Forgot password?</a></p>

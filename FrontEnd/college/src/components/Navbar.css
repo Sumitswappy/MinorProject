@@ -16,6 +16,9 @@
 .login-register-dropdown {
   margin-right: 15px;
 }
+.logout-dropdown{
+  margin-right: 15px;
+}
 
 .dropdowm {
   margin-right: 15px;
@@ -29,6 +32,10 @@
 .nav-button-2:hover {
   background-color: rgb(207, 57, 77);
   color: rgb(255, 255, 255);
+}
+.nav-button-3:hover {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 .nav-search:hover {
   background-color: rgb(41, 150, 49);
