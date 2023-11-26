@@ -16,4 +16,6 @@ public class CollegeEntity {
     String state;
     @ManyToOne
     CityEntity cityEntity;
+    @ManyToOne
+    PlacementEntity placementEntity;
 }

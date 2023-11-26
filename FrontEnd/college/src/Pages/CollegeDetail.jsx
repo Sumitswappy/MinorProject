@@ -66,20 +66,20 @@ console.log(collegeData.cityEntity.cityName);
             </ul>
           </div>
         );
-      case "reviews":
-        return (
-          <div>
-            <h2>Student Reviews</h2>
-            <ul>
-              {collegeData.reviews.map((review) => (
-                <li key={review.id}>
-                  <p>{review.text}</p>
-                  <p>Rating: {review.rating}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
+      // case "reviews":
+      //   return (
+      //     <div>
+      //       <h2>Student Reviews</h2>
+      //       <ul>
+      //         {collegeData.reviews.map((review) => (
+      //           <li key={review.id}>
+      //             <p>{review.text}</p>
+      //             <p>Rating: {review.rating}</p>
+      //           </li>
+      //         ))}
+      //       </ul>
+      //     </div>
+      //   );
       default:
         return null;
     }
@@ -113,14 +113,14 @@ console.log(collegeData.cityEntity.cityName);
                     Placements
                   </MDBTabsLink>
                 </MDBTabsItem>
-                <MDBTabsItem>
+                {/* <MDBTabsItem>
                   <MDBTabsLink
                     active={activeTab === "reviews"}
                     onClick={() => setActiveTab("reviews")}
                   >
                     Reviews
                   </MDBTabsLink>
-                </MDBTabsItem>
+                </MDBTabsItem> */}
               </MDBTabs>
 
               {/* Render the content based on the active tab */}

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import {
   MDBBtn,
   MDBContainer,
@@ -11,9 +13,38 @@ import {
   MDBIcon
 }
 from 'mdb-react-ui-kit';
+function AdminLogin() {
+  const navigate = useNavigate();
+  const url="http://localhost:8080/login";
+const[data,setData]=useState({
+  userName:"",
+  password:"",
+})
+function handle(e){
+  const newData={...data}
+  newData[e.target.id]=e.target.value
+  setData(newData)
+}
+function submit(e){
+  e.preventDefault();
+  Axios.post(url,{
+    userName:data.userName,
+    password:data.password
+  }).then((res)=>{
+    if(res.data==true){
+      sessionStorage.setItem("email",data.userName);
+      console.log(res.data);
+      navigate("/");
+      alert("Login Successful...");
+    }
+    else{
+      alert("User Not Found, Register first...");
+    }
+  })
+}
 
-export default function AdminLogin() {
   return (
+    <form onSubmit={(e)=>submit(e)}>
     <MDBContainer fluid>
 
       <div className="p-5 bg-image" style={{backgroundImage: 'url(https://mdbootstrap.com/img/new/textures/full/171.jpg)', height: '300px'}}></div>
@@ -21,51 +52,24 @@ export default function AdminLogin() {
       <MDBCard className='mx-5 mb-5 p-5 shadow-5' style={{marginTop: '-100px', background: 'hsla(0, 0%, 100%, 0.8)', backdropFilter: 'blur(30px)'}}>
         <MDBCardBody className='p-5 text-center'>
 
-          <h2 className="fw-bold mb-5">Sign up now</h2>
+          <h2 className="fw-bold mb-5">Log In</h2>
 
           <MDBRow>
             <MDBCol col='6'>
-              <MDBInput wrapperClass='mb-4' label='First name' id='form1' type='text'/>
+            <MDBInput wrapperClass='mb-4' label='Username' id='userName' type='email' onChange={(e)=>handle(e)} value={data.userName} />
             </MDBCol>
 
             <MDBCol col='6'>
-              <MDBInput wrapperClass='mb-4' label='Last name' id='form1' type='text'/>
+            <MDBInput wrapperClass='mb-4' label='Password' id='password' type='password' onChange={(e)=>handle(e)} value={data.password} />
             </MDBCol>
           </MDBRow>
-
-          <MDBInput wrapperClass='mb-4' label='Email' id='form1' type='email'/>
-          <MDBInput wrapperClass='mb-4' label='Password' id='form1' type='password'/>
-
-          
-
-          <MDBBtn className='w-100 mb-4' size='md' href='/AdminHome/dashboard'>sign up</MDBBtn>
-
-          <div className="text-center">
-
-            <p>or sign up with:</p>
-
-            <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#1266f1' }}>
-              <MDBIcon fab icon='facebook-f' size="sm"/>
-            </MDBBtn>
-
-            <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#1266f1' }}>
-              <MDBIcon fab icon='twitter' size="sm"/>
-            </MDBBtn>
-
-            <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#1266f1' }}>
-              <MDBIcon fab icon='google' size="sm"/>
-            </MDBBtn>
-
-            <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#1266f1' }}>
-              <MDBIcon fab icon='github' size="sm"/>
-            </MDBBtn>
-
-          </div>
+          <MDBBtn className='w-100 mb-4' size='md' href='/AdminHome/dashboard'>Log In</MDBBtn>
 
         </MDBCardBody>
       </MDBCard>
 
-    </MDBContainer>
+    </MDBContainer></form>
   );
 }
 
+export default AdminLogin;

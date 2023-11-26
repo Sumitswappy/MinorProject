@@ -1,5 +1,5 @@
 // AdminSidenav.js
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import {
   MDBAccordion,
   MDBAccordionItem,
@@ -7,19 +7,38 @@ import {
   MDBNavbarLink,
   MDBContainer,
   MDBIcon,
+  MDBBtn,
 } from 'mdb-react-ui-kit';
 import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './AdminSidenav.css'; // Uncomment this line to import the CSS file
 
 export default function AdminSidenav() {
   const [verticalActive, setVerticalActive] = useState('tab1');
-
+  const navigate=useNavigate();
   const handleVerticalClick = (value) => {
     if (value === verticalActive) {
       return;
     }
     setVerticalActive(value);
   };
+  const handleLogOut = () => {
+handleRefresh();
+    navigate("/");
+  };
+  function handleRefresh() {
+    window.location.reload();
+  }
+  useEffect(()=>{
+    console.log(sessionStorage.getItem("email"));
+    if(sessionStorage.getItem("email")!=null){
+      document.getElementById("logout-navbar").style.display="block";
+    }
+    else{
+      document.getElementById("logout-navbar").style.display="none";
+    }
+   
+  })
 
   return (
     
@@ -75,6 +94,7 @@ export default function AdminSidenav() {
                 </MDBNavbarLink>
               </MDBAccordionItem>
             </MDBAccordion>
+            <MDBBtn id='logout-navbar' color='primary' outline rounded onClick={handleLogOut}> Log Out</MDBBtn>
           </div>
         </MDBContainer>
    
