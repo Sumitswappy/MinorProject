@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import {
   MDBBtn,
   MDBContainer,
@@ -6,20 +8,42 @@ import {
   MDBCardBody,
   MDBRow,
   MDBCol,
+  MDBIcon,
   MDBInput,
 } from 'mdb-react-ui-kit';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import './CollegeRegister.css';
 
 const CollegeRegister = () => {
   const [collegeData, setCollegeData] = useState({
-    collegeName: '',
-    contactPerson: '',
-    phoneNumber: '',
-    state: '',
-    city: '',
-    email: '',
-    password: '',
+    name: '',
+  contactName: '',
+  phoneNumber: '',
+  state: '',
+  city: '',
+  email: '',
+  password: '',
+  affiliation: '',
+  certification: '',
+  establishmentYear: '',
+  collegeCourses: [{ id: '' }],
   });
+  const [course, setCourse] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await Axios.get('http://localhost:8080/courses/get');
+        setCourse(response.data.map(course => course.course));
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   const [errors, setErrors] = useState({});
 
@@ -30,46 +54,66 @@ const CollegeRegister = () => {
     'Andaman and Nicobar Islands', 'Chandigarh', 'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Lakshadweep', 'Puducherry'
   ];
 
+
   const validateForm = () => {
     let valid = true;
     const newErrors = {};
-
-    // Add your validation logic here
-    if (!collegeData.collegeName.trim()) {
-      newErrors.collegeName = '*College name is required';
+  
+    if (!collegeData.name.trim()) {
+      newErrors.name = '*College name is required';
       valid = false;
     }
-
-    if (!collegeData.contactPerson.trim()) {
-      newErrors.contactPerson = '*Contact person name is required';
+  
+    if (!collegeData.contactName.trim()) {
+      newErrors.contactName = '*Contact person name is required';
       valid = false;
     }
-
+  
     if (!collegeData.phoneNumber.trim() || !/^\d{10}$/.test(collegeData.phoneNumber.trim())) {
       newErrors.phoneNumber = '*Valid 10-digit phone number is required';
       valid = false;
     }
-
+  
     if (!collegeData.state.trim()) {
       newErrors.state = '*State is required';
       valid = false;
     }
-
+  
     if (!collegeData.city.trim()) {
       newErrors.city = '*City is required';
       valid = false;
     }
-
+  
     if (!collegeData.email.trim() || !/\S+@\S+\.\S+/.test(collegeData.email.trim())) {
       newErrors.email = '*Valid email is required';
       valid = false;
     }
-
+  
     if (!collegeData.password.trim()) {
       newErrors.password = '*Password is required';
       valid = false;
     }
-
+  
+    if (!collegeData.affiliation.trim()) {
+      newErrors.affiliation = '*Affiliation is required';
+      valid = false;
+    }
+  
+    if (!collegeData.certification.trim()) {
+      newErrors.certification = '*Certification is required';
+      valid = false;
+    }
+  
+    if (!collegeData.establishmentYear.trim() || !/^\d{4}$/.test(collegeData.establishmentYear.trim())) {
+      newErrors.establishmentYear = '*Valid 4-digit year is required';
+      valid = false;
+    }
+  
+    if (!collegeData.collegeCourses) {
+      newErrors.course = '*Course is required';
+      valid = false;
+    }
+  
     setErrors(newErrors);
     return valid;
   };
@@ -78,10 +122,19 @@ const CollegeRegister = () => {
     e.preventDefault();
 
     if (validateForm()) {
-      // Your form submission logic here
-      console.log('Form submitted:', collegeData);
+      Axios.post(`http://localhost:8080/College/add`, collegeData)
+        .then((res) => {
+          console.log(res.data);
+          navigate('/');
+        })
+        .catch((error) => {
+          console.error('Error submitting form:', error);
+        });
     }
+
+    console.log('Form submitted:', collegeData);
   };
+ 
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -91,30 +144,35 @@ const CollegeRegister = () => {
     }));
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [id]: '', // Clear the error message when the user starts typing
+      [id]: '',
     }));
+    console.log(collegeData);
   };
 
   return (
     <div className='form-body'>
+      <div className='d-flex flex-row ps-5 pt-5' style={{ justifyContent: "center" }}>
+        <MDBIcon fas icon="book-open" size='3x' style={{ color: '#709085' }} />
+        <span className="h1 fw-bold mb-0">Unifind.in</span>
+      </div>
       <MDBContainer fluid>
         <MDBRow className='justify-content-center align-items-center p-5'>
           <MDBCard>
             <MDBCardBody className='px-4'>
               <h3 className="fw-bold mb-4 pb-2 pb-md-0 mb-md-5">College Registration Form</h3>
-              <form onSubmit={handleSubmit}>
+              <Form onSubmit={handleSubmit}>
                 <MDBRow>
                   <MDBCol md=''>
                     <MDBInput
                       wrapperClass='mb-4'
                       label='Name of College'
                       size='lg'
-                      id='collegeName'
+                      id='name'
                       type='text'
                       onChange={handleChange}
-                      value={collegeData.collegeName}
+                      value={collegeData.name}
                     />
-                    {errors.collegeName && <div className="text-danger">{errors.collegeName}</div>}
+                    {errors.name && <div className="text-danger">{errors.name}</div>}
                   </MDBCol>
                 </MDBRow>
 
@@ -124,12 +182,12 @@ const CollegeRegister = () => {
                       wrapperClass='mb-4'
                       label='Name of the Contact Person'
                       size='lg'
-                      id='contactPerson'
+                      id='contactName'
                       type='text'
                       onChange={handleChange}
-                      value={collegeData.contactPerson}
+                      value={collegeData.contactName}
                     />
-                    {errors.contactPerson && <div className="text-danger">{errors.contactPerson}</div>}
+                    {errors.contactName && <div className="text-danger">{errors.contactName}</div>}
                   </MDBCol>
 
                   <MDBCol md='6'>
@@ -205,9 +263,54 @@ const CollegeRegister = () => {
                     {errors.password && <div className="text-danger">{errors.password}</div>}
                   </MDBCol>
                 </MDBRow>
-
+                <MDBRow>
+                  <MDBCol md=''>
+                    <MDBInput
+                      wrapperClass='mb-4'
+                      label='Affiliation'
+                      size='lg'
+                      id='affiliation'
+                      type='text'
+                      onChange={handleChange}
+                      value={collegeData.affiliation}
+                    />
+                    {errors.affiliation && <div className="text-danger">{errors.affiliation}</div>}
+                  </MDBCol>
+                </MDBRow>
+                <MDBRow>
+                  <MDBCol md=''>
+                    <MDBInput
+                      wrapperClass='mb-4'
+                      label='Certification'
+                      size='lg'
+                      id='certification'
+                      type='text'
+                      onChange={handleChange}
+                      value={collegeData.certification}
+                    />
+                    {errors.certification && <div className="text-danger">{errors.certification}</div>}
+                  </MDBCol>
+                </MDBRow>
+                <MDBRow>
+                  <MDBCol md='6'>
+                    <MDBInput
+                      wrapperClass='mb-4'
+                      label='Year of Establishment'
+                      size='lg'
+                      id='establishmentYear'
+                      type='text'
+                      onChange={handleChange}
+                      value={collegeData.establishmentYear}
+                    />
+                    {errors.establishmentYear && <div className="text-danger">{errors.establishmentYear}</div>}
+                  </MDBCol>
+                  <MDBCol md='6'>
+                  
+                    {errors.collegeCourses && <div className="text-danger">{errors.collegeCourses}</div>}
+                  </MDBCol>
+                </MDBRow>
                 <MDBBtn className='mb-4' size='lg' type="submit">Submit</MDBBtn>
-              </form>
+              </Form>
             </MDBCardBody>
           </MDBCard>
         </MDBRow>

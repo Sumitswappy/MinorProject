@@ -30,7 +30,7 @@ const CollegeDetail = () => {
   if (!collegeData) {
     return <div>Loading...</div>;
   }
-console.log(collegeData.cityEntity.cityName);
+console.log(collegeData.city);
   // State to manage the active tab
 
   const renderContent = () => {
@@ -38,12 +38,13 @@ console.log(collegeData.cityEntity.cityName);
       case "overview":
         return (
           <div>
+            
             <h2>Overview</h2>
             <p>
-              <strong>Name:</strong> {collegeData.college}
+              <strong>Name:</strong> {collegeData.name}
             </p>
             <p>
-              <strong>Location:</strong> {collegeData.cityEntity.cityName}
+              <strong>Location:</strong> {collegeData.city},{collegeData.state}
             </p>
             <p>
               <strong>Affiliation:</strong> {collegeData.affiliation}
@@ -53,19 +54,19 @@ console.log(collegeData.cityEntity.cityName);
             </p>
           </div>
         );
-      case "placements":
-        return (
-          <div>
-            <h2>Placements</h2>
-            <ul>
-              {collegeData.placements.map((placement) => (
-                <li key={placement.year}>
-                  {placement.year}: {placement.percentage}%
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
+      // case "placements":
+      //   return (
+      //     <div>
+      //       <h2>Placements</h2>
+      //       <ul>
+      //         {collegeData.placements.map((placement) => (
+      //           <li key={placement.year}>
+      //             {placement.year}: {placement.percentage}%
+      //           </li>
+      //         ))}
+      //       </ul>
+      //     </div>
+      //   );
       // case "reviews":
       //   return (
       //     <div>
@@ -93,7 +94,7 @@ console.log(collegeData.cityEntity.cityName);
         <MDBCol>
           <MDBCard style={{ flex: 1, paddingLeft: '20px', marginTop: '75px' }}>
             <MDBCardBody className="college-detail-card">
-              <h1>{collegeData.college}</h1>
+            <h1><strong>{collegeData.name}</strong></h1>
 
               {/* Navigation buttons */}
               <MDBTabs pills justify className='mb-3'>
@@ -105,14 +106,14 @@ console.log(collegeData.cityEntity.cityName);
                     Overview
                   </MDBTabsLink>
                 </MDBTabsItem>
-                <MDBTabsItem>
+                {/* <MDBTabsItem>
                   <MDBTabsLink
                     active={activeTab === "placements"}
                     onClick={() => setActiveTab("placements")}
                   >
                     Placements
                   </MDBTabsLink>
-                </MDBTabsItem>
+                </MDBTabsItem> */}
                 {/* <MDBTabsItem>
                   <MDBTabsLink
                     active={activeTab === "reviews"}

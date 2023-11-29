@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MDBAccordion, MDBAccordionItem, MDBCheckbox, MDBBtn } from 'mdb-react-ui-kit';
 import './SideBarFilters.css';
 
-const SidebarFilters = () => {
+const SidebarFilters = ({ onFilterChange }) => {
   const cities = [
     "Agra", "Ahmedabad", "Ahmednagar", "Ajmer", "Aligarh", "Allahabad", "Ambala", "Amravati", "Amritsar",
     "Anand", "Aurangabad", "Bareilly", "Bathinda", "Beed", "Belgaum", "Bhavnagar", "Bhilwara", "Bhopal", "Bhubaneswar",
@@ -41,79 +41,93 @@ const SidebarFilters = () => {
     
     const feesStructure = ["Less than ₹50,000", "₹50,000 - ₹1,00,000", "₹1,00,000 - ₹2,00,000", "₹2,00,000 - ₹3,00,000", "₹3,00,000 - ₹4,00,000", "More than ₹4,00,000"];
 
-  const [filters, setFilters] = useState({
-    city: '',
-    course: '',
-    state: '',
-    fees: ''
-  });
+    const [filters, setFilters] = useState({
+      city: '',
+      course: '',
+      state: '',
+      fees: ''
+    });
+   
+    const handleFilterChange = (e) => {
+      const { name, value } = e.target;
+      setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+    };
+    const applyFilters = () => {
+     
+      // Call the parent component's callback with the selected filters
+      onFilterChange(filters);
+    };
+  
+    return (
+     
+      <div className="sidebar">
+        <MDBAccordion alwaysOpen>
+          <MDBAccordionItem collapseId={1} headerTitle='City'>
+            <div className="accordion-scroll">
+              {cities.map((city, index) => (
+                <div key={index}>
+                <MDBCheckbox
+                  id={`cityCheckbox_${index}`}
+                  label={city}
+                  value={filters.city === city}
+                  onChange={() => handleFilterChange({ target: { name: 'city', value: city }})}
+                /><br/>
+                </div>
+              ))}
+            </div>
+          </MDBAccordionItem>
+          <MDBAccordionItem collapseId={2} headerTitle='State'>
+  <div className="accordion-scroll">
+    {states.map((state, index) => (
+      <div key={index}>
+        <MDBCheckbox
+          id={`stateCheckbox_${index}`}
+          label={state}
+          value={filters.state === state}
+          onChange={() => handleFilterChange({ target: { name: 'state', value: state }})}
+        />
+        <br/>
+      </div>
+    ))}
+  </div>
+</MDBAccordionItem>
+        
+          <MDBAccordionItem collapseId={3} headerTitle='Courses'>
+              <div className="accordion-scroll">
+              {courses.map((course, index) => (
+                <div key={index}>
+                <MDBCheckbox
+                  id={`courseCheckbox_${index}`}
+                  label={course}
+                  value={filters.course === course}
+                  onChange={() => handleFilterChange({ target: { name: 'course', value: course }})}
+                />
+                <br/>
+                </div>
+              ))}
+            </div>
+          </MDBAccordionItem>
+          {/* <MDBAccordionItem collapseId={4} headerTitle='Fees'>
+              <div className="accordion-scroll">
+              {feesStructure.map((fees, index) => (
+                <MDBCheckbox
+                  key={index}
+                  id={`feesCheckbox_${index}`}
+                  label={fees}
+                  checked={filters.fees === fees}
+                  onChange={() => handleFilterChange({ target: { name: 'fees', value: fees }})}
+                />
+              ))}
+            </div>
+          </MDBAccordionItem> */}
+        </MDBAccordion>
+  
+        <MDBBtn className='m-2' onClick={applyFilters}>
+          Apply Filters
+        </MDBBtn>
+      </div>
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+    );
   };
-
-  return (
-    <div className="sidebar">
-      <MDBAccordion alwaysOpen initialActive={1}>
-        <MDBAccordionItem collapseId={1} headerTitle='City'>
-          <div className="accordion-scroll">
-            {cities.map((city, index) => (
-              <MDBCheckbox
-                key={index}
-                id={`cityCheckbox_${index}`}
-                label={city}
-                checked={filters.city === city}
-                onChange={() => handleFilterChange({ target: { name: 'city', value: city }})}
-              />
-            ))}
-          </div>
-        </MDBAccordionItem>
-        <MDBAccordionItem collapseId={2} headerTitle='State'>
-            <div className="accordion-scroll">
-            {states.map((state, index) => (
-              <MDBCheckbox
-                key={index}
-                id={`stateCheckbox_${index}`}
-                label={state}
-                checked={filters.state === state}
-                onChange={() => handleFilterChange({ target: { name: 'state', value: state }})}
-              />
-            ))}
-          </div>
-        </MDBAccordionItem>
-      
-      <MDBAccordionItem collapseId={3} headerTitle='Courses'>
-            <div className="accordion-scroll">
-            {courses.map((course, index) => (
-              <MDBCheckbox
-                key={index}
-                id={`courseCheckbox_${index}`}
-                label={course}
-                checked={filters.course === course}
-                onChange={() => handleFilterChange({ target: { name: 'course', value: course }})}
-              />
-            ))}
-          </div>
-        </MDBAccordionItem>
-        <MDBAccordionItem collapseId={4} headerTitle='Fees'>
-            <div className="accordion-scroll">
-            {feesStructure.map((fees, index) => (
-              <MDBCheckbox
-                key={index}
-                id={`feesCheckbox_${index}`}
-                label={fees}
-                checked={filters.fees === fees}
-                onChange={() => handleFilterChange({ target: { name: 'fees', value: fees }})}
-              />
-            ))}
-          </div>
-        </MDBAccordionItem>
-      </MDBAccordion>
-
-      <MDBBtn className='m-2'>Apply Filters</MDBBtn>
-    </div>
-  );
-};
-
-export default SidebarFilters;
+  
+  export default SidebarFilters;

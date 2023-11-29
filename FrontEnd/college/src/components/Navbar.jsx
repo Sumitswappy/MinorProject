@@ -64,9 +64,9 @@ handleRefresh();
             <MDBDropdown group className='ms-2'>
               <MDBDropdownToggle outline rounded color='warning' className='nav-button-1'><MDBIcon fas icon="landmark" size='lg'/> Colleges</MDBDropdownToggle>
               <MDBDropdownMenu dark >
-                <MDBDropdownItem link>Action</MDBDropdownItem>
+                {/* <MDBDropdownItem link>Action</MDBDropdownItem>
                 <MDBDropdownItem link>Another action</MDBDropdownItem>
-                <MDBDropdownItem link>Something else here</MDBDropdownItem>
+                <MDBDropdownItem link>Something else here</MDBDropdownItem> */}
               </MDBDropdownMenu>
             </MDBDropdown>
             
@@ -74,9 +74,9 @@ handleRefresh();
             <MDBDropdown group className='ms-2'>
               <MDBDropdownToggle outline rounded color='warning' className='nav-button-1' ><MDBIcon fas icon="graduation-cap" size='lg'/> Courses</MDBDropdownToggle>
               <MDBDropdownMenu dark>
-                <MDBDropdownItem link>Action</MDBDropdownItem>
+                {/* <MDBDropdownItem link>Action</MDBDropdownItem>
                 <MDBDropdownItem link>Another action</MDBDropdownItem>
-                <MDBDropdownItem link>Something else here</MDBDropdownItem>
+                <MDBDropdownItem link>Something else here</MDBDropdownItem> */}
               </MDBDropdownMenu>
             </MDBDropdown>
             
@@ -84,9 +84,9 @@ handleRefresh();
             <MDBDropdown group className='ms-2'>
               <MDBDropdownToggle outline rounded color='warning' className='nav-button-1'><MDBIcon fas icon="award" size='lg'/> Exams</MDBDropdownToggle>
               <MDBDropdownMenu dark>
-                <MDBDropdownItem link>Action</MDBDropdownItem>
+                {/* <MDBDropdownItem link>Action</MDBDropdownItem>
                 <MDBDropdownItem link>Another action</MDBDropdownItem>
-                <MDBDropdownItem link>Something else here</MDBDropdownItem>
+                <MDBDropdownItem link>Something else here</MDBDropdownItem> */}
               </MDBDropdownMenu>
             </MDBDropdown>
             <MDBNavbarItem className='ms-2'>

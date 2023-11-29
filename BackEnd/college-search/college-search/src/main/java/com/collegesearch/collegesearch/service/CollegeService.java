@@ -1,32 +1,44 @@
 package com.collegesearch.collegesearch.service;
 
 import com.collegesearch.collegesearch.entity.CollegeEntity;
-import com.collegesearch.collegesearch.entity.UserEntity;
 import com.collegesearch.collegesearch.repository.CollegeRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class CollegeService {
+
+    @Autowired
     private CollegeRepository collegeRepository;
-    public List<CollegeEntity> getCollege(){
-        List<CollegeEntity> clgdet=new ArrayList<CollegeEntity>(collegeRepository.findAll());
-        return clgdet;
+
+    public List<CollegeEntity> getAllColleges() {
+        return collegeRepository.findAll();
+    }
+    public List<CollegeEntity> getCollegesByState(String state) {
+        // Implement the logic to fetch colleges by state from your repository
+        return collegeRepository.findByState(state);
+    }
+public List<CollegeEntity> getCollegesByCityAndCourse(String city, String course) {
+    return collegeRepository.findByCityAndCourse(city, course);
+}
+    public List<CollegeEntity> getCollegesByCourse(String course) {
+        return collegeRepository.findByCourse(course);
     }
 
-    public List<CollegeEntity> filterCollege(String cityName, String courseName){
-        return collegeRepository.findByCityEntityCityNameAndCourseEntityCourseName(cityName,courseName);
+    public Optional<CollegeEntity> getCollegeById(int collegeId) {
+        return collegeRepository.findById(collegeId);
     }
-    public Optional<CollegeEntity> getCollegeById(int id) {
-        return collegeRepository.findById(id);
-    }
-    public void addCollege(CollegeEntity college){
+
+    public void saveCollege(CollegeEntity college) {
         collegeRepository.save(college);
     }
-    public void deleteCollege(int id){ collegeRepository.deleteById(id);}
+
+    public void deleteCollege(int collegeId) {
+        collegeRepository.deleteById(collegeId);
+    }
 }

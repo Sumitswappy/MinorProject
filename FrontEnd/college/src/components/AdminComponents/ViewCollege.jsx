@@ -17,12 +17,11 @@ import Axios from "axios";
 const ViewCollege = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-  const url = "http://localhost:8080/College";
-  const getQuery=`/get`;
-  const getUrl=`${url}${getQuery}`;
+  const url = "http://localhost:8080/College/get";
 
-  Axios.get(getUrl)
+  Axios.get(url)
     .then((res) => {
+      console.log(res.data);
       setUsers(res.data);
     })
     .catch((error) => {
@@ -85,7 +84,10 @@ const ViewCollege = () => {
               <th className="table-header">SLNo.</th>
               <th className="table-header">College Name</th>
               <th className="table-header">City</th>
-              <th className="table-header">Course</th>
+              <th className="table-header">State</th>
+              <th className="table-header">Affiliation</th>
+              <th className="table-header">Certification</th>
+              <th className="table-header">EstablishmentYear</th>
               <th className="table-header">Action</th>
             </tr>
           </thead>
@@ -93,9 +95,12 @@ const ViewCollege = () => {
             {users.map((user,index) => (
               <tr key={user.id} className="table-row">
                 <td>{index+1}</td>
-                <td>{user.college}</td>
-                <td>{user.cityEntity.cityName}</td>
-                <td>{user.courseEntity.courseName}</td>
+                <td>{user.name}</td>
+                <td>{user.city}</td>
+                <td>{user.state}</td>
+                <td>{user.affiliation}</td>
+                <td>{user.certification}</td>
+                <td>{user.establishmentYear}</td>
                 <td>
                   <MDBDropdown className="btn-group">
                     <MDBBtn size="sm" color="success">

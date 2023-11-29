@@ -1,5 +1,5 @@
 package com.collegesearch.collegesearch.entity;
-
+import java.util.Set;
 import jakarta.persistence.*;
 import lombok.Data;
 @Data
@@ -8,6 +8,9 @@ import lombok.Data;
 public class CourseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
-    String courseName;
+     int id;
+     String course;
+    @ManyToMany(mappedBy = "collegeCourses")
+     Set<CollegeEntity> college;
+    // getters and setters
 }

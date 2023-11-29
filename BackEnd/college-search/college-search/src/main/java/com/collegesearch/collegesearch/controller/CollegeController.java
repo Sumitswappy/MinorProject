@@ -1,41 +1,56 @@
 package com.collegesearch.collegesearch.controller;
 
 import com.collegesearch.collegesearch.entity.CollegeEntity;
-import com.collegesearch.collegesearch.entity.UserEntity;
 import com.collegesearch.collegesearch.service.CollegeService;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("College")
-@CrossOrigin(maxAge = 500)
+@CrossOrigin(maxAge=500)
 public class CollegeController {
-   private CollegeService collegeService;
-   @GetMapping("get")
-   public List<CollegeEntity> getCollege(){
-       return collegeService.getCollege();
-   }
 
-   @PostMapping("add")
-    public void addCollege(@RequestBody CollegeEntity college){
-       collegeService.addCollege(college);
-   }
-   @GetMapping("get-filtered")
-    public List<CollegeEntity> getFilterCollege(@RequestParam (value="cityName") String cityName, @RequestParam (value="courseName") String courseName)
-   {
-       return collegeService.filterCollege(cityName,courseName);
-   }
-   @GetMapping("get/{id}")
-   public CollegeEntity getCollegeById(@PathVariable int id){
-       return collegeService.getCollegeById(id)
-               .orElseThrow(() -> {
-                   throw new RuntimeException("College not found");
-               });
+    @Autowired
+    private CollegeService collegeService;
 
-   }
-   @DeleteMapping("delete/{id}")
-   public void deleteCollege(@PathVariable int id){collegeService.deleteCollege(id);}
+    @GetMapping("get")
+    public List<CollegeEntity> getAllColleges() {
+        return collegeService.getAllColleges();
+    }
+
+    @GetMapping("get/{collegeId}")
+    public ResponseEntity<CollegeEntity> getCollegeById(@PathVariable int collegeId) {
+        return collegeService.getCollegeById(collegeId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+    @GetMapping("byCourse/{course}")
+    public List<CollegeEntity> getCollegesByCourse(@PathVariable String course) {
+        return collegeService.getCollegesByCourse(course);
+    }
+
+    @GetMapping("byState/{state}")
+    public List<CollegeEntity> getCollegesByState(@PathVariable String state) {
+        return collegeService.getCollegesByState(state);
+    }
+@GetMapping("/get-filtered")
+public List<CollegeEntity> getCollegesByCityAndCourse(
+        @RequestParam(name = "city", required = false) String city,
+        @RequestParam(name = "course", required = false) String course) {
+
+    return collegeService.getCollegesByCityAndCourse(city, course);
+}
+    @PostMapping("add")
+    public void saveCollege(@RequestBody CollegeEntity college) {
+        collegeService.saveCollege(college);
+    }
+
+    @DeleteMapping("delete/{collegeId}")
+    public ResponseEntity<Void> deleteCollege(@PathVariable int collegeId) {
+        collegeService.deleteCollege(collegeId);
+        return ResponseEntity.noContent().build();
+    }
 }
