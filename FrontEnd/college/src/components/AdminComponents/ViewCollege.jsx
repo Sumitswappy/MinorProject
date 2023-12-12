@@ -11,18 +11,18 @@ import {
   MDBBtn
 } from "mdb-react-ui-kit";
 import{NavLink} from "react-router-dom";
-import "./ViewCollege.css"; // Create a new CSS file for styling
+import "./ViewCollege.css";
 import Axios from "axios";
 
 const ViewCollege = () => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]);
-  const url = "http://localhost:8080/College/get";
+  const [colleges, setColleges] = useState([]);
+  const url = "http://localhost:8080/College/";
 
-  Axios.get(url)
+  Axios.get(`${url}get`)
     .then((res) => {
       console.log(res.data);
-      setUsers(res.data);
+      setColleges(res.data);
     })
     .catch((error) => {
       console.error("Error fetching user data:", error);
@@ -31,11 +31,11 @@ const ViewCollege = () => {
 
     const onHandleDelete=(e)=>{
       const delId=e.id;
-      const delQuery=`/delete/${delId}`;
+      const delQuery=`delete/${delId}`;
   const delUrl=`${url}${delQuery}`;
   Axios.delete(delUrl)
     .then((res) => {
-      alert("User deleted...");
+      alert("College deleted...");
     })
     .catch((error) => {
       console.error("Error fetching user data:", error);
@@ -43,9 +43,9 @@ const ViewCollege = () => {
     }
 
     const onHandleEdit = (e) => {
-      const userId = e.id;
-      alert(userId);
-      navigate("/AdminHome/edit-user", { state: { id:userId } });
+      const collegeId = e.id;
+      alert(collegeId);
+      navigate("/AdminHome/edit-user", { state: { id:collegeId } });
     };
   return (
     <div className="view-user">
@@ -83,24 +83,26 @@ const ViewCollege = () => {
             <tr>
               <th className="table-header">SLNo.</th>
               <th className="table-header">College Name</th>
+              <th className="table-header">Contact Person</th>
               <th className="table-header">City</th>
               <th className="table-header">State</th>
               <th className="table-header">Affiliation</th>
               <th className="table-header">Certification</th>
-              <th className="table-header">EstablishmentYear</th>
+              <th className="table-header">Establishment Year</th>
               <th className="table-header">Action</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user,index) => (
-              <tr key={user.id} className="table-row">
+            {colleges.map((college,index) => (
+              <tr key={college.id} className="table-row">
                 <td>{index+1}</td>
-                <td>{user.name}</td>
-                <td>{user.city}</td>
-                <td>{user.state}</td>
-                <td>{user.affiliation}</td>
-                <td>{user.certification}</td>
-                <td>{user.establishmentYear}</td>
+                <td>{college.name}</td>
+                <td>{college.contactName}</td>
+                <td>{college.city}</td>
+                <td>{college.state}</td>
+                <td>{college.affiliation}</td>
+                <td>{college.certification}</td>
+                <td>{college.establishmentYear}</td>
                 <td>
                   <MDBDropdown className="btn-group">
                     <MDBBtn size="sm" color="success">
@@ -112,8 +114,8 @@ const ViewCollege = () => {
                       split
                     ></MDBDropdownToggle>
                     <MDBDropdownMenu>
-                      <MDBDropdownItem link onClick={()=>onHandleEdit(user)}>Update User</MDBDropdownItem>
-                      <MDBDropdownItem link onClick={()=>onHandleDelete(user)}>Delete User</MDBDropdownItem>
+                      {/* <MDBDropdownItem link onClick={()=>onHandleEdit(college)}>Update College</MDBDropdownItem> */}
+                      <MDBDropdownItem link onClick={()=>onHandleDelete(college)}>Delete College</MDBDropdownItem>
                     </MDBDropdownMenu>
                   </MDBDropdown>
                 </td>

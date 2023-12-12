@@ -64,6 +64,7 @@ function submit(e){
             </MDBCol>
           </MDBRow>
           <MDBBtn className='w-100 mb-4' size='md' href='/AdminHome/dashboard'>Log In</MDBBtn>
+          <p className='ms-5'>Don't have an account? <a href="/Register" className="link-primary">Register here</a></p>
 
         </MDBCardBody>
       </MDBCard>

@@ -98,13 +98,13 @@ handleRefresh();
             <MDBDropdownToggle outline rounded color='danger' className='nav-button-2'><MDBIcon fas icon="user-graduate" size='lg' /> Login/SignUp</MDBDropdownToggle>
             <MDBDropdownMenu dark>
               <MDBDropdownItem link href='/Login'>Student Login</MDBDropdownItem>
-              <MDBDropdownItem link href='/Register'>Student Register</MDBDropdownItem>
+              <MDBDropdownItem link href='/Register'>Student Sign Up</MDBDropdownItem>
               <MDBDropdownItem link href='/College-register'>College Register</MDBDropdownItem>
               <MDBDropdownItem link href='/AdminLogin'>Admin Login</MDBDropdownItem>
             </MDBDropdownMenu>
           </MDBDropdown>
           <MDBDropdown id="logout-navbar"  group className="logout-dropdown">
-      <MDBDropdownToggle outline rounded color='light' className='nav-button-3'>Hi, {sessionStorage.getItem("email")}</MDBDropdownToggle>
+      <MDBDropdownToggle outline rounded color='light' className='nav-button-3'><MDBIcon fas icon="user-graduate" size='lg' /> Hi, {sessionStorage.getItem("email")}</MDBDropdownToggle>
       <MDBDropdownMenu dark>
         <MDBDropdownItem ></MDBDropdownItem>
         <MDBDropdownItem link tag='a' onClick={handleLogOut}>Log out</MDBDropdownItem>

@@ -1,5 +1,6 @@
 package com.collegesearch.collegesearch.service;
 
+import com.collegesearch.collegesearch.Util.SecurityManager;
 import com.collegesearch.collegesearch.entity.CollegeEntity;
 import com.collegesearch.collegesearch.repository.CollegeRepository;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ public class CollegeService {
 
     @Autowired
     private CollegeRepository collegeRepository;
-
+    private SecurityManager securityManager;
     public List<CollegeEntity> getAllColleges() {
         return collegeRepository.findAll();
     }
@@ -35,6 +36,7 @@ public List<CollegeEntity> getCollegesByCityAndCourse(String city, String course
     }
 
     public void saveCollege(CollegeEntity college) {
+        college.setPassword(securityManager.encryptPassword(college.getPassword()));
         collegeRepository.save(college);
     }
 

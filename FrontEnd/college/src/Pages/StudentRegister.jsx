@@ -131,7 +131,6 @@ function Register() {
         <MDBRow>
 
           <MDBCol md='6' className='text-center text-md-start d-flex flex-column justify-content-center'>
-
             <h1 className="my-5 display-3 fw-bold ls-tight px-3">
               Explore Your Future in Education <br />
               <span className="text-primary">with Unifind.in</span>
@@ -254,12 +253,13 @@ function Register() {
                 <MDBBtn className='w-100 mb-4' color='primary' size='md' type='submit' value="Submit">Register Now</MDBBtn>
 
                 <div className="text-center">
+                <p className='ms-5'>Already have an account? <a href="/Login" className="link-primary">Click to Log In</a></p>
 
-                  <p>or sign up with:</p>
+                  {/* <p>or sign up with:</p>
 
                   <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#00589E' }}>
                     <MDBIcon fab icon='google' size="lg" />
-                  </MDBBtn>
+                  </MDBBtn> */}
 
                 </div>
 

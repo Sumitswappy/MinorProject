@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import Axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   MDBBtn,
   MDBContainer,
@@ -8,26 +8,27 @@ import {
   MDBCardBody,
   MDBRow,
   MDBCol,
+  MDBDropdown,
+  MDBDropdownToggle,
+  MDBDropdownMenu,
   MDBIcon,
   MDBInput,
-} from 'mdb-react-ui-kit';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import './CollegeRegister.css';
+} from "mdb-react-ui-kit";
+import "./CollegeRegister.css";
 
 const CollegeRegister = () => {
   const [collegeData, setCollegeData] = useState({
-    name: '',
-  contactName: '',
-  phoneNumber: '',
-  state: '',
-  city: '',
-  email: '',
-  password: '',
-  affiliation: '',
-  certification: '',
-  establishmentYear: '',
-  collegeCourses: [{ id: '' }],
+    name: "",
+    contactName: "",
+    phoneNumber: "",
+    state: "",
+    city: "",
+    email: "",
+    password: "",
+    affiliation: "",
+    certification: "",
+    establishmentYear: "",
+    collegeCourses: [],
   });
   const [course, setCourse] = useState([]);
   const navigate = useNavigate();
@@ -35,10 +36,10 @@ const CollegeRegister = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await Axios.get('http://localhost:8080/courses/get');
-        setCourse(response.data.map(course => course.course));
+        const response = await Axios.get("http://localhost:8080/courses/get");
+        setCourse(response.data.map((course) => course.course));
       } catch (error) {
-        console.error('Error fetching courses:', error);
+        console.error("Error fetching courses:", error);
       }
     };
 
@@ -48,93 +49,163 @@ const CollegeRegister = () => {
   const [errors, setErrors] = useState({});
 
   const states = [
-    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh',
-    'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha',
-    'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal',
-    'Andaman and Nicobar Islands', 'Chandigarh', 'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Lakshadweep', 'Puducherry'
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
+    "Lakshadweep",
+    "Puducherry",
   ];
+  const handleCourseChange = (index, value) => {
+    setCollegeData((prevData) => {
+      const updatedCourses = [...prevData.collegeCourses];
+      if (value != undefined) {
+        console.log(value);
+        updatedCourses[index] = { id: value };
+      }
+      return {
+        ...prevData,
+        collegeCourses: updatedCourses,
+      };
+    });
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [`course${index}`]: "",
+      collegeCourses: "",
+    }));
+  };
 
+  let i = 0;
 
   const validateForm = () => {
     let valid = true;
     const newErrors = {};
-  
+
     if (!collegeData.name.trim()) {
-      newErrors.name = '*College name is required';
+      newErrors.name = "*College name is required";
       valid = false;
     }
-  
+
     if (!collegeData.contactName.trim()) {
-      newErrors.contactName = '*Contact person name is required';
+      newErrors.contactName = "*Contact person name is required";
       valid = false;
     }
-  
-    if (!collegeData.phoneNumber.trim() || !/^\d{10}$/.test(collegeData.phoneNumber.trim())) {
-      newErrors.phoneNumber = '*Valid 10-digit phone number is required';
+
+    if (
+      !collegeData.phoneNumber.trim() ||
+      !/^\d{10}$/.test(collegeData.phoneNumber.trim())
+    ) {
+      newErrors.phoneNumber = "*Valid 10-digit phone number is required";
       valid = false;
     }
-  
+
     if (!collegeData.state.trim()) {
-      newErrors.state = '*State is required';
+      newErrors.state = "*State is required";
       valid = false;
     }
-  
+
     if (!collegeData.city.trim()) {
-      newErrors.city = '*City is required';
+      newErrors.city = "*City is required";
       valid = false;
     }
-  
-    if (!collegeData.email.trim() || !/\S+@\S+\.\S+/.test(collegeData.email.trim())) {
-      newErrors.email = '*Valid email is required';
+
+    if (
+      !collegeData.email.trim() ||
+      !/\S+@\S+\.\S+/.test(collegeData.email.trim())
+    ) {
+      newErrors.email = "*Valid email is required";
       valid = false;
     }
-  
+
     if (!collegeData.password.trim()) {
-      newErrors.password = '*Password is required';
+      newErrors.password = "*Password is required";
       valid = false;
     }
-  
+
     if (!collegeData.affiliation.trim()) {
-      newErrors.affiliation = '*Affiliation is required';
+      newErrors.affiliation = "*Affiliation is required";
       valid = false;
     }
-  
+
     if (!collegeData.certification.trim()) {
-      newErrors.certification = '*Certification is required';
+      newErrors.certification = "*Certification is required";
       valid = false;
     }
-  
-    if (!collegeData.establishmentYear.trim() || !/^\d{4}$/.test(collegeData.establishmentYear.trim())) {
-      newErrors.establishmentYear = '*Valid 4-digit year is required';
+
+    if (
+      !collegeData.establishmentYear.trim() ||
+      !/^\d{4}$/.test(collegeData.establishmentYear.trim())
+    ) {
+      newErrors.establishmentYear = "*Valid 4-digit year is required";
       valid = false;
     }
-  
-    if (!collegeData.collegeCourses) {
-      newErrors.course = '*Course is required';
+
+    if (!collegeData.collegeCourses.length) {
+      newErrors.collegeCourses = "*At least one course is required";
       valid = false;
+    } else {
+      collegeData.collegeCourses.forEach((course, index) => {
+        if (!course || !course.id) {
+          newErrors[`course${index}`] = `*Course ${index + 1} is required`;
+          valid = false;
+        }
+      });
     }
-  
+
     setErrors(newErrors);
     return valid;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    while (i < collegeData.collegeCourses.length) {
+      if (collegeData.collegeCourses[i] == undefined) {
+        delete collegeData.collegeCourses[i];
+        i++;
+      } else {
+        i++;
+      }
+    }
     if (validateForm()) {
       Axios.post(`http://localhost:8080/College/add`, collegeData)
         .then((res) => {
           console.log(res.data);
-          navigate('/');
+          navigate("/");
         })
         .catch((error) => {
-          console.error('Error submitting form:', error);
+          console.error("Error submitting form:", error);
         });
     }
-
-    console.log('Form submitted:', collegeData);
+    console.log("Form submitted:", collegeData);
   };
- 
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -144,71 +215,81 @@ const CollegeRegister = () => {
     }));
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [id]: '',
+      [id]: "",
     }));
-    console.log(collegeData);
   };
 
   return (
-    <div className='form-body'>
-      <div className='d-flex flex-row ps-5 pt-5' style={{ justifyContent: "center" }}>
-        <MDBIcon fas icon="book-open" size='3x' style={{ color: '#709085' }} />
+    <div className="form-body">
+      <div
+        className="d-flex flex-row ps-5 pt-5"
+        style={{ justifyContent: "center" }}
+      >
+        <MDBIcon fas icon="book-open" size="3x" style={{ color: "#709085" }} />
         <span className="h1 fw-bold mb-0">Unifind.in</span>
       </div>
       <MDBContainer fluid>
-        <MDBRow className='justify-content-center align-items-center p-5'>
+        <MDBRow className="justify-content-center align-items-center p-5">
           <MDBCard>
-            <MDBCardBody className='px-4'>
-              <h3 className="fw-bold mb-4 pb-2 pb-md-0 mb-md-5">College Registration Form</h3>
-              <Form onSubmit={handleSubmit}>
+            <MDBCardBody className="px-4">
+              <h3 className="fw-bold mb-4 pb-2 pb-md-0 mb-md-5">
+                College Registration Form
+              </h3>
+              <form onSubmit={handleSubmit}>
                 <MDBRow>
-                  <MDBCol md=''>
+                  <MDBCol md="">
                     <MDBInput
-                      wrapperClass='mb-4'
-                      label='Name of College'
-                      size='lg'
-                      id='name'
-                      type='text'
+                      wrapperClass="mb-4"
+                      label="Name of College"
+                      size="lg"
+                      id="name"
+                      type="text"
                       onChange={handleChange}
                       value={collegeData.name}
                     />
-                    {errors.name && <div className="text-danger">{errors.name}</div>}
+                    {errors.name && (
+                      <div className="text-danger">{errors.name}</div>
+                    )}
                   </MDBCol>
                 </MDBRow>
 
                 <MDBRow>
-                  <MDBCol md='6'>
+                  <MDBCol md="6">
                     <MDBInput
-                      wrapperClass='mb-4'
-                      label='Name of the Contact Person'
-                      size='lg'
-                      id='contactName'
-                      type='text'
+                      wrapperClass="mb-4"
+                      label="Name of the Contact Person"
+                      size="lg"
+                      id="contactName"
+                      type="text"
                       onChange={handleChange}
                       value={collegeData.contactName}
                     />
-                    {errors.contactName && <div className="text-danger">{errors.contactName}</div>}
+                    {errors.contactName && (
+                      <div className="text-danger">{errors.contactName}</div>
+                    )}
                   </MDBCol>
 
-                  <MDBCol md='6'>
+                  <MDBCol md="6">
                     <MDBInput
-                      wrapperClass='mb-4'
-                      label='Phone Number'
-                      size='lg'
-                      id='phoneNumber'
-                      type='text'
+                      wrapperClass="mb-4"
+                      label="Phone Number"
+                      size="lg"
+                      id="phoneNumber"
+                      type="text"
                       onChange={handleChange}
                       value={collegeData.phoneNumber}
                     />
-                    {errors.phoneNumber && <div className="text-danger">{errors.phoneNumber}</div>}
+                    {errors.phoneNumber && (
+                      <div className="text-danger">{errors.phoneNumber}</div>
+                    )}
                   </MDBCol>
                 </MDBRow>
 
                 <MDBRow>
-                  <MDBCol md='6'>
+                  <MDBCol md="6">
                     <select
                       className="custom-select"
-                      id='state'
+                      id="state"
                       onChange={handleChange}
                       value={collegeData.state}
                     >
@@ -219,98 +300,161 @@ const CollegeRegister = () => {
                         </option>
                       ))}
                     </select>
-                    {errors.state && <div className="text-danger">{errors.state}</div>}
+                    {errors.state && (
+                      <div className="text-danger">{errors.state}</div>
+                    )}
                   </MDBCol>
 
-                  <MDBCol md='6'>
+                  <MDBCol md="6">
                     <MDBInput
-                      wrapperClass='mb-4'
-                      label='Select City'
-                      size='lg'
-                      id='city'
-                      type='text'
+                      wrapperClass="mb-4"
+                      label="Select City"
+                      size="lg"
+                      id="city"
+                      type="text"
                       onChange={handleChange}
                       value={collegeData.city}
                     />
-                    {errors.city && <div className="text-danger">{errors.city}</div>}
+                    {errors.city && (
+                      <div className="text-danger">{errors.city}</div>
+                    )}
                   </MDBCol>
                 </MDBRow>
 
                 <MDBRow>
-                  <MDBCol md='6'>
+                  <MDBCol md="6">
                     <MDBInput
-                      wrapperClass='mb-4'
-                      label='Email'
-                      size='lg'
-                      id='email'
-                      type='email'
+                      wrapperClass="mb-4"
+                      label="Email"
+                      size="lg"
+                      id="email"
+                      type="email"
                       onChange={handleChange}
                       value={collegeData.email}
                     />
-                    {errors.email && <div className="text-danger">{errors.email}</div>}
+                    {errors.email && (
+                      <div className="text-danger">{errors.email}</div>
+                    )}
                   </MDBCol>
 
-                  <MDBCol md='6'>
+                  <MDBCol md="6">
                     <MDBInput
-                      wrapperClass='mb-4'
-                      label='Password'
-                      size='lg'
-                      id='password'
-                      type='password'
+                      wrapperClass="mb-4"
+                      label="Password"
+                      size="lg"
+                      id="password"
+                      type="password"
                       onChange={handleChange}
                       value={collegeData.password}
                     />
-                    {errors.password && <div className="text-danger">{errors.password}</div>}
+                    {errors.password && (
+                      <div className="text-danger">{errors.password}</div>
+                    )}
                   </MDBCol>
                 </MDBRow>
                 <MDBRow>
-                  <MDBCol md=''>
+                  <MDBCol md="">
                     <MDBInput
-                      wrapperClass='mb-4'
-                      label='Affiliation'
-                      size='lg'
-                      id='affiliation'
-                      type='text'
+                      wrapperClass="mb-4"
+                      label="Affiliation"
+                      size="lg"
+                      id="affiliation"
+                      type="text"
                       onChange={handleChange}
                       value={collegeData.affiliation}
                     />
-                    {errors.affiliation && <div className="text-danger">{errors.affiliation}</div>}
+                    {errors.affiliation && (
+                      <div className="text-danger">{errors.affiliation}</div>
+                    )}
                   </MDBCol>
                 </MDBRow>
                 <MDBRow>
-                  <MDBCol md=''>
+                  <MDBCol md="">
                     <MDBInput
-                      wrapperClass='mb-4'
-                      label='Certification'
-                      size='lg'
-                      id='certification'
-                      type='text'
+                      wrapperClass="mb-4"
+                      label="Certification"
+                      size="lg"
+                      id="certification"
+                      type="text"
                       onChange={handleChange}
                       value={collegeData.certification}
                     />
-                    {errors.certification && <div className="text-danger">{errors.certification}</div>}
+                    {errors.certification && (
+                      <div className="text-danger">{errors.certification}</div>
+                    )}
                   </MDBCol>
                 </MDBRow>
                 <MDBRow>
-                  <MDBCol md='6'>
+                  <MDBCol md="6">
                     <MDBInput
-                      wrapperClass='mb-4'
-                      label='Year of Establishment'
-                      size='lg'
-                      id='establishmentYear'
-                      type='text'
+                      wrapperClass="mb-4"
+                      label="Year of Establishment"
+                      size="lg"
+                      id="establishmentYear"
+                      type="text"
                       onChange={handleChange}
                       value={collegeData.establishmentYear}
                     />
-                    {errors.establishmentYear && <div className="text-danger">{errors.establishmentYear}</div>}
+                    {errors.establishmentYear && (
+                      <div className="text-danger">
+                        {errors.establishmentYear}
+                      </div>
+                    )}
                   </MDBCol>
-                  <MDBCol md='6'>
-                  
-                    {errors.collegeCourses && <div className="text-danger">{errors.collegeCourses}</div>}
+                  <MDBCol md="6">
+                    <MDBDropdown>
+                      <MDBDropdownToggle tag="a">
+                        Select Courses
+                      </MDBDropdownToggle>
+                      <MDBDropdownMenu
+                        style={{ overflow: "auto", maxHeight: "160px" }}
+                      >
+                        {course.map((_, index) => (
+                          <div
+                            key={index}
+                            className="custom-control custom-checkbox"
+                          >
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              id={`courseCheckbox${index}`}
+                              checked={
+                                collegeData.collegeCourses[index]?.id !==
+                                undefined
+                              }
+                              onChange={() =>
+                                handleCourseChange(
+                                  index,
+                                  collegeData.collegeCourses[index]?.id
+                                    ? undefined
+                                    : index + 1
+                                )
+                              }
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor={`courseCheckbox${index}`}
+                            >
+                              {course[index]}
+                            </label>
+                            {/* {errors.collegeCourses && errors.collegeCourses[index] && (
+          <div className="text-danger">{errors.collegeCourses[index]}</div>
+        )} */}
+                          </div>
+                        ))}
+                      </MDBDropdownMenu>
+                    </MDBDropdown>
+                  </MDBCol>
+                  <MDBCol md="6">
+                    {errors.collegeCourses && (
+                      <div className="text-danger">{errors.collegeCourses}</div>
+                    )}
                   </MDBCol>
                 </MDBRow>
-                <MDBBtn className='mb-4' size='lg' type="submit">Submit</MDBBtn>
-              </Form>
+                <MDBBtn className="mb-4" size="lg" type="submit">
+                  Submit
+                </MDBBtn>
+              </form>
             </MDBCardBody>
           </MDBCard>
         </MDBRow>

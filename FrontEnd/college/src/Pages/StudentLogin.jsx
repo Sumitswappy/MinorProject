@@ -53,7 +53,7 @@ function submit(e){
             </div>
 
             <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4'>
-              <h3 className="fw-normal mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Log in</h3>
+              <h3 className="fw-large mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Log in to Continue</h3>
               <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Email address' id='userName' type='email' size="lg" onChange={(e)=>handle(e)} value={data.userName} />
               <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Password' id='password' type='password' size="lg" onChange={(e)=>handle(e)} value={data.password} />
 

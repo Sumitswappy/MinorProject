@@ -1,15 +1,13 @@
 body {
     background-color: hsl(0, 0%, 96%);
   } 
-  /* Style for the input fields when in focus */
+  
   #form1:focus {
-    border-color: #00589E; /* Desired border color when in focus */
+    border-color: #00589E; 
   }
-  /* Default styles */
+ 
 
-/* Add your existing styles here */
 
-/* Media query for smaller screens (e.g., mobile devices) */
 @media (max-width: 767px) {
   .text-center.text-md-start {
     text-align: center !important;
@@ -40,41 +38,39 @@ body {
     padding: 3rem !important;
   }
 
-  /* Additional styles for smaller screens */
-
-/* Center align the header text */
+ 
 .display-3 {
   text-align: center !important;
 }
 
-/* Adjust the paragraph text */
+
 .px-3 {
   padding: 0 1rem !important;
 }
 
-/* Increase the top margin for better spacing */
+
 .my-5 {
   margin-top: 2rem !important;
 }
 
-/* Increase the padding for the card body */
+
 .p-5 {
   padding: 2rem !important;
 }
 
-/* Increase the margin between form inputs */
+
 .mb-4 {
   margin-bottom: 1.5rem !important;
 }
 
-/* Center align the social media buttons */
+
 .text-center > p {
   text-align: center;
 }
 .px{
   display: none;
 }
-/* Add more specific styles as needed */
+
 
 
 }

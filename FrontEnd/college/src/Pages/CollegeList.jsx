@@ -41,10 +41,10 @@ const CollegeList = () => {
         let response;
         if(!searchdata.state){
         if (!filters.city && !filters.course && !filters.state) {
-          // If no filters are selected, fetch all colleges
+          
           response = await Axios.get(url2);
         } else if (!filters.city && !filters.state) {
-          // Use the correct filter names here
+          
           response = await Axios.get(`http://localhost:8080/College/byCourse/${filters.course}`);
         } else if(filters.city)
         {
@@ -53,7 +53,7 @@ const CollegeList = () => {
           response = await Axios.get(`http://localhost:8080/College/byState/${filters.state}`);
         }
         else {
-          // If filters are selected, construct the query string
+          
           const query = `?city=${filters.city || ''}&course=${filters.course || ''}`;
           const fullUrl = `${url}${query}`;
           response = await Axios.get(fullUrl);
