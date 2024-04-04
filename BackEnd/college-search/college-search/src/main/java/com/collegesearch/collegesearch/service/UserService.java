@@ -24,6 +24,9 @@ public class UserService {
         List<UserEntity> usrdet=new ArrayList<UserEntity>(userRepository.findAll());
         return usrdet;
     }
+    public List<UserEntity> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
     public Optional<UserEntity> getUserById(int id) {
         return userRepository.findById(id);
     }

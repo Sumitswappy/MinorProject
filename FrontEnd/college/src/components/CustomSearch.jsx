@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { MDBBtn} from 'mdb-react-ui-kit';
@@ -12,11 +12,13 @@ export default function CustomSearch() {
   });
   
   const navigate = useNavigate();
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    setIsLoggedIn(!!sessionStorage.getItem("email"));
+  }, []);
   const handleLocationChange = (e) => {
     setData({ ...data, cityName: e.target.value });
   };
-
   const handleCourseChange = (e) => {
     setData({ ...data, courseName: e.target.value });
   };
@@ -34,8 +36,6 @@ export default function CustomSearch() {
       alert("Please select both city and course to perform the search.");
     }
   };
-
-  
   const allLocations = [
     "Agra", "Ahmedabad", "Ahmednagar", "Ajmer", "Aligarh", "Allahabad", "Ambala", "Amravati", "Amritsar",
     "Anand", "Aurangabad","Bangalore", "Bareilly", "Bathinda", "Beed", "Belgaum", "Bhavnagar", "Bhilwara", "Bhopal", "Bhubaneswar",
@@ -73,7 +73,7 @@ export default function CustomSearch() {
 
   return (
     <form >
-      <div className="search-bar" >
+      <div className={`search-bar ${isLoggedIn ? 'logged-in' : 'logged-out'}`}>
         <div className="custom-select-container">
           <input
             type="text"

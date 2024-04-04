@@ -16,6 +16,7 @@ import CollegeRegister from './Pages/CollegeRegister';
 import CollegeDetail from './Pages/CollegeDetail';
 import AddCollege from './components/AdminComponents/AddCollege';
 import ViewCollege from './components/AdminComponents/ViewCollege';
+import UserProfile from './Pages/UserProfile';
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/College-register" element={<CollegeRegister/>}/>
           <Route path="/AdminLogin" element={<AdminLogin />} />
           <Route path="/Colleges" element={<CollegeList/>}/>
+          <Route path="/userprofile" element={<UserProfile/>}/>
           <Route path="/CollegesProfile" element={<CollegeDetail/>} />
           <Route path="/AdminHome" element={<AdminHome />} >
         <Route path="dashboard" element={<AdminDashboard/>}/>

@@ -33,7 +33,10 @@ public class UserController {
                 });
 
     }
-
+    @GetMapping("getByEmail")
+    public List<UserEntity> getUserByEmail(@RequestParam("email") String email) {
+        return userService.getUserByEmail(email);
+    }
     @DeleteMapping("delete/{id}")
     public void deleteUser(@PathVariable int id){userService.deleteUser(id);}
 

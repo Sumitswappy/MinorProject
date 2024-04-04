@@ -14,7 +14,7 @@ import './StudentLogin.css';
 function Login() {
   const navigate = useNavigate();
   const url="http://localhost:8080/login";
-const[data,setData]=useState({
+  const[data,setData]=useState({
   userName:"",
   password:"",
 })
@@ -33,7 +33,6 @@ function submit(e){
       sessionStorage.setItem("email",data.userName);
       console.log(res.data);
       navigate("/");
-      alert("Login Successful...");
     }
     else{
       alert("User Not Found, Register first...");
