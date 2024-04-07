@@ -22,23 +22,10 @@ export default function AdminSidenav() {
     }
     setVerticalActive(value);
   };
-  const handleLogOut = () => {
-handleRefresh();
-    navigate("/");
-  };
+ 
   function handleRefresh() {
     window.location.reload();
   }
-  useEffect(()=>{
-    console.log(sessionStorage.getItem("email"));
-    if(sessionStorage.getItem("email")!=null){
-      document.getElementById("logout-navbar").style.display="block";
-    }
-    else{
-      document.getElementById("logout-navbar").style.display="none";
-    }
-   
-  })
 
   return (
     
@@ -94,7 +81,6 @@ handleRefresh();
                 </MDBNavbarLink>
               </MDBAccordionItem>
             </MDBAccordion>
-            <MDBBtn id='logout-navbar' color='primary' outline rounded onClick={handleLogOut}> Log Out</MDBBtn>
           </div>
         </MDBContainer>
    

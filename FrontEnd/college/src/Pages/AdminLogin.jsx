@@ -20,6 +20,7 @@ const[data,setData]=useState({
   userName:"",
   password:"",
 })
+const[admin,setAdmin]=useState();
 function handle(e){
   const newData={...data}
   newData[e.target.id]=e.target.value
@@ -32,13 +33,20 @@ function submit(e){
     password:data.password
   }).then((res)=>{
     if(res.data==true){
-      sessionStorage.setItem("email",data.userName);
       console.log(res.data);
-      navigate("/");
-      alert("Login Successful...");
+      const getUrl = `http://localhost:8080/user/getByEmail?email=${data.userName}`;
+      Axios.get(getUrl).then((res) => {
+        if(res.data[0].isAdmin==1){
+        sessionStorage.setItem("email",data.userName);
+        navigate("/AdminHome/dashboard");}
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+      
     }
     else{
-      alert("User Not Found, Register first...");
+      alert("Only admins can login...");
     }
   })
 }
@@ -63,8 +71,8 @@ function submit(e){
             <MDBInput wrapperClass='mb-4' label='Password' id='password' type='password' onChange={(e)=>handle(e)} value={data.password} />
             </MDBCol>
           </MDBRow>
-          <MDBBtn className='w-100 mb-4' size='md' href='/AdminHome/dashboard'>Log In</MDBBtn>
-          <p className='ms-5'>Don't have an account? <a href="/Register" className="link-primary">Register here</a></p>
+          <MDBBtn className="mb-4 px-5 mx-5 w-100" color='primary' size='lg'>Login</MDBBtn>
+              <p className="small mb-5 pb-lg-3 ms-5"><a className="text-muted" href="#!">Forgot password?</a></p>
 
         </MDBCardBody>
       </MDBCard>

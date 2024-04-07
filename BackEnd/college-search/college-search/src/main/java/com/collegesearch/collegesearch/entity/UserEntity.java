@@ -17,4 +17,5 @@ public class UserEntity {
     String city;
     String state;
     String password;
+    Boolean isAdmin;
 }

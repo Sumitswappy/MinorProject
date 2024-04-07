@@ -12,6 +12,7 @@ import AddUser from './components/AdminComponents/AddUser';
 import ViewUser from './components/AdminComponents/ViewUser';
 import CollegeList from './Pages/CollegeList';
 import EditUser from './components/AdminComponents/EditUser';
+import CollegeLogin from './Pages/CollegeLogin';
 import CollegeRegister from './Pages/CollegeRegister';
 import CollegeDetail from './Pages/CollegeDetail';
 import AddCollege from './components/AdminComponents/AddCollege';
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
+          <Route path="/Collegelogin" element={<CollegeLogin />} />
           <Route path="/College-register" element={<CollegeRegister/>}/>
           <Route path="/AdminLogin" element={<AdminLogin />} />
           <Route path="/Colleges" element={<CollegeList/>}/>

@@ -12,3 +12,6 @@
   .custom-select:focus {
     border: 3px solid rgb(0, 101, 252);
   }
+  .icon{
+    background-image: linear-gradient(to bottom right, rgb(255, 255, 255), rgb(85, 85, 85));;
+  }

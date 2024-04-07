@@ -27,6 +27,7 @@ const EditUser = () => {
     phone: "",
     email: "",
     password: "",
+    isAdmin: false,
   });
   const [users, setUsers] = useState([]);
   useEffect(() => {
@@ -47,7 +48,11 @@ const EditUser = () => {
 
   function handle(e) {
     const newData = { ...data };
-    newData[e.target.id] = e.target.value;
+    if (e.target.type === "checkbox") {
+      newData[e.target.id] = e.target.checked; // Store boolean value for isAdmin
+    } else {
+      newData[e.target.id] = e.target.value;
+    }
     setData(newData);
   }
  console.log(data);
@@ -65,6 +70,7 @@ const EditUser = () => {
       phone: data.phone,
       email: data.email,
       password: data.password,
+      isAdmin: data.isAdmin,
     }).then((res) => {
       console.log(res.data);
       alert("Updated...");
@@ -190,6 +196,13 @@ const EditUser = () => {
                   onChange={(e) => handle(e)}
                   value={data.password}
                 />
+                  <label>
+                 <input
+                  id="isAdmin"
+                  type="checkbox"
+                  onChange={(e) => handle(e)}
+                  checked={data.isAdmin}
+                />Admin</label>
                 <div style={{ float: "left" }}>
                 <MDBBtn
                     className="w-10 mb-4"

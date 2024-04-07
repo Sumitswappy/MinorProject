@@ -10,7 +10,7 @@ export default function Home() {
       <Navbar />
       <Carousel/>
         <Tabs/>
-        <HelpfulReviews/>
+        {/*<HelpfulReviews/>*/}
         <Footer/>
     </div>
   )

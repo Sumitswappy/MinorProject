@@ -26,6 +26,7 @@ const AddUser = () => {
     phone: "",
     email: "",
     password: "",
+    isAdmin: false,
   });
   const [errors, setErrors] = useState({
     firstName: "",
@@ -38,7 +39,11 @@ const AddUser = () => {
 
   function handle(e) {
     const newData = { ...data };
-    newData[e.target.id] = e.target.value;
+    if (e.target.type === "checkbox") {
+      newData[e.target.id] = e.target.checked; // Store boolean value for isAdmin
+    } else {
+      newData[e.target.id] = e.target.value;
+    }
     setData(newData);
   }
 
@@ -116,8 +121,10 @@ const AddUser = () => {
         phone: data.phone,
         email: data.email,
         password: data.password,
+        isAdmin: data.isAdmin,
       }).then((res) => {
         alert("New User Added...");
+        console.log(res.data);
         handleRefresh();
         navigate("/AdminHome/add-user");
       });
@@ -243,6 +250,13 @@ const AddUser = () => {
                   onChange={(e) => handle(e)}
                   value={data.password}
                 />
+                <label>
+                 <input
+                  id="isAdmin"
+                  type="checkbox"
+                  onChange={(e) => handle(e)}
+                  checked={data.isAdmin}
+                />Admin</label>
                 <div style={{ float: "left" }}>
                   <MDBBtn
                     className="w-10 mb-4"

@@ -1,6 +1,7 @@
 package com.collegesearch.collegesearch.repository;
 
 import com.collegesearch.collegesearch.entity.CollegeEntity;
+import com.collegesearch.collegesearch.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -17,6 +18,6 @@ public interface CollegeRepository extends JpaRepository<CollegeEntity, Integer>
     List<CollegeEntity> findByState(@Param("state") String state);
 //    @Query("SELECT c FROM CollegeEntity c JOIN c.collegeCourses cc JOIN cc.course co WHERE c.city = :city AND co.course = :course")
 //    List<CollegeEntity> findByCityAndCourse(@Param("city") String city, @Param("course") String course);
-
+   List<CollegeEntity>findByEmail(String Email);
 }
 

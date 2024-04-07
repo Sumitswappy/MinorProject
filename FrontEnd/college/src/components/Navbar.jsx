@@ -129,7 +129,8 @@ handleRefresh();
             <MDBDropdownMenu dark>
               <MDBDropdownItem link href='/Login'>Student Login</MDBDropdownItem>
               <MDBDropdownItem link href='/Register'>Student Sign Up</MDBDropdownItem>
-              <MDBDropdownItem link href='/College-register'>College Register</MDBDropdownItem>
+              <MDBDropdownItem link href='/Collegelogin'>Login for College</MDBDropdownItem>
+              <MDBDropdownItem link href='/College-register'>Sign up for College </MDBDropdownItem>
               <MDBDropdownItem link href='/AdminLogin'>Admin Login</MDBDropdownItem>
             </MDBDropdownMenu>
           </MDBDropdown>

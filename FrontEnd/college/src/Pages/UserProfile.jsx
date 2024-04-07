@@ -140,10 +140,8 @@ const UserProfile = () => {
                     />
                   </MDBCol>
                 </MDBRow>
-
-                
                 <div style={{ float: "left" }}>
-                  
+                  <MDBBtn onClick={() => navigate(-1)} color="primary">Back</MDBBtn>
                 </div>
               </MDBCardBody>
             </MDBCard>

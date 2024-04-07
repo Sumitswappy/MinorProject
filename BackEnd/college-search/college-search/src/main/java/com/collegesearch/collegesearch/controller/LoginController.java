@@ -19,4 +19,8 @@ public class LoginController {
     public ResponseEntity<Boolean> login(@RequestBody LoginModel loginModel){
         return new ResponseEntity<>(loginService.checkLogin(loginModel), HttpStatus.OK);
     }
+    @PostMapping("collegelogin")
+    public ResponseEntity<Boolean> collegelogin(@RequestBody LoginModel loginModel){
+        return new ResponseEntity<>(loginService.checkCollegeLogin(loginModel), HttpStatus.OK);
+    }
 }

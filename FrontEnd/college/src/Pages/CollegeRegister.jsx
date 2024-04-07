@@ -225,8 +225,11 @@ const CollegeRegister = () => {
         className="d-flex flex-row ps-5 pt-5"
         style={{ justifyContent: "center" }}
       >
+        <div className="icon">
         <MDBIcon fas icon="book-open" size="3x" style={{ color: "#709085" }} />
         <span className="h1 fw-bold mb-0">Unifind.in</span>
+        </div>
+        
       </div>
       <MDBContainer fluid>
         <MDBRow className="justify-content-center align-items-center p-5">
