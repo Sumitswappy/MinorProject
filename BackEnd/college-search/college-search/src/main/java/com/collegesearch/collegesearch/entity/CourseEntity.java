@@ -12,5 +12,7 @@ public class CourseEntity {
      String course;
     @ManyToMany(mappedBy = "collegeCourses")
      Set<CollegeEntity> college;
-    // getters and setters
+    @ManyToMany(mappedBy = "categoryCourses")
+    Set<CategoryEntity> category;
+
 }

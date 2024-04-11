@@ -38,7 +38,8 @@ function submit(e){
       Axios.get(getUrl).then((res) => {
         if(res.data[0].isAdmin==1){
         sessionStorage.setItem("email",data.userName);
-        navigate("/AdminHome/dashboard");}
+        sessionStorage.setItem("admin",data.userName);
+        navigate("/");}
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);

@@ -6,12 +6,14 @@ import com.collegesearch.collegesearch.repository.CollegeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class CollegeService {
 
     @Autowired
@@ -29,6 +31,10 @@ public List<CollegeEntity> getCollegesByCityAndCourse(String city, String course
 }
     public List<CollegeEntity> getCollegesByCourse(String course) {
         return collegeRepository.findByCourse(course);
+    }
+    public int getNumberOfCollegesByCourse(String courseName) {
+        List<CollegeEntity> colleges = collegeRepository.findByCourse(courseName);
+        return colleges.size();
     }
 
     public Optional<CollegeEntity> getCollegeById(int collegeId) {

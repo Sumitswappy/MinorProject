@@ -1,87 +1,96 @@
-import React from 'react';
-import { MDBNavbarLink,MDBIcon } from 'mdb-react-ui-kit';
+import React, { useState, useEffect } from 'react';
+import { MDBNavbarLink, MDBIcon } from 'mdb-react-ui-kit';
 import './Category.css';
+
 export default function Category() {
+  const [collegeCounts, setCollegeCounts] = useState({});
+
+  useEffect(() => {
+    async function fetchCollegeCounts() {
+      try {
+        const categories = [
+          'Engineering',
+          'Management',
+          'Medical',
+          'Mass Communication',
+          'Design',
+          'Law',
+          'Architecture',
+          'Computers',
+          'Arts and Humanities',
+          'Commerce',
+          'Science',
+          'Hotel Management',
+          'Education',
+          'Pharmacy',
+          'Travel and Tourism'
+        ];
+
+        const counts = {};
+        for (const category of categories) {
+          const response = await fetch(`http://localhost:8080/categories/colleges?categoryName=${category}`);
+          if (response.ok) {
+            const data = await response.json();
+            counts[category] = data;
+          } else {
+            console.error(`Failed to fetch college count for category: ${category}`);
+          }
+        }
+
+        setCollegeCounts(counts);
+      } catch (error) {
+        console.error('Error fetching college counts:', error);
+      }
+    }
+
+    fetchCollegeCounts();
+  }, []); // Execute once on component mount
+
   return (
     <div className='categories'>
-          
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="cogs" size='2x'/><br/>
-              Engineering
-            </MDBNavbarLink>
-        
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="chart-line" size='2x' /><br/>
-              Management
-            </MDBNavbarLink>
-          
-          
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="briefcase-medical" size='2x' /><br/>
-              Medical
-            </MDBNavbarLink>
-        
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="film" size='2x'/><br/>
-              Mass Communication
-            </MDBNavbarLink>
-         
-          
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="socks" size='2x'/><br/>
-              Design
-            </MDBNavbarLink>
-       
-        
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="gavel" size='2x' /><br/>
-              Law
-            </MDBNavbarLink>
-         
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon far icon="building" size='2x' /><br/>
-              Architecture
-            </MDBNavbarLink>
-        
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="laptop" size='2x'/><br/>
-              Computers
-            </MDBNavbarLink>
-         
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="paint-brush" size='2x' /><br/>
-              Art & Humanities
-            </MDBNavbarLink>
-         
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="hand-holding-usd" size='2x' /><br/>
-              Commerce
-            </MDBNavbarLink>
-         
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="atom" size='2x'/><br/>
-              Science
-            </MDBNavbarLink>
-         
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="concierge-bell" size='2x'/><br/>
-              Hotel Management
-            </MDBNavbarLink>
-         
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="chalkboard-teacher" size='2x'/><br/>
-              Teaching
-            </MDBNavbarLink>
-         
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="flask" size='2x'/><br/>
-              Pharmacy
-            </MDBNavbarLink>
-         
-            <MDBNavbarLink active aria-current='page' href='#'>
-            <MDBIcon fas icon="plane-departure" size='2x' /><br/>
-              Travel & Tourism
-            </MDBNavbarLink>
-       </div>
+      {Object.entries(collegeCounts).map(([category, count]) => (
+        <MDBNavbarLink key={category} active aria-current='page' href='#'>
+          {getCategoryIcon(category)}<br></br>
+          {category} ({count})
+        </MDBNavbarLink>
+      ))}
+    </div>
   );
+}
+
+function getCategoryIcon(category) {
+  switch (category.toLowerCase()) {
+    case 'engineering':
+      return <MDBIcon fas icon="cogs" size='2x' />;
+    case 'management':
+      return <MDBIcon fas icon="chart-line" size='2x' />;
+    case 'medical':
+      return <MDBIcon fas icon="briefcase-medical" size='2x' />;
+    case 'mass communication':
+      return <MDBIcon fas icon="film" size='2x' />;
+    case 'design':
+      return <MDBIcon fas icon="socks" size='2x' />;
+    case 'law':
+      return <MDBIcon fas icon="gavel" size='2x' />;
+    case 'architecture':
+      return <MDBIcon far icon="building" size='2x' />;
+    case 'computers':
+      return <MDBIcon fas icon="laptop" size='2x' />;
+    case 'arts and humanities':
+      return <MDBIcon fas icon="paint-brush" size='2x' />;
+    case 'commerce':
+      return <MDBIcon fas icon="hand-holding-usd" size='2x' />;
+    case 'science':
+      return <MDBIcon fas icon="atom" size='2x' />;
+    case 'hotel management':
+      return <MDBIcon fas icon="concierge-bell" size='2x' />;
+    case 'education':
+      return <MDBIcon fas icon="chalkboard-teacher" size='2x' />;
+    case 'pharmacy':
+      return <MDBIcon fas icon="flask" size='2x' />;
+    case 'travel and tourism':
+      return <MDBIcon fas icon="plane-departure" size='2x' />;
+    default:
+      return <MDBIcon fas icon="question-circle" size='2x' />;
+  }
 }
