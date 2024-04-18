@@ -17,6 +17,7 @@ import CollegeRegister from './Pages/CollegeRegister';
 import CollegeDetail from './Pages/CollegeDetail';
 import AddCollege from './components/AdminComponents/AddCollege';
 import ViewCollege from './components/AdminComponents/ViewCollege';
+import EditCollege from './components/AdminComponents/EditCollege';
 import UserProfile from './Pages/UserProfile';
 
 export default function App() {
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="edit-user" element={<EditUser/>}/>
             <Route path="add-college" element={<AddCollege/>}/>
             <Route path="view-college" element={<ViewCollege/>}/>
+            <Route path="edit-college" element={<EditCollege/>}/>
             </Route>
         </Routes> 
       </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   MDBBreadcrumb,
   MDBBreadcrumbItem,
@@ -16,7 +16,11 @@ import {
 import './AddCollege.css';
 import { NavLink } from 'react-router-dom';
 
-const AddCollege = () => {
+const EditCollege = () => {
+    const navigate = useNavigate();
+    const url = "http://localhost:8080/College/";
+    const location = useLocation();
+    const [college, setCollege] = useState([]);
   const [collegeData, setCollegeData] = useState({
     name: "",
     contactName: "",
@@ -30,7 +34,6 @@ const AddCollege = () => {
     collegeCourses: [],
   });
   const [course, setCourse] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -41,10 +44,27 @@ const AddCollege = () => {
         console.error("Error fetching courses:", error);
       }
     };
-
+  
     fetchCourses();
-  }, []);
-
+  
+    if (location.state && location.state.id) {
+      const colId = location.state.id;
+      console.log(colId);
+      
+      const getQuery=`get/${location.state.id}`;
+      Axios.get(`${url}${getQuery}`).then((res) => {
+        setCollege(res.data);
+        setCollegeData({
+          ...res.data,
+          collegeCourses: res.data.collegeCourses.map(course => ({ id: course.id }))
+        });
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+    }
+  }, [location]);
   const [errors, setErrors] = useState({});
 
   const states = [
@@ -83,6 +103,25 @@ const AddCollege = () => {
     "Lakshadweep",
     "Puducherry",
   ];
+  /*const handleCourseChange = (courseId) => {
+    setCollegeData((prevData) => {
+      const updatedCourses = [...prevData.collegeCourses];
+      const existingIndex = updatedCourses.findIndex(course => course.id === courseId);
+      if (existingIndex !== -1) {
+        updatedCourses.splice(existingIndex, 1); // If already present, remove it
+      } else {
+        updatedCourses.push({ id: courseId }); // If not present, add it
+      }
+      return {
+        ...prevData,
+        collegeCourses: updatedCourses,
+      };
+    });
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      collegeCourses: "",
+    }));
+  };*/
   const handleCourseChange = (index, value) => {
     setCollegeData((prevData) => {
       const updatedCourses = [...prevData.collegeCourses];
@@ -101,112 +140,72 @@ const AddCollege = () => {
       collegeCourses: "",
     }));
   };
+  
+  
+  
 
-  let i = 0;
+  const colId = college.id;
+  const putQuery=`update/${colId}`;
+  const fullurl=`${url}${putQuery}`;
+  console.log(fullurl);
+  
+ 
+   if (!college.id) {
+     // Handle the case when the user ID is not available
+     return (
+       <div>
+         <p>Error: User ID not available</p>
+       </div>
+     );
+   }
+ 
+   console.log("Data:", collegeData);
 
-  const validateForm = () => {
-    let valid = true;
-    const newErrors = {};
+ 
+let i=0;
 
-    if (!collegeData.name.trim()) {
-      newErrors.name = "*College name is required";
-      valid = false;
-    }
-
-    if (!collegeData.contactName.trim()) {
-      newErrors.contactName = "*Contact person name is required";
-      valid = false;
-    }
-
-   /* if (
-      !collegeData.phoneNumber.trim() ||
-      !/^\d{10}$/.test(collegeData.phoneNumber.trim())
-    ) {
-      newErrors.phoneNumber = "*Valid 10-digit phone number is required";
-      valid = false;
-    }*/
-
-    if (!collegeData.state.trim()) {
-      newErrors.state = "*State is required";
-      valid = false;
-    }
-
-    if (!collegeData.city.trim()) {
-      newErrors.city = "*City is required";
-      valid = false;
-    }
-
-    if (
-      !collegeData.email.trim() ||
-      !/\S+@\S+\.\S+/.test(collegeData.email.trim())
-    ) {
-      newErrors.email = "*Valid email is required";
-      valid = false;
-    }
-
-    if (!collegeData.password.trim()) {
-      newErrors.password = "*Password is required";
-      valid = false;
-    }
-
-    if (!collegeData.affiliation.trim()) {
-      newErrors.affiliation = "*Affiliation is required";
-      valid = false;
-    }
-
-    if (!collegeData.certification.trim()) {
-      newErrors.certification = "*Certification is required";
-      valid = false;
-    }
-
-    if (
-      !collegeData.establishmentYear.trim() ||
-      !/^\d{4}$/.test(collegeData.establishmentYear.trim())
-    ) {
-      newErrors.establishmentYear = "*Valid 4-digit year is required";
-      valid = false;
-    }
-
-    if (!collegeData.collegeCourses.length) {
-      newErrors.collegeCourses = "*At least one course is required";
-      valid = false;
-    } else {
-      collegeData.collegeCourses.forEach((course, index) => {
-        if (!course || !course.id) {
-          newErrors[`course${index}`] = `*Course ${index + 1} is required`;
-          valid = false;
-        }
+/*const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Submitting form...");
+    console.log("Courses:", collegeData.collegeCourses);
+    Axios.put(fullurl, 
+        {name: collegeData.name,
+            contactName: collegeData.contactName,
+            state: collegeData.state,
+            city: collegeData.city,
+            email: collegeData.email,
+            password: collegeData.password,
+            affiliation: collegeData.affiliation,
+            certification: collegeData.certification,
+            establishmentYear: collegeData.establishmentYear,
+            collegeCourses: collegeData.collegeCourses,}
+    )
+      .then((res) => {
+        console.log("Response:", res.data);
+        alert("Updated...");
+        navigate("/AdminHome/view-college");
+      })
+      .catch((error) => {
+        console.error("Error updating college:", error);
+        alert("Error updating college. Please check the console for details.");
       });
-    }
-
-    setErrors(newErrors);
-    return valid;
-  };
-
+  };*/
   const handleSubmit = (e) => {
     e.preventDefault();
-    while (i < collegeData.collegeCourses.length) {
-      if (collegeData.collegeCourses[i] == undefined) {
-        delete collegeData.collegeCourses[i];
-        i++;
-      } else {
-        i++;
-      }
-    }
-    console.log(collegeData);
-    if (validateForm()) {
-      Axios.post(`http://localhost:8080/College/add`, collegeData)
-        .then((res) => {
-          console.log(res.data);
-          alert("New College Added...");
-          handleRefresh();
-          navigate("/AdminHome/add-college");
-        })
-        .catch((error) => {
-          console.error("Error adding college:", error);
-        });
-    }
+    console.log("Submitting form...");
+    console.log("Data to be sent:", collegeData);
+    Axios.put(fullurl, collegeData)
+      .then((res) => {
+        console.log("Response:", res.data);
+        alert("Updated...");
+        navigate("/AdminHome/view-college");
+      })
+      .catch((error) => {
+        console.error("Error updating college:", error);
+        alert("Error updating college. Please check the console for details.");
+      });
   };
+  
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -245,12 +244,12 @@ const AddCollege = () => {
             </MDBBreadcrumbItem>
             <MDBBreadcrumbItem>
               <a href="/AdminHome/add-user" className="text-reset">
-                <u>Add College</u>
+                <u>Edit College</u>
               </a>
             </MDBBreadcrumbItem>
         </MDBBreadcrumb>
         <MDBContainer fluid className="heading">
-          <h2 className="view-heading">Add College</h2>
+          <h2 className="view-heading">Edit College</h2>
           <NavLink to="/AdminHome/view-college" className="add-user-button">
             View College
           </NavLink>
@@ -287,7 +286,7 @@ const AddCollege = () => {
                     {errors.contactName && <div className="text-danger">{errors.contactName}</div>}
                   </MDBCol>
 
-                 {/* <MDBCol md='6'>
+                  {/*<MDBCol md='6'>
                     <MDBInput
                       wrapperClass='mb-4'
                       label='Phone Number'
@@ -298,7 +297,7 @@ const AddCollege = () => {
                       value={collegeData.phoneNumber}
                     />
                     {errors.phoneNumber && <div className="text-danger">{errors.phoneNumber}</div>}
-  </MDBCol>*/}
+                  </MDBCol>*/}
                 </MDBRow>
 
                 <MDBRow>
@@ -484,4 +483,4 @@ const AddCollege = () => {
   );
 };
 
-export default AddCollege;
+export default EditCollege;

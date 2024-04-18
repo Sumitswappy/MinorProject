@@ -1,5 +1,5 @@
 package com.collegesearch.collegesearch.controller;
-
+import org.springframework.http.HttpStatus;
 import com.collegesearch.collegesearch.entity.CollegeEntity;
 import com.collegesearch.collegesearch.service.CollegeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +43,28 @@ public List<CollegeEntity> getCollegesByCityAndCourse(
 
     return collegeService.getCollegesByCityAndCourse(city, course);
 }
+
     @PostMapping("add")
     public void saveCollege(@RequestBody CollegeEntity college) {
         collegeService.saveCollege(college);
+    }
+    @PutMapping("update/{collegeId}")
+    public ResponseEntity<Void> updateCollege(@PathVariable int collegeId, @RequestBody CollegeEntity updatedCollege) {
+        boolean success = collegeService.updateCollege(collegeId, updatedCollege);
+        if (success) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/{collegeId}")
+    public ResponseEntity<CollegeEntity> getCollegeWithCoursesById(@PathVariable int collegeId) {
+        CollegeEntity college = collegeService.getCollegeWithCoursesById(collegeId);
+        if (college != null) {
+            return new ResponseEntity<>(college, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("delete/{collegeId}")

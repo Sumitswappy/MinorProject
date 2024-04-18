@@ -21,7 +21,6 @@ const ViewCollege = () => {
 
   Axios.get(`${url}get`)
     .then((res) => {
-      console.log(res.data);
       setColleges(res.data);
     })
     .catch((error) => {
@@ -44,8 +43,7 @@ const ViewCollege = () => {
 
     const onHandleEdit = (e) => {
       const collegeId = e.id;
-      alert(collegeId);
-      navigate("/AdminHome/edit-user", { state: { id:collegeId } });
+      navigate("/AdminHome/edit-college", { state: { id: collegeId } });
     };
   return (
     <div className="view-user">
@@ -114,7 +112,7 @@ const ViewCollege = () => {
                       split
                     ></MDBDropdownToggle>
                     <MDBDropdownMenu>
-                      {/* <MDBDropdownItem link onClick={()=>onHandleEdit(college)}>Update College</MDBDropdownItem> */}
+                       <MDBDropdownItem link onClick={()=>onHandleEdit(college)}>Update College</MDBDropdownItem>
                       <MDBDropdownItem link onClick={()=>onHandleDelete(college)}>Delete College</MDBDropdownItem>
                     </MDBDropdownMenu>
                   </MDBDropdown>

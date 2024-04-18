@@ -58,6 +58,18 @@
   text-align: center;
   padding: 10px;
 }
+.admin-user {
+  background-image: linear-gradient(to right,  rgba(255,0,0,0),rgb(24, 86, 255));
+  border-radius: 0px 35px 0px 35px;
+  font-weight: bolder;
+  text-decoration: underline;
+  color: rgb(255, 255, 255);
+}
+.admin-user-text {
+  font-weight: bolder;
+  color: rgb(0, 0, 0);
+}
+
 .add-user-button{
   color: rgb(0, 106, 255);
   font-weight: bold;

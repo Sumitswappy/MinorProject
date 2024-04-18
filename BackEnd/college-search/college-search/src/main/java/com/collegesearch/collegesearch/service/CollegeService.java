@@ -40,10 +40,38 @@ public List<CollegeEntity> getCollegesByCityAndCourse(String city, String course
     public Optional<CollegeEntity> getCollegeById(int collegeId) {
         return collegeRepository.findById(collegeId);
     }
-
+    public CollegeEntity getCollegeWithCoursesById(int collegeId) {
+        Optional<CollegeEntity> collegeOptional = collegeRepository.findCollegeWithCoursesById(collegeId);
+        return collegeOptional.orElse(null);
+    }
     public void saveCollege(CollegeEntity college) {
         college.setPassword(securityManager.encryptPassword(college.getPassword()));
         collegeRepository.save(college);
+    }
+    public boolean updateCollege(int collegeId, CollegeEntity updatedCollege) {
+        Optional<CollegeEntity> existingCollegeOptional = collegeRepository.findById(collegeId);
+        if (existingCollegeOptional.isPresent()) {
+            CollegeEntity existingCollege = existingCollegeOptional.get();
+            // Update the college details
+            existingCollege.setName(updatedCollege.getName());
+            existingCollege.setContactName(updatedCollege.getContactName());
+            existingCollege.setEmail(updatedCollege.getEmail());
+            existingCollege.setPassword(updatedCollege.getPassword());
+            existingCollege.setCity(updatedCollege.getCity());
+            existingCollege.setState(updatedCollege.getState());
+            existingCollege.setAffiliation(updatedCollege.getAffiliation());
+            existingCollege.setCertification(updatedCollege.getCertification());
+            existingCollege.setEstablishmentYear(updatedCollege.getEstablishmentYear());
+
+            // Update associated courses
+            existingCollege.setCollegeCourses(updatedCollege.getCollegeCourses());
+
+            // Save the updated college entity
+            collegeRepository.save(existingCollege);
+            return true;
+        } else {
+            return false; // College not found
+        }
     }
 
     public void deleteCollege(int collegeId) {

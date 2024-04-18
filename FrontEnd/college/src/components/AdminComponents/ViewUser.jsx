@@ -24,6 +24,7 @@ const ViewUser = () => {
   Axios.get(getUrl)
     .then((res) => {
       setUsers(res.data);
+      console.log(res.data);
     })
     .catch((error) => {
       console.error("Error fetching user data:", error);
@@ -96,11 +97,13 @@ const ViewUser = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user,index) => (
+            {users.map((user, index) => (
               <tr key={user.id} className="table-row">
-                <td>{index+1}</td>
-                <td>{user.firstName}</td>
-                <td>{user.lastName}</td>
+                <td className={user.isAdmin ? 'admin-user' : ''}>{index + 1}</td>
+                <td className={user.isAdmin ? 'admin-user-text' : ''}>
+                  {user.firstName}
+                </td>
+                <td className={user.isAdmin ? 'admin-user-text' : ''}>{user.lastName}</td>
                 <td>{user.email}</td>
                 <td>{user.city}</td>
                 <td>{user.state}</td>
@@ -110,14 +113,20 @@ const ViewUser = () => {
                     <MDBBtn size="sm" color="success">
                       Action
                     </MDBBtn>
-                    <MDBDropdownToggle
-                      color="success"
-                      outline
-                      split
-                    ></MDBDropdownToggle>
+                    <MDBDropdownToggle color="success" outline split></MDBDropdownToggle>
                     <MDBDropdownMenu>
-                      <MDBDropdownItem link onClick={()=>onHandleEdit(user)}>Update User</MDBDropdownItem>
-                      <MDBDropdownItem link onClick={()=>onHandleDelete(user)}>Delete User</MDBDropdownItem>
+                      <MDBDropdownItem
+                        link
+                        onClick={() => onHandleEdit(user)}
+                      >
+                        Update User
+                      </MDBDropdownItem>
+                      <MDBDropdownItem
+                        link
+                        onClick={() => onHandleDelete(user)}
+                      >
+                        Delete User
+                      </MDBDropdownItem>
                     </MDBDropdownMenu>
                   </MDBDropdown>
                 </td>
