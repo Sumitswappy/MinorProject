@@ -17,7 +17,7 @@ import Axios from "axios";
 const ViewUser = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-  const url = "http://localhost:8080/user";
+  const url = "http://65.2.79.30:8080/user";
   const getQuery=`/get`;
   const getUrl=`${url}${getQuery}`;
 

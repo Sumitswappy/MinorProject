@@ -18,7 +18,7 @@ import { NavLink } from 'react-router-dom';
 
 const EditCollege = () => {
     const navigate = useNavigate();
-    const url = "http://localhost:8080/College/";
+    const url = "http://65.2.79.30:8080/College/";
     const location = useLocation();
     const [college, setCollege] = useState([]);
   const [collegeData, setCollegeData] = useState({
@@ -38,7 +38,7 @@ const EditCollege = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await Axios.get("http://localhost:8080/courses/get");
+        const response = await Axios.get("http://65.2.79.30:8080/courses/get");
         setCourse(response.data.map((course) => course.course));
       } catch (error) {
         console.error("Error fetching courses:", error);

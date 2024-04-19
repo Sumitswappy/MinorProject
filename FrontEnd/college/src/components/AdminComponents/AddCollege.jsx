@@ -35,7 +35,7 @@ const AddCollege = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await Axios.get("http://localhost:8080/courses/get");
+        const response = await Axios.get("http://65.2.79.30:8080/courses/get");
         setCourse(response.data.map((course) => course.course));
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -118,13 +118,13 @@ const AddCollege = () => {
       valid = false;
     }
 
-   /* if (
+    if (
       !collegeData.phoneNumber.trim() ||
       !/^\d{10}$/.test(collegeData.phoneNumber.trim())
     ) {
       newErrors.phoneNumber = "*Valid 10-digit phone number is required";
       valid = false;
-    }*/
+    }
 
     if (!collegeData.state.trim()) {
       newErrors.state = "*State is required";
@@ -287,7 +287,7 @@ const AddCollege = () => {
                     {errors.contactName && <div className="text-danger">{errors.contactName}</div>}
                   </MDBCol>
 
-                 {/* <MDBCol md='6'>
+                  <MDBCol md='6'>
                     <MDBInput
                       wrapperClass='mb-4'
                       label='Phone Number'
@@ -298,7 +298,7 @@ const AddCollege = () => {
                       value={collegeData.phoneNumber}
                     />
                     {errors.phoneNumber && <div className="text-danger">{errors.phoneNumber}</div>}
-  </MDBCol>*/}
+  </MDBCol>
                 </MDBRow>
 
                 <MDBRow>

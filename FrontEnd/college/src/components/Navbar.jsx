@@ -40,7 +40,7 @@ handleRefresh();
   const handleDashboard = () => {
     navigate("/AdminHome/dashboard");
   }
-    const url = `http://localhost:8080/user/getByEmail?email=${sessionStorage.getItem("email")}`;
+    const url = `http://65.2.79.30:8080/user/getByEmail?email=${sessionStorage.getItem("email")}`;
     Axios.get(url)
     .then((res) => {
       sessionStorage.setItem("name",res.data[0].firstName);

@@ -15,7 +15,7 @@ import './StudentRegister.css';
 
 function Register() {
   const navigate = useNavigate();
-  const url = "http://localhost:8080/user/add";
+  const url = "http://65.2.79.30:8080/user/add";
   const [data, setData] = useState({
     firstName: "",
     lastName: "",

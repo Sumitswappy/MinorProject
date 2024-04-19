@@ -36,7 +36,7 @@ const CollegeRegister = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await Axios.get("http://localhost:8080/courses/get");
+        const response = await Axios.get("http://65.2.79.30:8080/courses/get");
         setCourse(response.data.map((course) => course.course));
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -195,7 +195,7 @@ const CollegeRegister = () => {
       }
     }
     if (validateForm()) {
-      Axios.post(`http://localhost:8080/College/add`, collegeData)
+      Axios.post(`http://65.2.79.30:8080/College/add`, collegeData)
         .then((res) => {
           console.log(res.data);
           navigate("/");

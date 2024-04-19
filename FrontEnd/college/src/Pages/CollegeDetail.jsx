@@ -10,7 +10,7 @@ const CollegeDetail = () => {
   const { id } = useParams();
   const [collegeData, setCollegeData] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
-  const url = "http://localhost:8080/College/"; 
+  const url = "http://65.2.79.30:8080/College/"; 
   const location = useLocation();
   useEffect(() => {
     if (location.state && location.state.id) {

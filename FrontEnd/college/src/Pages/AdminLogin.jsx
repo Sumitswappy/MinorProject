@@ -15,7 +15,7 @@ import {
 from 'mdb-react-ui-kit';
 function AdminLogin() {
   const navigate = useNavigate();
-  const url="http://localhost:8080/login";
+  const url="http://65.2.79.30:8080/login";
 const[data,setData]=useState({
   userName:"",
   password:"",
@@ -34,7 +34,7 @@ function submit(e){
   }).then((res)=>{
     if(res.data==true){
       console.log(res.data);
-      const getUrl = `http://localhost:8080/user/getByEmail?email=${data.userName}`;
+      const getUrl = `http://65.2.79.30:8080/user/getByEmail?email=${data.userName}`;
       Axios.get(getUrl).then((res) => {
         if(res.data[0].isAdmin==1){
         sessionStorage.setItem("email",data.userName);

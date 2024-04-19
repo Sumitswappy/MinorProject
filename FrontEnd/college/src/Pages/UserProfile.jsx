@@ -17,7 +17,7 @@ import { NavLink } from "react-router-dom";
 
 const UserProfile = () => {
   const navigate = useNavigate();
-  const url = "http://localhost:8080/user/";
+  const url = "http://65.2.79.30:8080/user/";
   const location = useLocation();
   const [data, setData] = useState({
     firstName: "",

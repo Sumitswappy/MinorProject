@@ -13,7 +13,7 @@ import './StudentLogin.css';
 
 function Login() {
   const navigate = useNavigate();
-  const url="http://localhost:8080/login";
+  const url="http://65.2.79.30:8080/login";
   const[data,setData]=useState({
   userName:"",
   password:"",

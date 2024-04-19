@@ -15,6 +15,7 @@ public class CollegeEntity {
 
     private String name;
     private String contactName;
+    private Long phoneNumber;
     private String email;
     private String password;
     private String city;

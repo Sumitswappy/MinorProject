@@ -45,12 +45,12 @@ const CollegeList = () => {
           response = await Axios.get(url2);
         } else if (!filters.city && !filters.state) {
           
-          response = await Axios.get(`http://localhost:8080/College/byCourse/${filters.course}`);
+          response = await Axios.get(`http://65.2.79.30:8080/College/byCourse/${filters.course}`);
         } else if(filters.city)
         {
-          response = await Axios.get(`http://localhost:8080/College/byCity/${filters.city}`);
+          response = await Axios.get(`http://65.2.79.30:8080/College/byCity/${filters.city}`);
         } else if(filters.state){
-          response = await Axios.get(`http://localhost:8080/College/byState/${filters.state}`);
+          response = await Axios.get(`http://65.2.79.30:8080/College/byState/${filters.state}`);
         }
         else {
           
