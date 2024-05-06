@@ -14,15 +14,26 @@ public class CollegeEntity {
     private int id;
 
     private String name;
-    private String contactName;
+    private String firstName;
+    private String lastName;
     private Long phoneNumber;
+    @Column(unique = true)
     private String email;
-    private String password;
+    private String address;
     private String city;
     private String state;
     private String affiliation;
     private String certification;
     private Long establishmentYear;
+    private String filename;
+    private String brochurefileUri;
+    private String profilephoto;
+    private String profilephotoUri;
+    private String coverphoto;
+    private String coverphotoUri;
+    private String collegeweb;
+    private String applyweb;
+    private Double rating;
 
     @ManyToMany
     @JoinTable(

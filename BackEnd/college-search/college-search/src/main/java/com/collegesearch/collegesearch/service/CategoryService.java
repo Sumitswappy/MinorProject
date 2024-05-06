@@ -2,6 +2,7 @@
 package com.collegesearch.collegesearch.service;
 
 import com.collegesearch.collegesearch.entity.CategoryEntity;
+import com.collegesearch.collegesearch.entity.CollegeEntity;
 import com.collegesearch.collegesearch.repository.CategoryRepository;
 import com.collegesearch.collegesearch.repository.CollegeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,7 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
-    CollegeRepository collegeRepository;
-    CollegeService college;
+
     public List<CategoryEntity> getAllCategories() {
         return categoryRepository.findAll();
     }
@@ -31,6 +31,7 @@ public class CategoryService {
     public int getNumberOfCollegesByCategoryName(String categoryName) {
         return categoryRepository.countCollegesByCategoryName(categoryName);
     }
+
 
     public CategoryEntity createCategory(CategoryEntity categoryEntity) {
         return categoryRepository.save(categoryEntity);

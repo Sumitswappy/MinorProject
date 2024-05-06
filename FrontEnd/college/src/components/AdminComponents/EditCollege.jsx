@@ -6,7 +6,9 @@ import {
   MDBBreadcrumbItem,
   MDBBtn,
   MDBContainer,
-  MDBDropdown,MDBDropdownToggle,MDBDropdownMenu,
+  MDBDropdown,
+  MDBDropdownToggle,
+  MDBDropdownMenu,
   MDBRow,
   MDBCol,
   MDBCard,
@@ -17,13 +19,35 @@ import './AddCollege.css';
 import { NavLink } from 'react-router-dom';
 
 const EditCollege = () => {
-    const navigate = useNavigate();
-    const url = "http://65.2.79.30:8080/College/";
-    const location = useLocation();
-    const [college, setCollege] = useState([]);
+  const navigate = useNavigate();
+  const url = "http://localhost:8080/College/";
+  const location = useLocation();
+  const [college, setCollege] = useState({});
+  const colId = college.id;
+  const putQuery=`update/${colId}`;
+  const fullurl=`${url}${putQuery}`;
+  
+  const [userId, setUserId] = useState('');
+  const [user, setUser] = useState({
+    firstName: '',
+            lastName: '',
+            address: '',
+            city: '',
+            state: '',
+            phone: '',
+            email: '',
+            password: '',
+            isAdmin: '',
+        isCollegeUser: '',
+        photofile: '',
+        profilephotoUri: '', 
+  });
   const [collegeData, setCollegeData] = useState({
     name: "",
-    contactName: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    address: "",
     state: "",
     city: "",
     email: "",
@@ -32,13 +56,22 @@ const EditCollege = () => {
     certification: "",
     establishmentYear: "",
     collegeCourses: [],
+    brochurefileUri: "",
+    filename: "",
+    collegeweb: "",
+    applyweb: "",
+    profilephoto: "",
+    profilephotoUri: "",
+    coverphoto: "",
+    coverphotoUri: "",
+
   });
   const [course, setCourse] = useState([]);
-
+  
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await Axios.get("http://65.2.79.30:8080/courses/get");
+        const response = await Axios.get("http://localhost:8080/courses/get");
         setCourse(response.data.map((course) => course.course));
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -52,19 +85,67 @@ const EditCollege = () => {
       console.log(colId);
       
       const getQuery=`get/${location.state.id}`;
+      
       Axios.get(`${url}${getQuery}`).then((res) => {
+
         setCollege(res.data);
         setCollegeData({
           ...res.data,
           collegeCourses: res.data.collegeCourses.map(course => ({ id: course.id }))
         });
-        console.log(res.data);
+        console.log("college",res.data);
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);
       });
     }
+    console.log(collegeData.email);
+    
   }, [location]);
+  
+  useEffect(() => {
+    // Check if brochurefileUri and filename are not empty
+    if (collegeData.brochurefileUri !== "" && collegeData.filename !== "") {
+      console.log("File uploaded successfully:", collegeData.brochurefileUri);
+      console.log("Filename:", collegeData.filename);
+
+      // Continue with form submission
+      
+        console.log("Start:", collegeData);
+      
+        const geturl = `http://localhost:8080/user/getByEmail?email=${collegeData.email}`;
+        Axios.get(geturl)
+        .then((resp) => {
+          console.log("userid:", resp.data);
+          setUser(resp.data);
+          const userIdFromResponse = resp.data[0].id;
+          setUserId(userIdFromResponse); // Update userId inside the .then() block
+          console.log("id2:", userIdFromResponse); // Now this should give the updated value
+          // Perform subsequent actions that depend on userId here
+          const endpointUrl = `http://localhost:8080/user/update/${userIdFromResponse}`;
+          Axios.put(endpointUrl, {
+            firstName: collegeData.firstName,
+            lastName: collegeData.lastName,
+            address: user.address,
+            city: collegeData.city,
+            state: collegeData.state,
+            phone: collegeData.phoneNumber,
+            email: collegeData.email,
+            password: '',
+            isAdmin: user.isAdmin,
+        isCollegeUser: true,
+        photofile: user.photofile,
+        profilephotoUri: user.profilephotoUri,
+          }).then((res) => {
+            console.log(res.data); 
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+    }
+  }, [collegeData],[user]);
+ 
   const [errors, setErrors] = useState({});
 
   const states = [
@@ -103,25 +184,7 @@ const EditCollege = () => {
     "Lakshadweep",
     "Puducherry",
   ];
-  /*const handleCourseChange = (courseId) => {
-    setCollegeData((prevData) => {
-      const updatedCourses = [...prevData.collegeCourses];
-      const existingIndex = updatedCourses.findIndex(course => course.id === courseId);
-      if (existingIndex !== -1) {
-        updatedCourses.splice(existingIndex, 1); // If already present, remove it
-      } else {
-        updatedCourses.push({ id: courseId }); // If not present, add it
-      }
-      return {
-        ...prevData,
-        collegeCourses: updatedCourses,
-      };
-    });
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      collegeCourses: "",
-    }));
-  };*/
+
   const handleCourseChange = (index, value) => {
     setCollegeData((prevData) => {
       const updatedCourses = [...prevData.collegeCourses];
@@ -141,69 +204,86 @@ const EditCollege = () => {
     }));
   };
   
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
   
   
 
-  const colId = college.id;
-  const putQuery=`update/${colId}`;
-  const fullurl=`${url}${putQuery}`;
-  console.log(fullurl);
-  
- 
-   if (!college.id) {
-     // Handle the case when the user ID is not available
-     return (
-       <div>
-         <p>Error: User ID not available</p>
-       </div>
-     );
-   }
- 
-   console.log("Data:", collegeData);
-
- 
-let i=0;
-
-/*const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitting form...");
-    console.log("Courses:", collegeData.collegeCourses);
-    Axios.put(fullurl, 
-        {name: collegeData.name,
-            contactName: collegeData.contactName,
-            state: collegeData.state,
-            city: collegeData.city,
-            email: collegeData.email,
-            password: collegeData.password,
-            affiliation: collegeData.affiliation,
-            certification: collegeData.certification,
-            establishmentYear: collegeData.establishmentYear,
-            collegeCourses: collegeData.collegeCourses,}
-    )
-      .then((res) => {
-        console.log("Response:", res.data);
-        alert("Updated...");
-        navigate("/AdminHome/view-college");
-      })
-      .catch((error) => {
-        console.error("Error updating college:", error);
-        alert("Error updating college. Please check the console for details.");
-      });
-  };*/
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitting form...");
-    console.log("Data to be sent:", collegeData);
-    Axios.put(fullurl, collegeData)
+  
+    const formData = new FormData();
+    if (file) {
+      formData.append("file", file);
+      Axios.put("http://localhost:8080/files", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
       .then((res) => {
-        console.log("Response:", res.data);
-        alert("Updated...");
-        navigate("/AdminHome/view-college");
+        console.log("File uploaded successfully:", res.data);
+        console.log(res.data.fileDownloadUrl);
+        console.log("collegedata", collegeData);
+  
+        // Update collegeData with file information
+        const updatedCollegeData = {
+          ...collegeData,
+          brochurefileUri: res.data.fileDownloadUrl || "", // Store empty string if no file is selected
+          filename: res.data.filename || "", // Store empty string if no file is selected
+        };
+  
+        // Set the updated collegeData state
+        setCollegeData(updatedCollegeData);
+  
+        console.log("updated collegeData", updatedCollegeData); // Log the updated collegeData
+  
+        // Now, make the second Axios PUT request with the updated collegeData
+        Axios.put(fullurl, updatedCollegeData)
+          .then((res) => {
+            console.log("College data updated successfully:", res.data);
+            alert("College data updated successfully");
+            navigate("/AdminHome/view-college");
+          })
+          .catch((error) => {
+            console.error("Error updating college:", error);
+            alert("Error updating college. Please check the console for details.");
+          });
       })
       .catch((error) => {
-        console.error("Error updating college:", error);
-        alert("Error updating college. Please check the console for details.");
+        console.error("Error uploading file:", error);
       });
+  
+    }
+    else{
+      // Update collegeData with file information
+      const updatedCollegeData = {
+        ...collegeData,
+        brochurefileUri: "", // Store empty string if no file is selected
+        filename:  "", // Store empty string if no file is selected
+      };
+
+      // Set the updated collegeData state
+      setCollegeData(updatedCollegeData);
+
+      console.log("updated collegeData", updatedCollegeData); // Log the updated collegeData
+
+      // Now, make the second Axios PUT request with the updated collegeData
+      Axios.put(fullurl, updatedCollegeData)
+        .then((res) => {
+          console.log("College data updated successfully:", res.data);
+          alert("College data updated successfully");
+          navigate("/AdminHome/view-college");
+        })
+        .catch((error) => {
+          console.error("Error updating college:", error);
+          alert("Error updating college. Please check the console for details.");
+        });
+    
+  
+    }
   };
   
 
@@ -258,7 +338,8 @@ let i=0;
           <MDBCard className="my-5">
             <MDBCardBody className="p-5">
               <form onSubmit={handleSubmit}>
-                <MDBRow>
+              <hr/><h4><u>College Details:</u></h4><br/>
+              <MDBRow>
                   <MDBCol md="">
                     <MDBInput
                       wrapperClass="mb-4"
@@ -269,42 +350,46 @@ let i=0;
                       onChange={handleChange}
                       value={collegeData.name}
                     />
-                    {errors.name && <div className="text-danger">{errors.name}</div>}
+                    {errors.name && (
+                      <div className="text-danger">{errors.name}</div>
+                    )}
                   </MDBCol>
                 </MDBRow>
                 <MDBRow>
-                  <MDBCol md='6'>
+                  <MDBCol md="">
                     <MDBInput
-                      wrapperClass='mb-4'
-                      label='Name of the Contact Person'
-                      size='lg'
-                      id='contactName'
-                      type='text'
+                      wrapperClass="mb-4"
+                      label="Affiliation"
+                      size="lg"
+                      id="affiliation"
+                      type="text"
                       onChange={handleChange}
-                      value={collegeData.contactName}
+                      value={collegeData.affiliation}
                     />
-                    {errors.contactName && <div className="text-danger">{errors.contactName}</div>}
+                    {errors.affiliation && (
+                      <div className="text-danger">{errors.affiliation}</div>
+                    )}
                   </MDBCol>
-
-                  {/*<MDBCol md='6'>
-                    <MDBInput
-                      wrapperClass='mb-4'
-                      label='Phone Number'
-                      size='lg'
-                      id='phoneNumber'
-                      type='text'
-                      onChange={handleChange}
-                      value={collegeData.phoneNumber}
-                    />
-                    {errors.phoneNumber && <div className="text-danger">{errors.phoneNumber}</div>}
-                  </MDBCol>*/}
                 </MDBRow>
-
                 <MDBRow>
-                  <MDBCol md='6'>
+                <MDBCol md="4">
+                    <MDBInput
+                      wrapperClass="mb-4"
+                      label="Address"
+                      size="lg"
+                      id="address"
+                      type="text"
+                      onChange={handleChange}
+                      value={collegeData.address}
+                    />
+                    {errors.address && (
+                      <div className="text-danger">{errors.address}</div>
+                    )}
+                  </MDBCol>
+                  <MDBCol md="4">
                     <select
                       className="custom-select"
-                      id='state'
+                      id="state"
                       onChange={handleChange}
                       value={collegeData.state}
                     >
@@ -315,79 +400,42 @@ let i=0;
                         </option>
                       ))}
                     </select>
-                    {errors.state && <div className="text-danger">{errors.state}</div>}
+                    {errors.state && (
+                      <div className="text-danger">{errors.state}</div>
+                    )}
                   </MDBCol>
 
-                  <MDBCol md='6'>
+                  <MDBCol md="4">
                     <MDBInput
-                      wrapperClass='mb-4'
-                      label='Select City'
-                      size='lg'
-                      id='city'
-                      type='text'
+                      wrapperClass="mb-4"
+                      label="Select City"
+                      size="lg"
+                      id="city"
+                      type="text"
                       onChange={handleChange}
                       value={collegeData.city}
                     />
-                    {errors.city && <div className="text-danger">{errors.city}</div>}
-                  </MDBCol>
-                </MDBRow>
-
-                <MDBRow>
-                  <MDBCol md='6'>
-                    <MDBInput
-                      wrapperClass='mb-4'
-                      label='Email'
-                      size='lg'
-                      id='email'
-                      type='email'
-                      onChange={handleChange}
-                      value={collegeData.email}
-                    />
-                    {errors.email && <div className="text-danger">{errors.email}</div>}
-                  </MDBCol>
-
-                  <MDBCol md='6'>
-                    <MDBInput
-                      wrapperClass='mb-4'
-                      label='Password'
-                      size='lg'
-                      id='password'
-                      type='password'
-                      onChange={handleChange}
-                      value={collegeData.password}
-                    />
-                    {errors.password && <div className="text-danger">{errors.password}</div>}
+                    {errors.city && (
+                      <div className="text-danger">{errors.city}</div>
+                    )}
                   </MDBCol>
                 </MDBRow>
                 <MDBRow>
-                  <MDBCol md=''>
+                  <MDBCol md="6">
                     <MDBInput
-                      wrapperClass='mb-4'
-                      label='Affiliation'
-                      size='lg'
-                      id='affiliation'
-                      type='text'
-                      onChange={handleChange}
-                      value={collegeData.affiliation}
-                    />
-                    {errors.affiliation && <div className="text-danger">{errors.affiliation}</div>}
-                  </MDBCol>
-                </MDBRow>
-                <MDBRow>
-                  <MDBCol md=''>
-                    <MDBInput
-                      wrapperClass='mb-4'
-                      label='Certification'
-                      size='lg'
-                      id='certification'
-                      type='text'
+                      wrapperClass="mb-4"
+                      label="Certification"
+                      size="lg"
+                      id="certification"
+                      type="text"
                       onChange={handleChange}
                       value={collegeData.certification}
                     />
-                    {errors.certification && <div className="text-danger">{errors.certification}</div>}
+                    {errors.certification && (
+                      <div className="text-danger">{errors.certification}</div>
+                    )}
                   </MDBCol>
-                </MDBRow>
-                <MDBRow>
+                
                   <MDBCol md="6">
                     <MDBInput
                       wrapperClass="mb-4"
@@ -399,10 +447,48 @@ let i=0;
                       value={collegeData.establishmentYear}
                     />
                     {errors.establishmentYear && (
-                      <div className="text-danger">{errors.establishmentYear}</div>
+                      <div className="text-danger">
+                        {errors.establishmentYear}
+                      </div>
                     )}
                   </MDBCol>
-                 <MDBCol md="6">
+                  </MDBRow>
+                  <MDBRow>
+                  <MDBCol md="6">
+                    <MDBInput
+                      wrapperClass="mb-4"
+                      label="College Website URL"
+                      size="lg"
+                      id="collegeweb"
+                      type="text"
+                      onChange={handleChange}
+                      value={collegeData.collegeweb}
+                      required
+                    />
+                    {errors.collegeweb && (
+                      <div className="text-danger">{errors.collegeweb}</div>
+                    )}
+                  </MDBCol>
+                
+                  <MDBCol md="6">
+                    <MDBInput
+                      wrapperClass="mb-4"
+                      label="Admission Portal URL,if any or else add the same URL"
+                      size="lg"
+                      id="applyweb"
+                      type="text"
+                      onChange={handleChange}
+                      value={collegeData.applyweb}
+                      required
+                    />
+                    {errors.applyweb && (
+                      <div className="text-danger">
+                        {errors.applyweb}
+                      </div>
+                    )}
+                  </MDBCol></MDBRow>
+                  <MDBRow>
+                  <MDBCol md="">
                     <MDBDropdown>
                       <MDBDropdownToggle tag="a">
                         Select Courses
@@ -438,13 +524,25 @@ let i=0;
                             >
                               {course[index]}
                             </label>
-                            {/* {errors.collegeCourses && errors.collegeCourses[index] && (
+                             {errors.collegeCourses && errors.collegeCourses[index] && (
           <div className="text-danger">{errors.collegeCourses[index]}</div>
-        )} */}
+        )} 
                           </div>
                         ))}
                       </MDBDropdownMenu>
                     </MDBDropdown>
+                  </MDBCol>
+                  <MDBCol md="6">
+                    <label className="form-label" htmlFor="brochureFile">
+                      College Brochure (PDF):{collegeData.filename}
+                    </label>
+                    <input
+                      className="form-control mb-4"
+                      type="file"
+                      id="brochureFile"
+                      onChange={handleFileChange}
+                      accept=".pdf"
+                    />
                   </MDBCol>
                   <MDBCol md="6">
                     {errors.collegeCourses && (
@@ -452,6 +550,37 @@ let i=0;
                     )}
                   </MDBCol>
                 </MDBRow>
+                <hr/>
+<h4><u>Contact Person Detail:</u></h4><br/>
+                <MDBRow>
+                  <MDBCol md="6">
+                    <MDBInput
+                      wrapperClass="mb-4"
+                      label="First Name:"
+                      size="lg"
+                      id="firstName"
+                      type="text"
+                      onChange={handleChange}
+                      value={collegeData.firstName}
+                    />
+                    {errors.contactName && (
+                      <div className="text-danger">{errors.firstName}</div>
+                    )}
+                  </MDBCol>
+                  <MDBCol md="6">
+                    <MDBInput
+                      wrapperClass="mb-4"
+                      label="Last Name:"
+                      size="lg"
+                      id="lastName"
+                      type="text"
+                      onChange={handleChange}
+                      value={collegeData.lastName}
+                    />
+                    {errors.lastName && (
+                      <div className="text-danger">{errors.lastName}</div>
+                    )}
+                  </MDBCol></MDBRow>
                 <div style={{ float: 'left' }}>
                   <MDBBtn
                     className="w-10 mb-4"

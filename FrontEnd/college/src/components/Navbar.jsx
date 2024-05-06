@@ -9,6 +9,7 @@ import {
   MDBNavbarToggler,
   MDBInputGroup,
   MDBBtn,
+  MDBCardImage,
   MDBNavbarBrand,
   MDBCollapse,
   MDBDropdown,
@@ -30,37 +31,46 @@ export default function Navbar() {
   useEffect(() => {
     setIsLoggedIn(!!sessionStorage.getItem("email"));
     setShowDashboard(!!sessionStorage.getItem("admin"));
+
+    const fetchData = async () => {
+      try {
+        const url = `http://localhost:8080/user/getByEmail?email=${sessionStorage.getItem("email")}`;
+        const res = await Axios.get(url);
+        sessionStorage.setItem("name", res.data[0].firstName);
+        sessionStorage.setItem("id",res.data[0].id);
+        sessionStorage.setItem("photoUrl",res.data[0].profilephotoUri);
+        sessionStorage.setItem("isCollegeUser",res.data[0].isCollegeUser);
+        setUsername(res.data[0].id);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
+  const courses = ["Medical (MBBS)", "Dentistry (BDS)", "Pharmacy (B.Pharm/M.Pharm)","Nursing (B.Sc Nursing/M.Sc Nursing)","Computer Applications (BCA/MCA)", "Law (LLB/LLM)",
+    "Education/Teaching (B.Ed/M.Ed)", "Journalism/Mass Communication", "Design (B.Des/M.Des)", "Hotel Management",
+    "Animation/Multimedia", "Fine Arts"];
   const handleLogOut = () => {
     sessionStorage.removeItem("email");
     sessionStorage.removeItem("admin");
-handleRefresh();
     navigate("/");
+handleRefresh();
+    
   };
   const handleDashboard = () => {
     navigate("/AdminHome/dashboard");
   }
-    const url = `http://65.2.79.30:8080/user/getByEmail?email=${sessionStorage.getItem("email")}`;
-    Axios.get(url)
-    .then((res) => {
-      sessionStorage.setItem("name",res.data[0].firstName);
-      
-      setUsername(res.data[0].id);
-    })
-    .catch((error) => {
-      console.error("Error fetching user data:", error);
-    });
+  const handleCourse = (e, event) => {
+    event.preventDefault();
+    navigate("/Colleges", { state: { courseName: e } });
+  }
     
   function handleRefresh() {
     window.location.reload();
   }
-  console.log(username);
-  console.log("admin");
-  console.log(isAdmin);
-  const onHandleEdit = (username) => {
-    console.log(username);
-    const userId = username;
-    console.log("User ID:", userId);
+  const onHandleEdit = (userId, event) => {
+    event.preventDefault(); // Prevent default behavior of anchor tag
     navigate("/userprofile", { state: { id: userId } });
   };
   const [openNavColor, setOpenNavColor] = useState(false);
@@ -82,43 +92,38 @@ handleRefresh();
         </MDBNavbarToggler>
         <MDBCollapse open={openNavColor} navbar>
           <MDBNavbarNav className='me-auto mb-2 lg-3'>
-            <MDBDropdown group className='ms-2'>
-              <MDBDropdownToggle outline rounded color={isLoggedIn ? 'light' : 'warning'} className='nav-button-1'><MDBIcon fas icon="landmark" size='lg'/> Colleges</MDBDropdownToggle>
-              <MDBDropdownMenu dark >
-                 <MDBDropdownItem link>Action</MDBDropdownItem>
-                <MDBDropdownItem link>Another action</MDBDropdownItem>
-                <MDBDropdownItem link>Something else here</MDBDropdownItem> 
-              </MDBDropdownMenu>
-            </MDBDropdown>
+            
             
             
             <MDBDropdown group className='ms-2'>
               <MDBDropdownToggle outline rounded color={isLoggedIn ? 'light' : 'warning'} className='nav-button-1' ><MDBIcon fas icon="graduation-cap" size='lg'/> Courses</MDBDropdownToggle>
               <MDBDropdownMenu dark>
-                 <MDBDropdownItem link>Action</MDBDropdownItem>
-                <MDBDropdownItem link>Another action</MDBDropdownItem>
-                <MDBDropdownItem link>Something else here</MDBDropdownItem> 
+              {courses.map((course, index) => (
+            
+              <MDBDropdownItem link key={index} value={course} onClick={(event)=>handleCourse(course,event)}>{course}</MDBDropdownItem>
+              
+          
+          ))}
+                
               </MDBDropdownMenu>
             </MDBDropdown>
             
             
-            {/*<MDBDropdown group className='ms-2'>
-              <MDBDropdownToggle outline rounded color='warning' className='nav-button-1'><MDBIcon fas icon="award" size='lg'/> Exams</MDBDropdownToggle>
-              <MDBDropdownMenu dark>
-                {/* <MDBDropdownItem link>Action</MDBDropdownItem>
-                <MDBDropdownItem link>Another action</MDBDropdownItem>
-                <MDBDropdownItem link>Something else here</MDBDropdownItem> 
-              </MDBDropdownMenu>
-            </MDBDropdown>*/}
-            <MDBNavbarItem className='ms-2'>
-              <MDBNavbarLink href='#'>Reviews</MDBNavbarLink>
-            </MDBNavbarItem>
+           
+            {/* <MDBNavbarItem className='ms-2'>
+              <MDBNavbarLink href='#'>Review</MDBNavbarLink>
+            </MDBNavbarItem> */}
           </MDBNavbarNav>
           {isLoggedIn ? (
         <MDBDropdown id="logout-navbar" group className="logout-dropdown">
-          <MDBDropdownToggle outline rounded color='light' className='nav-button-3'><MDBIcon fas icon="user-graduate" size='lg' /> Hi, {sessionStorage.getItem("name")} </MDBDropdownToggle>
+          <MDBDropdownToggle outline rounded color='light' className='nav-button-3'> {/*<MDBIcon fas icon="user-graduate" size='lg' />*/}<MDBCardImage
+                    src={sessionStorage.getItem("photoUrl")}
+                    alt="avatar"
+                    className="rounded-circle"
+                    style={{ width: '25px', height: '25px' }}
+                    fluid /> Hi, {sessionStorage.getItem("name")} </MDBDropdownToggle>
           <MDBDropdownMenu dark>
-            <MDBDropdownItem link tag='a' onClick={()=>onHandleEdit(username)}>Profile</MDBDropdownItem>
+          <MDBDropdownItem link tag='a' onClick={(event) => onHandleEdit(username, event)}>Profile</MDBDropdownItem>
             <MDBDropdownItem link tag='a' style={{ display: showDashboard ? 'block' : 'none' }} onClick={handleDashboard}>Dashboard</MDBDropdownItem>
             <MDBDropdownItem link tag='a' onClick={handleLogOut}>Log out</MDBDropdownItem>
           </MDBDropdownMenu>
@@ -127,36 +132,15 @@ handleRefresh();
         <MDBDropdown id="login-navbar" group className="login-register-dropdown">
           <MDBDropdownToggle outline rounded color='danger' className='nav-button-2'><MDBIcon fas icon="user-graduate" size='lg' /> Login/SignUp</MDBDropdownToggle>
           <MDBDropdownMenu dark>
-            <MDBDropdownItem link href='/Login'>Student Login</MDBDropdownItem>
-            <MDBDropdownItem link href='/Register'>Student Sign Up</MDBDropdownItem>
-            <MDBDropdownItem link href='/Collegelogin'>Login for College</MDBDropdownItem>
+            <MDBDropdownItem link href='/Login'>User Login</MDBDropdownItem>
+            <MDBDropdownItem link href='/Register'> Sign Up as Student</MDBDropdownItem>
+           {/* <MDBDropdownItem link href='/Collegelogin'>Login for College</MDBDropdownItem>*/}
             <MDBDropdownItem link href='/College-register'>Sign up for College </MDBDropdownItem>
-            <MDBDropdownItem link href='/AdminLogin'>Admin Login</MDBDropdownItem>
+            <MDBDropdownItem link href='/AdminLogin'>Login for Admins</MDBDropdownItem>
           </MDBDropdownMenu>
         </MDBDropdown>
       )}
-          {/*<MDBDropdown id="login-navbar" group className="login-register-dropdown">
-            <MDBDropdownToggle outline rounded color='danger' className='nav-button-2'><MDBIcon fas icon="user-graduate" size='lg' /> Login/SignUp</MDBDropdownToggle>
-            <MDBDropdownMenu dark>
-              <MDBDropdownItem link href='/Login'>Student Login</MDBDropdownItem>
-              <MDBDropdownItem link href='/Register'>Student Sign Up</MDBDropdownItem>
-              <MDBDropdownItem link href='/College-register'>College Register</MDBDropdownItem>
-              <MDBDropdownItem link href='/AdminLogin'>Admin Login</MDBDropdownItem>
-            </MDBDropdownMenu>
-          </MDBDropdown>
-          <MDBDropdown id="logout-navbar"  group className="logout-dropdown">
-      <MDBDropdownToggle outline rounded color='info' className='nav-button-3'><MDBIcon fas icon="user-graduate" size='lg' /> Hi, {sessionStorage.getItem("email")}</MDBDropdownToggle>
-      <MDBDropdownMenu dark>
-        <MDBDropdownItem ></MDBDropdownItem>
-        <MDBDropdownItem link tag='a' onClick={handleLogOut}>Log out</MDBDropdownItem>
-      </MDBDropdownMenu>
-          </MDBDropdown>*/}
-         {/* <form className='d-flex input-group w-auto'>
-            <input type='search' className='form-control' style={{ width: '100%' }} placeholder='Search here' aria-label='Search' />
-            <MDBBtn outline color='success' className='nav-search mt-0 p-2'>
-              <MDBIcon fas icon="search" size='lg' />
-            </MDBBtn>
-              </form>*/}
+   
         </MDBCollapse>
       </MDBContainer>
     </MDBNavbar>

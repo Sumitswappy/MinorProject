@@ -11,13 +11,21 @@ import {
   MDBCard,
   MDBCardBody,
   MDBInput,
+  MDBCardText,
+  MDBCardImage,
+  MDBProgress,
+  MDBProgressBar,
+  MDBIcon,
+  MDBListGroup,
+  MDBListGroupItem
 } from "mdb-react-ui-kit";
 import "./UserProfile.css"; // Create a new CSS file for styling
 import { NavLink } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
-const UserProfile = () => {
+const UserProfile = ({ userId }) => {
   const navigate = useNavigate();
-  const url = "http://65.2.79.30:8080/user/";
+  const url = "http://localhost:8080/user/";
   const location = useLocation();
   const [data, setData] = useState({
     firstName: "",
@@ -29,126 +37,200 @@ const UserProfile = () => {
     password: "",
   });
   const [users, setUsers] = useState([]);
+  const [photoUrl, setPhotoUrl] = useState(null);
   useEffect(() => {
     if (location.state && location.state.id) {
-      // Set data based on the location state
-      // For example, you can fetch user details based on location.state.id
       const userId = location.state.id;
-      const getQuery=`get/${userId}`;
+      console.log("id",userId);
+      const getQuery = `get/${userId}`;
       Axios.get(`${url}${getQuery}`).then((res) => {
         setUsers(res.data);
         setData(res.data);
+        setPhotoUrl(res.data.profilephotoUri); // Set photoUrl after data state is updated
       })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
     }
   }, [location]);
 
-  function handle(e) {
-    const newData = { ...data };
-    newData[e.target.id] = e.target.value;
-    setData(newData);
-  }
- console.log(data);
- const userId = users.id;
+  const [file, setFile] = useState(null);
+  const [showUploadButton, setShowUploadButton] = useState(false);
+  
 
-  if (!users.id) {
-    // Handle the case when the user ID is not available
-    return (
-      <div>
-        <p>Error: User ID not available</p>
-      </div>
-    );
-  }
+  const handleFileChange = (event) => {
+    console.log(event.target.files[0]);
+    setFile(event.target.files[0]);
+    setShowUploadButton(true);
+  };
 
- 
+  const uploadPhoto = () => {
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+  
+      Axios.put(`http://localhost:8080/files`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((response) => {
+          // Handle success
+          console.log("Photo uploaded successfully");
+          console.log(response.data);
+  
+          const fileDownloadUrl = response.data.fileDownloadUrl;
+          const filename = response.data.filename;
+  
+          setPhotoUrl(fileDownloadUrl);
+          setShowUploadButton(false);
+  
+          // Update profilephotoUri in the data state
+          setData((prevData) => ({
+            ...prevData,
+            profilephotoUri: fileDownloadUrl,
+          }));
+  
+          // Perform the PUT request to update user data with the photo URL
+          const userId = data.id;
+          const putQuery = `update/photo/${userId}`;
+          const fullurl = `${url}${putQuery}`;
+  
+          Axios.put(fullurl, {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            city: data.city,
+            state: data.state,
+            phone: data.phone,
+            email: data.email,
+            isAdmin: data.isAdmin,
+            password: null,
+            photofile: filename,
+            profilephotoUri: fileDownloadUrl,
+          })
+            .then((res) => {
+              // Handle success
+              console.log(res.data);
+              console.log("User profile updated successfully");
+            })
+            .catch((error) => {
+              // Handle error
+              console.error("Error updating user profile:", error);
+            });
+        })
+        .catch((error) => {
+          // Handle error
+          console.error("Error uploading photo:", error);
+        });
+    } else {
+      console.error("No file selected");
+    }
+  };
+  const onHandleEdit = () => {
+    console.log("Editing user:", data);
+    const userId = data.id;
+    console.log("User ID:", userId);
+    navigate("/editprofile", { state: { id: userId } });
+  };
+  
+  
   return (
-    <div className="add-user">
-        <MDBContainer fluid>
+    
+    <section className="body">
+      <MDBContainer className="py-5">
+      <Navbar/>
+      <MDBRow md='6'>
           
-          <MDBContainer fluid className="heading">
-        <h2 className="view-heading">My Profile</h2>
-        </MDBContainer>
-        <MDBContainer fluid className="profilephoto">
-            box
-          </MDBContainer>
-          <MDBCol >
-            <MDBCard className="my-5">
-              <MDBCardBody className="p-5">
-                <MDBRow>
-                  <MDBCol col="6">
-                    <MDBInput
-                      wrapperClass="mb-4"
-                      label="First name"
-                      id="firstName"
-                      type="text"
-                      onChange={(e) => handle(e)}
-                      value={data.firstName}
-                    />
-                  </MDBCol>
+        
+          <MDBCol>
+            <MDBBreadcrumb className="  rounded-3 p-3 mb-4 breadcrumb">
+              <MDBBreadcrumbItem>
+                <a href='/' className="home">Home</a>
+              </MDBBreadcrumbItem>
+              <MDBBreadcrumbItem>My Profile</MDBBreadcrumbItem>
+            </MDBBreadcrumb>
+          </MDBCol>
+        </MDBRow>
 
-                  <MDBCol col="6">
-                    <MDBInput
-                      wrapperClass="mb-4"
-                      label="Last name"
-                      id="lastName"
-                      type="text"
-                      onChange={(e) => handle(e)}
-                      value={data.lastName}
-                    />
-                  </MDBCol>
-                </MDBRow>
-
-                <MDBInput
-                  wrapperClass="mb-4"
-                  label="Email"
-                  id="email"
-                  type="email"
-                  onChange={(e) => handle(e)}
-                  value={data.email}
-                />
-                <MDBInput
-                  wrapperClass="mb-4"
-                  label="Mobile No."
-                  id="phone"
-                  type="text"
-                  onChange={(e) => handle(e)}
-                  value={data.phone}
-                />
-
-                <MDBRow>
-                  <MDBCol col="6">
-                    <MDBInput
-                      wrapperClass="mb-4"
-                      label="City"
-                      id="city"
-                      type="text"
-                      onChange={(e) => handle(e)}
-                      value={data.city}
-                    />
-                  </MDBCol>
-
-                  <MDBCol col="6">
-                    <MDBInput
-                      wrapperClass="mb-4"
-                      label="State"
-                      id="state"
-                      type="text"
-                      onChange={(e) => handle(e)}
-                      value={data.state}
-                    />
-                  </MDBCol>
-                </MDBRow>
-                <div style={{ float: "left" }}>
-                  <MDBBtn onClick={() => navigate(-1)} color="primary">Back</MDBBtn>
-                </div>
+        <MDBRow>
+          <MDBCol lg="">
+            <MDBCard className=" bg-dark text-light mb-4 card">
+              <MDBCardBody className="text-center" style={{ position: 'relative' }}>
+              <a href={photoUrl} target="_blank" rel="noopener noreferrer">
+                <div style={{ position: 'relative', width: '250px', height: '250px', display: 'inline-block' }}>
+                  <MDBCardImage
+                    src={photoUrl}
+                    alt="avatar"
+                    className="avatar"
+                    style={{ width: '100%', height: '100%' }}
+                    fluid />
+                  <label htmlFor="fileInput" style={{ position: 'absolute', bottom: '0', right: '0' }} className="mt-2">
+                    <MDBIcon id="profilephoto" fas icon="camera-retro" size='2x' />
+                  </label>
+                </div></a>
+                <input type="file" id="fileInput" onChange={handleFileChange} style={{ display: 'none' }} />
+                {showUploadButton && (
+                  <MDBBtn onClick={uploadPhoto} color="primary">Upload</MDBBtn>
+                )}
+                <hr />
+                <h2 className="text-light mb-2">{data.firstName} {data.lastName} </h2>
+                <p className="text-light mb-1">from {data.city}, {data.state}, India</p>
+                
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
-        </MDBContainer>
-      
-    </div>
+          <MDBCol lg="8">
+            <MDBCard className="bg-dark text-light p-5 mb-4">
+              <MDBCardBody className="profiledet">
+                <MDBRow>
+                  <MDBCol sm="3">
+                    <MDBCardText>Full Name:</MDBCardText>
+                  </MDBCol>
+                  <MDBCol sm="9">
+                    <MDBCardText className="text-light">{data.firstName} {data.lastName}</MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+                <hr />
+                <MDBRow>
+                  <MDBCol sm="3">
+                    <MDBCardText>Email:</MDBCardText>
+                  </MDBCol>
+                  <MDBCol sm="9">
+                    <MDBCardText className="text-light">{data.email}</MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+                <hr />
+                <MDBRow>
+                  <MDBCol sm="3">
+                    <MDBCardText>Phone:</MDBCardText>
+                  </MDBCol>
+                  <MDBCol sm="9">
+                    <MDBCardText className="text-light">+91 {data.phone}</MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+                <hr />
+                <MDBRow>
+                  <MDBCol sm="3">
+                    <MDBCardText>Address:</MDBCardText>
+                  </MDBCol>
+                  <MDBCol sm="9">
+                    <MDBCardText className="text-light">{data.address} , {data.city} , {data.state}</MDBCardText>
+                  </MDBCol>
+                </MDBRow><hr/>
+                <MDBBtn
+                    className="w-10 mb-4"
+                    color="primary"
+                    size="md"
+                    onClick={onHandleEdit}
+                  >
+                    Edit Profile
+                  </MDBBtn>
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
+      </MDBContainer>
+    </section>
   );
 };
 

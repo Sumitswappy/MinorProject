@@ -1,6 +1,7 @@
 package com.collegesearch.collegesearch.controller;
 
 import com.collegesearch.collegesearch.entity.CategoryEntity;
+import com.collegesearch.collegesearch.entity.CollegeEntity;
 import com.collegesearch.collegesearch.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

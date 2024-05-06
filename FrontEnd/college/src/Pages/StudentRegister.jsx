@@ -15,10 +15,11 @@ import './StudentRegister.css';
 
 function Register() {
   const navigate = useNavigate();
-  const url = "http://65.2.79.30:8080/user/add";
+  const url = "http://localhost:8080/user/add";
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
+    address: "",
     city: "",
     state: "",
     phone: "",
@@ -68,7 +69,10 @@ function Register() {
       newErrors.phone = '*Phone number should be 10 digits';
       valid = false;
     }
-
+    if (!data.address.trim()) {
+      newErrors.address = '*Address is required';
+      valid = false;
+    }
     if (!data.city.trim()) {
       newErrors.city = '*City is required';
       valid = false;
@@ -111,11 +115,13 @@ function Register() {
       Axios.post(url, {
         firstName: data.firstName,
         lastName: data.lastName,
+        address: data.address,
         city: data.city,
         state: data.state,
         phone: data.phone,
         email: data.email,
         password: data.password,
+        isAdmin: false,
       })
         .then(res => {
           console.log(res.data);
@@ -203,7 +209,19 @@ function Register() {
                 />
                 
                 <MDBRow>
-                  <MDBCol col='6'>
+                <MDBCol col='4'>
+                  {errors.address && <div className="text-danger">{errors.address}</div>}
+                    <MDBInput
+                      wrapperClass='mb-4'
+                      label='Address'
+                      id='address'
+                      type='text'
+                      onChange={(e) => handle(e)}
+                      value={data.address}
+                    />
+                    
+                  </MDBCol>
+                  <MDBCol col='4'>
                   {errors.city && <div className="text-danger">{errors.city}</div>}
                     <MDBInput
                       wrapperClass='mb-4'
@@ -216,7 +234,7 @@ function Register() {
                     
                   </MDBCol>
 
-                  <MDBCol col='6'>
+                  <MDBCol col='4'>
                   {errors.state && <div className="text-danger">{errors.state}</div>}
                     <MDBInput
                       wrapperClass='mb-4'

@@ -5,6 +5,7 @@
     background-image: linear-gradient(to bottom, rgb(65, 65, 65),rgb(237, 237, 237),rgb(237, 237, 237),rgb(237, 237, 237),rgb(237, 237, 237),rgb(237, 237, 237));
     background-repeat: no-repeat;
     padding-bottom: 100%;
+    border: #333;
   }
   
   .view-heading {

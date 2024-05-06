@@ -59,14 +59,22 @@
   padding: 10px;
 }
 .admin-user {
-  background-image: linear-gradient(to top,  rgba(255,0,0,0),rgb(24, 86, 255));
-  border-radius: 175px 175px 175px 175px;
+  background-image: linear-gradient(to right,  rgba(255, 1, 1, 0.385),rgb(255, 24, 24));
+  border-radius: 0px 35px 35px 0px;
+  font-weight: bolder;
+  text-decoration: underline;
+  color: rgb(255, 255, 255);
+}
+.college-user {
+  background-image: linear-gradient(to right,  rgba(1, 141, 255, 0.385),rgb(24, 143, 255));
+  border-radius: 0px 35px 35px 0px;
   font-weight: bolder;
   text-decoration: underline;
   color: rgb(255, 255, 255);
 }
 .admin-user-text {
   font-weight: bolder;
+  text-decoration: underline;
   color: rgb(0, 0, 0);
 }
 

@@ -5,8 +5,8 @@ import Axios from "axios";
 export default function AdminDash() {
   const [userNo, setUserNo]=useState([]);
   const [collegeNo, setCollegeNo]=useState([]);
-  const userurl = "http://65.2.79.30:8080/user";
-  const collegeurl="http://65.2.79.30:8080/College"
+  const userurl = "http://localhost:8080/user";
+  const collegeurl="http://localhost:8080/College"
   const getQuery=`/get`;
   const getUserUrl=`${userurl}${getQuery}`;
   const getCollegeUrl=`${collegeurl}${getQuery}`;

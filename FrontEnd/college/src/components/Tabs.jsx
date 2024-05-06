@@ -32,18 +32,7 @@ export default function Tabs() {
             <h6 >Colleges</h6>
           </MDBTabsLink>
         </MDBTabsItem>
-        {/*<MDBTabsItem>
-          <MDBTabsLink onClick={() => handleJustifyClick('tab2')} active={justifyActive === 'tab2'}>
-          <MDBIcon fas icon="graduation-cap" size='2x'/>
-            <h6>Courses</h6>
-          </MDBTabsLink>
-        </MDBTabsItem>*/}
-        {/*<MDBTabsItem>
-          <MDBTabsLink onClick={() => handleJustifyClick('tab3')} active={justifyActive === 'tab3'}>
-          <MDBIcon fas icon="location-arrow" size='2x'/>
-            <h6>Location</h6>
-          </MDBTabsLink>
-  </MDBTabsItem>*/}
+      
       </MDBTabs>
 
       <MDBTabsContent>

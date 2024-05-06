@@ -30,13 +30,44 @@ public class UserService {
     public Optional<UserEntity> getUserById(int id) {
         return userRepository.findById(id);
     }
-    public void deleteUser(int id){ userRepository.deleteById(id);}
-    public void updateUser(int id,UserEntity user){
-        if(userRepository.existsById(id)){
-            user.setId(id);
-            user.setPassword(securityManager.encryptPassword(user.getPassword()));
-            userRepository.save(user);
+    public void deleteUser(int id){
+        userRepository.deleteById(id);
+    }
+    public void updateUser(int id, UserEntity updatedUser) {
+        Optional<UserEntity> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            UserEntity existingUser = optionalUser.get();
+            // Update non-password fields
+            existingUser.setFirstName(updatedUser.getFirstName());
+            existingUser.setLastName(updatedUser.getLastName());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setAddress(updatedUser.getAddress());
+            existingUser.setCity(updatedUser.getCity());
+            existingUser.setState(updatedUser.getState());
+            existingUser.setPhone(updatedUser.getPhone());
+            existingUser.setPhotofile(updatedUser.getPhotofile());
+            existingUser.setProfilephotoUri(updatedUser.getProfilephotoUri());
+            existingUser.setIsAdmin(updatedUser.getIsAdmin());
+            existingUser.setIsCollegeUser(updatedUser.getIsCollegeUser());
+
+            // Check if a new password is provided
+            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+                // Encrypt and set the new password
+                existingUser.setPassword(securityManager.encryptPassword(updatedUser.getPassword()));
+            }
+            if (updatedUser.getProfilephotoUri() != null && !updatedUser.getProfilephotoUri().isEmpty()) {
+
+                existingUser.setProfilephotoUri(updatedUser.getProfilephotoUri());
+            }
+            if (updatedUser.getPhotofile() != null && !updatedUser.getPhotofile().isEmpty()) {
+
+                existingUser.setPhotofile(updatedUser.getPhotofile());
+            }
+
+            // Save the updated user
+            userRepository.save(existingUser);
         }
     }
+
 
 }

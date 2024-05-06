@@ -28,19 +28,31 @@ const ViewCollege = () => {
     });
 
 
-    const onHandleDelete=(e)=>{
+    const onHandleDelete=async(e)=>{
+      try{
       const delId=e.id;
       const delQuery=`delete/${delId}`;
   const delUrl=`${url}${delQuery}`;
-  Axios.delete(delUrl)
-    .then((res) => {
-      alert("College deleted...");
-    })
-    .catch((error) => {
-      console.error("Error fetching user data:", error);
-    });
+  await Axios.delete(delUrl);
+  alert("College deleted successfully.");
+  const geturl = `http://localhost:8080/user/getByEmail?email=${e.email}`;
+    const resp = await Axios.get(geturl);
+    const userId = resp.data[0].id;
+    if (userId) {
+      // Delete user
+      const delUseQuery = `/delete/${userId}`;
+      const delUseUrl = `http://localhost:8080/user${delUseQuery}`;
+      await Axios.delete(delUseUrl);
+    } else {
+      alert("No user found for the user.");
     }
-
+  } catch (error) {
+    console.error("Error deleting user or college:", error);
+  }
+};
+    function handleRefresh() {
+      window.location.reload();
+    }
     const onHandleEdit = (e) => {
       const collegeId = e.id;
       navigate("/AdminHome/edit-college", { state: { id: collegeId } });
@@ -81,7 +93,10 @@ const ViewCollege = () => {
             <tr>
               <th className="table-header">SLNo.</th>
               <th className="table-header">College Name</th>
-              <th className="table-header">Contact Person</th>
+              <th className="table-header">First Name</th>
+              <th className="table-header">Last Name</th>
+              <th className="table-header">Phone Number</th>
+              <th className="table-header">Address</th>
               <th className="table-header">City</th>
               <th className="table-header">State</th>
               <th className="table-header">Affiliation</th>
@@ -95,7 +110,10 @@ const ViewCollege = () => {
               <tr key={college.id} className="table-row">
                 <td>{index+1}</td>
                 <td>{college.name}</td>
-                <td>{college.contactName}</td>
+                <td>{college.firstName}</td>
+                <td>{college.lastName}</td>
+                <td>{college.phoneNumber}</td>
+                <td>{college.address}</td>
                 <td>{college.city}</td>
                 <td>{college.state}</td>
                 <td>{college.affiliation}</td>

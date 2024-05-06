@@ -13,7 +13,7 @@ import './CollegeLogin.css';
 
 function CollegeLogin() {
   const navigate = useNavigate();
-  const url="http://65.2.79.30:8080/collegelogin";
+  const url="http://localhost:8080/login";
   const[data,setData]=useState({
   userName:"",
   password:"",
@@ -22,6 +22,7 @@ function handle(e){
   const newData={...data}
   newData[e.target.id]=e.target.value
   setData(newData)
+  console.log(data);
 }
 function submit(e){
   e.preventDefault();
@@ -58,7 +59,7 @@ function submit(e){
 
               <MDBBtn className="mb-4 px-5 mx-5 w-100" color='primary' size='lg'>Login</MDBBtn>
               <p className="small mb-5 pb-lg-3 ms-5"><a className="text-muted" href="#!">Forgot password?</a></p>
-              <p className='ms-5'>Don't have an account? <a href="/Register" className="link-primary">Register here</a></p>
+              <p className='ms-5'>Don't have an account? <a href="/College-register" className="link-primary">Register here</a></p>
             </div>
           </MDBCol>
 

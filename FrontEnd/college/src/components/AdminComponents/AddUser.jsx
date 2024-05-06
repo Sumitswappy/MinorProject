@@ -17,22 +17,25 @@ import { NavLink } from "react-router-dom";
 
 const AddUser = () => {
   const navigate = useNavigate();
-  const url = "http://65.2.79.30:8080/user/add";
+  const url = "http://localhost:8080/user/add";
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
+    address: "",
     city: "",
     state: "",
     phone: "",
     email: "",
     password: "",
     isAdmin: false,
+    isCollegeUser: false,
   });
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
+    address: "",
     city: "",
     state: "",
   });
@@ -90,6 +93,12 @@ const AddUser = () => {
         newErrors.phone = "";
       }
     }
+    if (!data.address.trim()) {
+      newErrors.address = "*Address is required";
+      valid = false;
+    } else {
+      newErrors.address = "";
+    }
 
     if (!data.city.trim()) {
       newErrors.city = "*City is required";
@@ -116,12 +125,14 @@ const AddUser = () => {
       Axios.post(url, {
         firstName: data.firstName,
         lastName: data.lastName,
+        address: data.address,
         city: data.city,
         state: data.state,
         phone: data.phone,
         email: data.email,
         password: data.password,
         isAdmin: data.isAdmin,
+        isCollegeUser: data.isCollegeUser,
       }).then((res) => {
         alert("New User Added...");
         console.log(res.data);
@@ -216,7 +227,18 @@ const AddUser = () => {
                 />
 
                 <MDBRow>
-                  <MDBCol col="6">
+                <MDBCol col="4">
+                  <div className="text-danger">{errors.city}</div>
+                    <MDBInput
+                      wrapperClass="mb-4"
+                      label="Address"
+                      id="address"
+                      type="text"
+                      onChange={(e) => handle(e)}
+                      value={data.address}
+                    />
+                  </MDBCol>
+                  <MDBCol col="4">
                   <div className="text-danger">{errors.city}</div>
                     <MDBInput
                       wrapperClass="mb-4"
@@ -228,7 +250,7 @@ const AddUser = () => {
                     />
                   </MDBCol>
 
-                  <MDBCol col="6">
+                  <MDBCol col="4">
                   <div className="text-danger">{errors.state}</div>
                     <MDBInput
                       wrapperClass="mb-4"
@@ -257,6 +279,13 @@ const AddUser = () => {
                   onChange={(e) => handle(e)}
                   checked={data.isAdmin}
                 />Admin</label>
+                  <label>
+                 <input
+                  id="isCollegeUser"
+                  type="checkbox"
+                  onChange={(e) => handle(e)}
+                  checked={data.isCollegeUser}
+                />College User</label>
                 <div style={{ float: "left" }}>
                   <MDBBtn
                     className="w-10 mb-4"

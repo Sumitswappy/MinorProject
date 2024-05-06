@@ -8,6 +8,9 @@ import com.collegesearch.collegesearch.repository.CollegeRepository;
 import com.collegesearch.collegesearch.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class LoginService {
@@ -15,12 +18,14 @@ public class LoginService {
     UserRepository userRepository;
     SecurityManager securityManager;
     CollegeRepository collegeRepository;
-    public Boolean checkLogin(LoginModel loginModel){
-        UserEntity user=userRepository.findByEmail(loginModel.getUserName()).stream().findFirst().orElseThrow();
-        return securityManager.checkPassword(loginModel.getPassword(),user.getPassword());
-    }
-    public Boolean checkCollegeLogin(LoginModel loginModel){
-        CollegeEntity college=collegeRepository.findByEmail(loginModel.getUserName()).stream().findFirst().orElseThrow();
-        return securityManager.checkPassword(loginModel.getPassword(),college.getPassword());
+
+    public Boolean checkLogin(LoginModel loginModel) {
+        Optional<UserEntity> userOptional = userRepository.findByEmail(loginModel.getUserName()).stream().findFirst();
+        if (userOptional.isPresent()) {
+            UserEntity user = userOptional.get();
+            return securityManager.checkPassword(loginModel.getPassword(), user.getPassword());
+        } else {
+            throw new IllegalStateException("User not found for email: " + loginModel.getUserName());
+        }
     }
 }

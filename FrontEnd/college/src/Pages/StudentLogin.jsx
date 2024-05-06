@@ -13,7 +13,7 @@ import './StudentLogin.css';
 
 function Login() {
   const navigate = useNavigate();
-  const url="http://65.2.79.30:8080/login";
+  const url="http://localhost:8080/login";
   const[data,setData]=useState({
   userName:"",
   password:"",
@@ -58,7 +58,7 @@ function submit(e){
 
               <MDBBtn className="mb-4 px-5 mx-5 w-100" color='primary' size='lg'>Login</MDBBtn>
               <p className="small mb-5 pb-lg-3 ms-5"><a className="text-muted" href="#!">Forgot password?</a></p>
-              <p className='ms-5'>Don't have an account? <a href="/Register" className="link-primary">Register here</a></p>
+              <p className='ms-5'>Don't have an account? <a href="/Register" className="link-primary">Register here for Students</a><br/>If you want to join as College User!  <a href="/College-register" className="link-primary">Register here</a></p>
             </div>
           </MDBCol>
 

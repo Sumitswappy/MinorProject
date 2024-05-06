@@ -1,4 +1,5 @@
 package com.collegesearch.collegesearch.controller;
+import com.collegesearch.collegesearch.repository.CollegeRepository;
 import org.springframework.http.HttpStatus;
 import com.collegesearch.collegesearch.entity.CollegeEntity;
 import com.collegesearch.collegesearch.service.CollegeService;
@@ -10,17 +11,21 @@ import java.util.List;
 
 @RestController
 @RequestMapping("College")
-@CrossOrigin(maxAge=500)
+@CrossOrigin(maxAge=500, origins = "http://localhost:3000")
 public class CollegeController {
 
     @Autowired
     private CollegeService collegeService;
-
+    @Autowired
+    private CollegeRepository collegeRepository;
     @GetMapping("get")
     public List<CollegeEntity> getAllColleges() {
         return collegeService.getAllColleges();
     }
-
+    @GetMapping("getByEmail")
+    public List<CollegeEntity> getCollegeByEmail(@RequestParam("email") String email) {
+        return collegeService.getCollegeByEmail(email);
+    }
     @GetMapping("get/{collegeId}")
     public ResponseEntity<CollegeEntity> getCollegeById(@PathVariable int collegeId) {
         return collegeService.getCollegeById(collegeId)
@@ -31,7 +36,10 @@ public class CollegeController {
     public List<CollegeEntity> getCollegesByCourse(@PathVariable String course) {
         return collegeService.getCollegesByCourse(course);
     }
-
+    @GetMapping("byCity/{city}")
+    public List<CollegeEntity> getCollegesByCity(@PathVariable String city) {
+        return collegeService.getCollegesByCity(city);
+    }
     @GetMapping("byState/{state}")
     public List<CollegeEntity> getCollegesByState(@PathVariable String state) {
         return collegeService.getCollegesByState(state);
@@ -56,6 +64,35 @@ public List<CollegeEntity> getCollegesByCityAndCourse(
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    @PutMapping("/update/rating/{id}")
+    public ResponseEntity<CollegeEntity> updateCollegeRating(@PathVariable int id, @RequestBody CollegeEntity updatedCollege) {
+        return collegeRepository.findById(id)
+                .map(college -> {
+                    college.setRating(updatedCollege.getRating());
+                    return ResponseEntity.ok(collegeRepository.save(college));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+    @PutMapping("/update/profilephoto/{id}")
+    public ResponseEntity<CollegeEntity> updateCollegeProfilePhoto(@PathVariable int id, @RequestBody CollegeEntity updatedCollege) {
+        return collegeRepository.findById(id)
+                .map(college -> {
+                    college.setProfilephotoUri(updatedCollege.getProfilephotoUri());
+                    college.setProfilephoto(updatedCollege.getProfilephoto());
+                    return ResponseEntity.ok(collegeRepository.save(college));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+    @PutMapping("/update/coverphoto/{id}")
+    public ResponseEntity<CollegeEntity> updateUserProfilePhoto(@PathVariable int id, @RequestBody CollegeEntity updatedCollege) {
+        return collegeRepository.findById(id)
+                .map(college -> {
+                    college.setCoverphotoUri(updatedCollege.getCoverphotoUri());
+                    college.setCoverphoto(updatedCollege.getCoverphoto());
+                    return ResponseEntity.ok(collegeRepository.save(college));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
     @GetMapping("/{collegeId}")
     public ResponseEntity<CollegeEntity> getCollegeWithCoursesById(@PathVariable int collegeId) {

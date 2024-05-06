@@ -15,7 +15,7 @@ import {
 from 'mdb-react-ui-kit';
 function AdminLogin() {
   const navigate = useNavigate();
-  const url="http://65.2.79.30:8080/login";
+  const url="http://localhost:8080/login";
 const[data,setData]=useState({
   userName:"",
   password:"",
@@ -34,7 +34,7 @@ function submit(e){
   }).then((res)=>{
     if(res.data==true){
       console.log(res.data);
-      const getUrl = `http://65.2.79.30:8080/user/getByEmail?email=${data.userName}`;
+      const getUrl = `http://localhost:8080/user/getByEmail?email=${data.userName}`;
       Axios.get(getUrl).then((res) => {
         if(res.data[0].isAdmin==1){
         sessionStorage.setItem("email",data.userName);
@@ -72,8 +72,14 @@ function submit(e){
             <MDBInput wrapperClass='mb-4' label='Password' id='password' type='password' onChange={(e)=>handle(e)} value={data.password} />
             </MDBCol>
           </MDBRow>
-          <MDBBtn className="mb-4 px-5 mx-5 w-100" color='primary' size='lg'>Login</MDBBtn>
-              <p className="small mb-5 pb-lg-3 ms-5"><a className="text-muted" href="#!">Forgot password?</a></p>
+          <MDBRow>
+  <MDBCol>
+    <div className="d-flex justify-content-center"> 
+      <MDBBtn className="mb-4 px-5 w-100" color="primary" size="lg">Login</MDBBtn>
+    </div>
+  </MDBCol>
+</MDBRow>
+          
 
         </MDBCardBody>
       </MDBCard>
