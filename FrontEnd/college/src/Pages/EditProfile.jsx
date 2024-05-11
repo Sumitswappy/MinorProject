@@ -250,7 +250,7 @@ const EditProfile = () => {
                   onChange={(e) => handle(e)}
                   value={data.password}
                 /> */}
-                <label>
+                {/* <label>
                   <input
                     id="isAdmin"
                     type="checkbox"
@@ -265,7 +265,7 @@ const EditProfile = () => {
                     onChange={(e) => handle(e)}
                     checked={data.isCollegeUser}
                   />College User
-                </label>
+                </label> */}
                 <div style={{ float: "left" }}>
                   <MDBBtn
                     className="w-10 mb-4"

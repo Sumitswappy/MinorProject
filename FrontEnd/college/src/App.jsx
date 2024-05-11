@@ -32,7 +32,7 @@ export default function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/College-register" element={<CollegeRegister/>}/>
-          <Route path="/AdminLogin" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminLogin />} />
           <Route path="/Colleges" element={<CollegeList/>}/>
           <Route path="/userprofile" element={<UserProfile/>}/>
           <Route path="/editprofile" element={<EditProfile/>}/>

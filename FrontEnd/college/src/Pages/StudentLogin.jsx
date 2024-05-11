@@ -35,7 +35,7 @@ function submit(e){
       navigate("/");
     }
     else{
-      alert("User Not Found, Register first...");
+      alert("Email doesn't exist or the password is incorrect...");
     }
   })
 }

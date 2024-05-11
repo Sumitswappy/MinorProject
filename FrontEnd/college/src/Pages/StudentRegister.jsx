@@ -122,6 +122,7 @@ function Register() {
         email: data.email,
         password: data.password,
         isAdmin: false,
+        isCollegeUser: false,
       })
         .then(res => {
           console.log(res.data);

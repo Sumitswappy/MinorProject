@@ -61,7 +61,7 @@ function submit(e){
       <MDBCard className='mx-5 mb-5 p-5 shadow-5' style={{marginTop: '-100px', background: 'hsla(0, 0%, 100%, 0.8)', backdropFilter: 'blur(30px)'}}>
         <MDBCardBody className='p-5 text-center'>
 
-          <h2 className="fw-bold mb-5">Log In</h2>
+          <h2 className="fw-bold mb-5">Log In for Admins</h2>
 
           <MDBRow>
             <MDBCol col='6'>

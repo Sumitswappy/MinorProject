@@ -136,7 +136,7 @@ handleRefresh();
             <MDBDropdownItem link href='/Register'> Sign Up as Student</MDBDropdownItem>
            {/* <MDBDropdownItem link href='/Collegelogin'>Login for College</MDBDropdownItem>*/}
             <MDBDropdownItem link href='/College-register'>Sign up for College </MDBDropdownItem>
-            <MDBDropdownItem link href='/AdminLogin'>Login for Admins</MDBDropdownItem>
+            {/* <MDBDropdownItem link href='/admin'>Login for Admins</MDBDropdownItem> */}
           </MDBDropdownMenu>
         </MDBDropdown>
       )}
