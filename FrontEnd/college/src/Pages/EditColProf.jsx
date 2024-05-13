@@ -21,7 +21,7 @@ import { NavLink } from 'react-router-dom';
 
 const EditColProf = () => {
   const navigate = useNavigate();
-  const url = "http://localhost:8080/College/";
+  const url = "http://13.202.120.24:8080/College/";
   const location = useLocation();
   const [college, setCollege] = useState({});
   const colId = college.id;
@@ -72,7 +72,7 @@ const EditColProf = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await Axios.get("http://localhost:8080/courses/get");
+        const response = await Axios.get("http://13.202.120.24:8080/courses/get");
         setCourse(response.data.map((course) => course.course));
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -114,7 +114,7 @@ const EditColProf = () => {
       
         console.log("Start:", collegeData);
       
-        const geturl = `http://localhost:8080/user/getByEmail?email=${collegeData.email}`;
+        const geturl = `http://13.202.120.24:8080/user/getByEmail?email=${collegeData.email}`;
         Axios.get(geturl)
         .then((resp) => {
           console.log("userid:", resp.data);
@@ -125,7 +125,7 @@ const EditColProf = () => {
           console.log("userid2:", user);
           // Now this should give the updated value
           // Perform subsequent actions that depend on userId here
-          const endpointUrl = `http://localhost:8080/user/update/${userIdFromResponse}`;
+          const endpointUrl = `http://13.202.120.24:8080/user/update/${userIdFromResponse}`;
            Axios.put(endpointUrl, {
             firstName: collegeData.firstName,
             lastName: collegeData.lastName,
@@ -222,7 +222,7 @@ const EditColProf = () => {
     const formData = new FormData();
     if (file) {
       formData.append("file", file);
-      Axios.put("http://localhost:8080/files", formData, {
+      Axios.put("http://13.202.120.24:8080/files", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

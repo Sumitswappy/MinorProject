@@ -45,7 +45,7 @@ const CollegeRegister = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await Axios.get("http://localhost:8080/courses/get");
+        const response = await Axios.get("http://13.202.120.24:8080/courses/get");
         setCourse(response.data.map((course) => course.course));
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -200,11 +200,11 @@ const CollegeRegister = () => {
 
   useEffect(() => {
     if (collegeData.brochurefileUri !== "" && collegeData.filename !== "") {
-      Axios.post(`http://localhost:8080/College/add`, collegeData)
+      Axios.post(`http://13.202.120.24:8080/College/add`, collegeData)
         .then((res) => {
           console.log("response:", res.data);
           alert("College added..");
-          Axios.post("http://localhost:8080/user/add", {
+          Axios.post("http://13.202.120.24:8080/user/add", {
             firstName: collegeData.firstName,
             lastName: collegeData.lastName,
             address: collegeData.useraddress,
@@ -238,7 +238,7 @@ const CollegeRegister = () => {
     const formData = new FormData();
     formData.append("file", file);
 
-    Axios.put("http://localhost:8080/files", formData, {
+    Axios.put("http://13.202.120.24:8080/files", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

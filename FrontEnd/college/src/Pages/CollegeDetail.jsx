@@ -18,7 +18,7 @@ const CollegeDetail = () => {
   const toggleOpen = () => setBasicModal(!basicModal);
   const [collegeData, setCollegeData] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
-  const url = "http://localhost:8080/College/";
+  const url = "http://13.202.120.24:8080/College/";
   const location = useLocation();
   const [userId, setUserId] = useState(""); // State to store user id
   const [isCollegeUser,setIsCollegeUser]=useState(false);
@@ -154,7 +154,7 @@ const CollegeDetail = () => {
       const formData = new FormData();
       formData.append("file", profilefile);
   
-      Axios.put(`http://localhost:8080/files`, formData, {
+      Axios.put(`http://13.202.120.24:8080/files`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -219,7 +219,7 @@ const CollegeDetail = () => {
       const formData = new FormData();
       formData.append("file", coverfile);
   
-      Axios.put(`http://localhost:8080/files`, formData, {
+      Axios.put(`http://13.202.120.24:8080/files`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

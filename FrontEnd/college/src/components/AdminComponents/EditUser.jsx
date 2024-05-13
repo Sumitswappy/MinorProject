@@ -18,7 +18,7 @@ import { NavLink } from "react-router-dom";
 const EditUser = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
-  const url = "http://localhost:8080/user/";
+  const url = "http://13.202.120.24:8080/user/";
   const location = useLocation();
   const [data, setData] = useState({
     firstName: "",
@@ -53,7 +53,7 @@ const EditUser = () => {
   }, [location]);
 
   useEffect(() => {
-    const geturl = `http://localhost:8080/College/getByEmail?email=${data.email}`;
+    const geturl = `http://13.202.120.24:8080/College/getByEmail?email=${data.email}`;
     Axios.get(geturl)
     .then((resp) => {
       setCol(resp.data);

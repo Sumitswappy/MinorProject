@@ -29,7 +29,7 @@ const AddReview = ({ userId, collegeId }) => {
         };
     
         // Send the review data to the server
-        Axios.post("http://localhost:8080/reviews/add", reviewData)
+        Axios.post("http://13.202.120.24:8080/reviews/add", reviewData)
             .then(response => {
                 console.log("Review submitted successfully:", response.data);
                 handleRefresh();

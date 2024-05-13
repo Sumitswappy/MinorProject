@@ -34,7 +34,7 @@ export default function Navbar() {
 
     const fetchData = async () => {
       try {
-        const url = `http://localhost:8080/user/getByEmail?email=${sessionStorage.getItem("email")}`;
+        const url = `http://13.202.120.24:8080/user/getByEmail?email=${sessionStorage.getItem("email")}`;
         const res = await Axios.get(url);
         sessionStorage.setItem("name", res.data[0].firstName);
         sessionStorage.setItem("id",res.data[0].id);

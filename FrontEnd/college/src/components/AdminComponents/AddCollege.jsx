@@ -45,7 +45,7 @@ const AddCollege = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await Axios.get("http://localhost:8080/courses/get");
+        const response = await Axios.get("http://13.202.120.24:8080/courses/get");
         setCourse(response.data.map((course) => course.course));
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -208,7 +208,7 @@ const AddCollege = () => {
     // Continue with form submission
     {/*if (validateForm()) {
       console.log("Start:", collegeData);
-      Axios.post(`http://localhost:8080/College/add`, collegeData)
+      Axios.post(`http://13.202.120.24:8080/College/add`, collegeData)
         .then((res) => {
           console.log("response:", res.data);
           alert("College added..");
@@ -217,7 +217,7 @@ const AddCollege = () => {
         .catch((error) => {
           console.error("Error submitting form:", error);
         });
-        Axios.post("http://localhost:8080/user/add", {
+        Axios.post("http://13.202.120.24:8080/user/add", {
           firstName: collegeData.firstName,
           lastName: collegeData.lastName,
           city: collegeData.city,
@@ -246,7 +246,7 @@ const AddCollege = () => {
     const formData = new FormData();
     formData.append("file", file);
   
-    Axios.put("http://localhost:8080/files", formData, {
+    Axios.put("http://13.202.120.24:8080/files", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -266,7 +266,7 @@ const AddCollege = () => {
         // After updating collegeData, proceed with form submission
         if (true) {
           console.log("Start:", collegeData);
-          Axios.post(`http://localhost:8080/College/add`, collegeData)
+          Axios.post(`http://13.202.120.24:8080/College/add`, collegeData)
             .then((res) => {
               console.log("response:", res.data);
               alert("College added..");
@@ -276,7 +276,7 @@ const AddCollege = () => {
               console.error("Error submitting form:", error);
             });
             
-          Axios.post("http://localhost:8080/user/add", {
+          Axios.post("http://13.202.120.24:8080/user/add", {
             firstName: collegeData.firstName,
             lastName: collegeData.lastName,
             address: collegeData.useraddress,

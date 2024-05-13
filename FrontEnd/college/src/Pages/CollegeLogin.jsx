@@ -13,7 +13,7 @@ import './CollegeLogin.css';
 
 function CollegeLogin() {
   const navigate = useNavigate();
-  const url="http://localhost:8080/login";
+  const url="http://13.202.120.24:8080/login";
   const[data,setData]=useState({
   userName:"",
   password:"",

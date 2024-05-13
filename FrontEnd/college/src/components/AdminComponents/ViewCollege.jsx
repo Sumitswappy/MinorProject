@@ -17,7 +17,7 @@ import Axios from "axios";
 const ViewCollege = () => {
   const navigate = useNavigate();
   const [colleges, setColleges] = useState([]);
-  const url = "http://localhost:8080/College/";
+  const url = "http://13.202.120.24:8080/College/";
 
   Axios.get(`${url}get`)
     .then((res) => {
@@ -35,13 +35,13 @@ const ViewCollege = () => {
   const delUrl=`${url}${delQuery}`;
   await Axios.delete(delUrl);
   alert("College deleted successfully.");
-  const geturl = `http://localhost:8080/user/getByEmail?email=${e.email}`;
+  const geturl = `http://13.202.120.24:8080/user/getByEmail?email=${e.email}`;
     const resp = await Axios.get(geturl);
     const userId = resp.data[0].id;
     if (userId) {
       // Delete user
       const delUseQuery = `/delete/${userId}`;
-      const delUseUrl = `http://localhost:8080/user${delUseQuery}`;
+      const delUseUrl = `http://13.202.120.24:8080/user${delUseQuery}`;
       await Axios.delete(delUseUrl);
     } else {
       alert("No user found for the user.");

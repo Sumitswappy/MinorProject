@@ -40,8 +40,8 @@ const CollegeList = () => {
     window.onload = resetFilters; // Reset filters when window is reloaded
   }, []);
 
-  const url = "http://localhost:8080/College/get-filtered";
-  const url2 = "http://localhost:8080/College/get";
+  const url = "http://13.202.120.24:8080/College/get-filtered";
+  const url2 = "http://13.202.120.24:8080/College/get";
 
   const [searchdata, setSearchData] = useState(useLocation());
   const [collegeDetails, setCollegeDetails] = useState([]);
@@ -54,11 +54,11 @@ const CollegeList = () => {
           if (!filters.city && !filters.course && !filters.state) {
             response = await Axios.get(url2);
           }  else if (filters.course && !filters.city && !filters.state) {
-            response = await Axios.get(`http://localhost:8080/College/byCourse/${filters.course}`);
+            response = await Axios.get(`http://13.202.120.24:8080/College/byCourse/${filters.course}`);
           } else if (filters.city && !filters.state && !filters.course) {
-            response = await Axios.get(`http://localhost:8080/College/byCity/${filters.city}`);
+            response = await Axios.get(`http://13.202.120.24:8080/College/byCity/${filters.city}`);
           } else if (filters.state && !filters.course && !filters.city) {
-            response = await Axios.get(`http://localhost:8080/College/byState/${filters.state}`);
+            response = await Axios.get(`http://13.202.120.24:8080/College/byState/${filters.state}`);
           }
           else if (filters.city && filters.course && !filters.state)
           {
@@ -76,7 +76,7 @@ const CollegeList = () => {
         }
         else if (searchdata.state.courseName && !searchdata.state.cityName) {
           console.log("Using searchdata state: ", searchdata.state);
-          response = await Axios.get(`http://localhost:8080/College/byCourse/${searchdata.state.courseName}`);
+          response = await Axios.get(`http://13.202.120.24:8080/College/byCourse/${searchdata.state.courseName}`);
         }
          else {
           const query = `?city=${searchdata.state.cityName || ''}&course=${searchdata.state.courseName || ''}`;
