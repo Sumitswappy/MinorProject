@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState,useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import {
   MDBBreadcrumb,
@@ -16,9 +16,15 @@ import Axios from "axios";
 
 const ViewUser = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("admin");
+    if (!sessionData) {
+      navigate("/admin"); // or any other route you want to redirect to
+    }
+  }, [navigate]);
   const [users, setUsers] = useState([]);
   const [colId, setColId] = useState('');
-  const url = "http://13.202.120.24:8080/user";
+  const url = "http://localhost:8080/user";
   const getQuery=`/get`;
   const getUrl=`${url}${getQuery}`;
 
@@ -30,7 +36,7 @@ const ViewUser = () => {
     .catch((error) => {
       console.error("Error fetching user data:", error);
     });
-   /* const geturl = `http://13.202.120.24:8080/College/getByEmail?email=${users.email}`;
+   /* const geturl = `http://localhost:8080/College/getByEmail?email=${users.email}`;
     Axios.get(geturl)
     .then((resp) => {
       setColId(resp.data);
@@ -50,14 +56,14 @@ const onHandleDelete = async (user) => {
     alert("User deleted successfully.");
 
     // Fetch college ID
-    const geturl = `http://13.202.120.24:8080/College/getByEmail?email=${user.email}`;
+    const geturl = `http://localhost:8080/College/getByEmail?email=${user.email}`;
     const resp = await Axios.get(geturl);
     const collegeId = resp.data[0].id;
 console.log("id:",collegeId);
     if (collegeId) {
       // Delete college
       const delColQuery = `/delete/${collegeId}`;
-      const delColUrl = `http://13.202.120.24:8080/College${delColQuery}`;
+      const delColUrl = `http://localhost:8080/College${delColQuery}`;
       await Axios.delete(delColUrl);
     } else {
       alert("No college found for the user.");

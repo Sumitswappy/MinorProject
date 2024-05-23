@@ -13,6 +13,7 @@ import Axios from "axios";
 import SidebarFilters from "../components/SideBarFilters";
 import Navbar from "../components/Navbar.jsx";
 import './CollegeList.css';
+import UpbarFilters from "../components/Upbarfilters.jsx";
 
 const CollegeList = () => {
   const [filters, setFilters] = useState({
@@ -40,11 +41,50 @@ const CollegeList = () => {
     window.onload = resetFilters; // Reset filters when window is reloaded
   }, []);
 
-  const url = "http://13.202.120.24:8080/College/get-filtered";
-  const url2 = "http://13.202.120.24:8080/College/get";
-
+  const url = "http://localhost:8080/College/get-filtered";
+  const url2 = "http://localhost:8080/College/get";
+  const url3 = "http://localhost:8080/College/get-filtered-state";
   const [searchdata, setSearchData] = useState(useLocation());
   const [collegeDetails, setCollegeDetails] = useState([]);
+  const courses = {
+    "Engineering (B.Tech/B.E)": 1,
+    "Medical (MBBS)": 2,
+    "Dentistry (BDS)": 3,
+    "Pharmacy (B.Pharm/M.Pharm)": 4,
+    "Nursing (B.Sc Nursing/M.Sc Nursing)": 5,
+    "Architecture (B.Arch/M.Arch)": 6,
+    "Business Administration (BBA/MBA)": 7,
+    "Commerce (B.Com/M.Com)": 8,
+    "Science (B.Sc/M.Sc)": 9,
+    "Computer Applications (BCA/MCA)": 10,
+    "Law (LLB/LLM)": 11,
+    "Education/Teaching (B.Ed/M.Ed)": 12,
+    "Journalism/Mass Communication": 13,
+    "Design (B.Des/M.Des)": 14,
+    "Hotel Management": 15,
+    "Animation/Multimedia": 16,
+    "Fine Arts": 17,
+    "Diploma Courses": 18,
+    "Agriculture (B.Sc Agriculture)": 19,
+    "Forestry": 20,
+    "Library Science": 21,
+    "Performing Arts (Music/Dance/Drama)": 22,
+    "Physical Education": 23,
+    "Fashion Designing": 24,
+    "Film/Television Production": 25,
+    "Food Technology": 26,
+    "Interior Designing": 27,
+    "Travel and Tourism": 28,
+    "Event Management": 29,
+    "Medical Laboratory Technology": 30,
+    "Psychology (BA/B.Sc Psychology)": 31,
+    "Sociology (BA/B.Sc Sociology)": 32,
+    "Economics (BA/B.Sc Economics)": 33,
+    "Geography (BA/B.Sc Geography)": 34,
+    "History (BA History)": 35,
+    "Political Science (BA/B.Sc Political Science)": 36,
+    "Languages (BA Literature/Linguistics)": 37
+  };
 
   useEffect(() => {
     const college = async () => {
@@ -54,31 +94,36 @@ const CollegeList = () => {
           if (!filters.city && !filters.course && !filters.state) {
             response = await Axios.get(url2);
           }  else if (filters.course && !filters.city && !filters.state) {
-            response = await Axios.get(`http://13.202.120.24:8080/College/byCourse/${filters.course}`);
+            response = await Axios.get(`http://localhost:8080/College/byCourse/${filters.course}`);
           } else if (filters.city && !filters.state && !filters.course) {
-            response = await Axios.get(`http://13.202.120.24:8080/College/byCity/${filters.city}`);
+            response = await Axios.get(`http://localhost:8080/College/byCity/${filters.city}`);
           } else if (filters.state && !filters.course && !filters.city) {
-            response = await Axios.get(`http://13.202.120.24:8080/College/byState/${filters.state}`);
-          }
-          else if (filters.city && filters.course && !filters.state)
-          {
-            const query = `?city=${filters.city || ''}&course=${filters.course || ''}`;
+            response = await Axios.get(`http://localhost:8080/College/byState/${filters.state}`);
+          } else if (filters.city && filters.course && !filters.state) {
+            const courseIndexToName = Object.fromEntries(Object.entries(courses).map(([name, index]) => [index, name]));
+            const coursename=filters.course? courseIndexToName[filters.course]:'';
+            const query = `?city=${filters.city || ''}&course=${coursename || ''}`;
             const fullUrl = `${url}${query}`;
             response = await Axios.get(fullUrl);
             console.log("Query: ", query);
-          }
+          } else if (!filters.city && filters.course && filters.state) {
+            const courseIndexToName = Object.fromEntries(Object.entries(courses).map(([name, index]) => [index, name]));
+            const coursename=filters.course? courseIndexToName[filters.course]:'';
+            const query = `?state=${filters.state || ''}&course=${coursename || ''}`;
+            const fullUrl = `${url3}${query}`;
+            response = await Axios.get(fullUrl);
+            console.log("Query: ", query);
+          } 
           else {
             const query = `?city=${filters.city || ''}&course=${filters.course || ''}`;
             const fullUrl = `${url}${query}`;
             response = await Axios.get(fullUrl);
             console.log("Query: ", query);
           }
-        }
-        else if (searchdata.state.courseName && !searchdata.state.cityName) {
+        } else if (searchdata.state.courseName && !searchdata.state.cityName) {
           console.log("Using searchdata state: ", searchdata.state);
-          response = await Axios.get(`http://13.202.120.24:8080/College/byCourse/${searchdata.state.courseName}`);
-        }
-         else {
+          response = await Axios.get(`http://localhost:8080/College/byCourse/${searchdata.state.courseName}`);
+        } else {
           const query = `?city=${searchdata.state.cityName || ''}&course=${searchdata.state.courseName || ''}`;
           const fullUrl = `${url}${query}`;
           response = await Axios.get(fullUrl);
@@ -104,7 +149,8 @@ const CollegeList = () => {
       alert("Please Log In...");
     }
   };
-  const renderStars = rating => {
+
+  const renderStars = (rating) => {
     const fullStars = Math.floor(rating);
     const halfStar = rating - fullStars >= 0.5;
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
@@ -122,21 +168,28 @@ const CollegeList = () => {
 
     return stars;
   };
+
   return (
     <div className='college-body'>
       <MDBContainer className='college-container' fluid>
-        <Navbar />
         <MDBRow>
-          <MDBCol size='2'>
+        <Navbar />
+        
+        </MDBRow>
+        <div className="upbarfilters">
+          <UpbarFilters onFilterChange={handleFilterChange}/>
+        </div>
+        <MDBRow>
+          <MDBCol size='12' md='2' className="sidebar-filters">
             <SidebarFilters onFilterChange={handleFilterChange} />
           </MDBCol>
-          <MDBCol>
-            <MDBContainer style={{ flex: 1, paddingLeft: '20px', marginTop: '75px' }} fluid>
+          <MDBCol size='12' md='10' >
+            <MDBContainer className="college-container" style={{ paddingLeft: '20px', marginTop: '75px' }} fluid>
               <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "10px" }}>
                 {collegeDetails.map((college, index) => (
-                  <MDBCard key={index} style={{ width: '75%', margin: '10px' }}>
+                  <MDBCard key={index} className="college-card" style={{ margin: '10px auto', zIndex: '-1' }}>
                     <MDBCardBody style={{ backgroundImage: `url(${college.coverphotoUri})`, backgroundSize: 'cover', borderRadius: '40px' }}>
-                      <div style={{ display: "flex", justifyContent: "flex-start",  padding: '20px', background: '#ffffff30',borderRadius: '20px', color: 'white' }}>
+                      <div style={{ display: "flex", justifyContent: "flex-start", padding: '20px', background: '#ffffff85', borderRadius: '20px', color: 'black' }}>
                         <img
                           src={college.profilephotoUri}
                           alt={`College ${index + 1}`}
@@ -148,9 +201,10 @@ const CollegeList = () => {
                             {college.state} <br />
                             {college.city} <br />
                             {college.establishmentYear}<br />
+                            {college.certification} Certified<br />
                             <p className="card-text">
-                  Rating: {renderStars(college.rating)}
-                </p><br/>
+                              Rating: {renderStars(college.rating)}
+                            </p><br />
                             <button className="btn btn-primary" onClick={() => onHandle(college)}>View Details</button>
                           </MDBCardText>
                         </div>

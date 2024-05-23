@@ -12,7 +12,7 @@ const HelpfulReviews = ({ collegeId }) => {
 
   useEffect(() => {
     // Fetch reviews data when the component mounts
-    Axios.get(`http://13.202.120.24:8080/reviews/college/${collegeId}`)
+    Axios.get(`http://localhost:8080/reviews/college/${collegeId}`)
       .then(response => {
         console.log("Fetched reviews data:", response.data);
         const sortedReviews = response.data.sort((a, b) => b.rating - a.rating);
@@ -22,11 +22,11 @@ const HelpfulReviews = ({ collegeId }) => {
         console.error('Error fetching reviews data:', error);
       });
   
-    Axios.get(`http://13.202.120.24:8080/reviews/get-rating/${collegeId}`)
+    Axios.get(`http://localhost:8080/reviews/get-rating/${collegeId}`)
       .then(res => {
         console.log("rating:", res.data);
         // Use the updated rating directly from res.data in the Axios.put call
-        Axios.put(`http://13.202.120.24:8080/College/update/rating/${collegeId}`, {
+        Axios.put(`http://localhost:8080/College/update/rating/${collegeId}`, {
           rating: res.data
         })
         .then(response => {

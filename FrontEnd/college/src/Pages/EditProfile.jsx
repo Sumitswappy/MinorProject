@@ -13,13 +13,19 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 import Navbar from "../components/Navbar";
-import "./EditProfile.css"; // Create a new CSS file for styling
+import "./EditProfile.css"; 
 import { NavLink } from "react-router-dom";
 
 const EditProfile = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("email");
+    if (!sessionData) {
+      navigate("/Login"); 
+    }
+  }, [navigate]);
   const [password, setPassword] = useState('');
-  const url = "http://13.202.120.24:8080/user/";
+  const url = "http://localhost:8080/user/";
   const location = useLocation();
   const [data, setData] = useState({
     firstName: "",
@@ -54,7 +60,7 @@ const EditProfile = () => {
   }, [location]);
 
   useEffect(() => {
-    const geturl = `http://13.202.120.24:8080/College/getByEmail?email=${data.email}`;
+    const geturl = `http://localhost:8080/College/getByEmail?email=${data.email}`;
     Axios.get(geturl)
     .then((resp) => {
       setCol(resp.data);
@@ -109,6 +115,7 @@ const EditProfile = () => {
       Axios.put(fullurl, {
         firstName: data.firstName,
         lastName: data.lastName,
+        address: data.address,
         city: data.city,
         state: data.state,
         phone: data.phone,
@@ -135,7 +142,7 @@ const EditProfile = () => {
   }
 
   return (
-    <div className="add-user">
+    <div className="user1">
         <Navbar/>
       <form onSubmit={(e) => submit(e)}>
         <MDBContainer fluid>

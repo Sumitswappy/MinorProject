@@ -34,13 +34,16 @@ public class CollegeService {
 public List<CollegeEntity> getCollegesByCityAndCourse(String city, String course) {
     return collegeRepository.findByCityAndCourse(city, course);
 }
-    public List<CollegeEntity> getCollegesByCourse(String course) {
+    public List<CollegeEntity> getCollegesByStateAndCourse(String state, String course) {
+        return collegeRepository.findByStateAndCourse(state, course);
+    }
+    public List<CollegeEntity> getCollegesByCourse(int course) {
         return collegeRepository.findByCourse(course);
     }
-    public int getNumberOfCollegesByCourse(String courseName) {
-        List<CollegeEntity> colleges = collegeRepository.findByCourse(courseName);
-        return colleges.size();
-    }
+//    public int getNumberOfCollegesByCourse(String courseName) {
+//        List<CollegeEntity> colleges = collegeRepository.findByCourse(courseName);
+//        return colleges.size();
+//    }
 
     public Optional<CollegeEntity> getCollegeById(int collegeId) {
         return collegeRepository.findById(collegeId);

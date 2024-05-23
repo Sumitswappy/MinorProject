@@ -18,8 +18,14 @@ import { NavLink } from "react-router-dom";
 const EditUser = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
-  const url = "http://13.202.120.24:8080/user/";
+  const url = "http://localhost:8080/user/";
   const location = useLocation();
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("admin");
+    if (!sessionData) {
+      navigate("/admin"); // or any other route you want to redirect to
+    }
+  }, [navigate]);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -53,7 +59,7 @@ const EditUser = () => {
   }, [location]);
 
   useEffect(() => {
-    const geturl = `http://13.202.120.24:8080/College/getByEmail?email=${data.email}`;
+    const geturl = `http://localhost:8080/College/getByEmail?email=${data.email}`;
     Axios.get(geturl)
     .then((resp) => {
       setCol(resp.data);
@@ -109,6 +115,7 @@ const EditUser = () => {
       Axios.put(fullurl, {
         firstName: data.firstName,
         lastName: data.lastName,
+        address: data.address,
         city: data.city,
         state: data.state,
         phone: data.phone,

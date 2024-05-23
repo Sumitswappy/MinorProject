@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState,useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import {
   MDBBreadcrumb,
@@ -16,8 +16,14 @@ import Axios from "axios";
 
 const ViewCollege = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("admin");
+    if (!sessionData) {
+      navigate("/admin"); // or any other route you want to redirect to
+    }
+  }, [navigate]);
   const [colleges, setColleges] = useState([]);
-  const url = "http://13.202.120.24:8080/College/";
+  const url = "http://localhost:8080/College/";
 
   Axios.get(`${url}get`)
     .then((res) => {
@@ -35,13 +41,13 @@ const ViewCollege = () => {
   const delUrl=`${url}${delQuery}`;
   await Axios.delete(delUrl);
   alert("College deleted successfully.");
-  const geturl = `http://13.202.120.24:8080/user/getByEmail?email=${e.email}`;
+  const geturl = `http://localhost:8080/user/getByEmail?email=${e.email}`;
     const resp = await Axios.get(geturl);
     const userId = resp.data[0].id;
     if (userId) {
       // Delete user
       const delUseQuery = `/delete/${userId}`;
-      const delUseUrl = `http://13.202.120.24:8080/user${delUseQuery}`;
+      const delUseUrl = `http://localhost:8080/user${delUseQuery}`;
       await Axios.delete(delUseUrl);
     } else {
       alert("No user found for the user.");
@@ -100,7 +106,6 @@ const ViewCollege = () => {
               <th className="table-header">City</th>
               <th className="table-header">State</th>
               <th className="table-header">Affiliation</th>
-              <th className="table-header">Certification</th>
               <th className="table-header">Establishment Year</th>
               <th className="table-header">Action</th>
             </tr>
@@ -117,7 +122,6 @@ const ViewCollege = () => {
                 <td>{college.city}</td>
                 <td>{college.state}</td>
                 <td>{college.affiliation}</td>
-                <td>{college.certification}</td>
                 <td>{college.establishmentYear}</td>
                 <td>
                   <MDBDropdown className="btn-group">

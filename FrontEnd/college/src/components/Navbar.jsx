@@ -34,7 +34,7 @@ export default function Navbar() {
 
     const fetchData = async () => {
       try {
-        const url = `http://13.202.120.24:8080/user/getByEmail?email=${sessionStorage.getItem("email")}`;
+        const url = `http://localhost:8080/user/getByEmail?email=${sessionStorage.getItem("email")}`;
         const res = await Axios.get(url);
         sessionStorage.setItem("name", res.data[0].firstName);
         sessionStorage.setItem("id",res.data[0].id);
@@ -48,9 +48,9 @@ export default function Navbar() {
 
     fetchData();
   }, []);
-  const courses = ["Medical (MBBS)", "Dentistry (BDS)", "Pharmacy (B.Pharm/M.Pharm)","Nursing (B.Sc Nursing/M.Sc Nursing)","Computer Applications (BCA/MCA)", "Law (LLB/LLM)",
-    "Education/Teaching (B.Ed/M.Ed)", "Journalism/Mass Communication", "Design (B.Des/M.Des)", "Hotel Management",
-    "Animation/Multimedia", "Fine Arts"];
+  const courses = {"Medical (MBBS)":2, "Dentistry (BDS)":3, "Pharmacy (B.Pharm/M.Pharm)":4,"Nursing (B.Sc Nursing/M.Sc Nursing)":5,"Computer Applications (BCA/MCA)":10, "Law (LLB/LLM)":11,
+    "Education/Teaching (B.Ed/M.Ed)":12, "Journalism/Mass Communication":13, "Design (B.Des/M.Des)":14, "Hotel Management":15,
+    "Animation/Multimedia":16, "Fine Arts":17};
   const handleLogOut = () => {
     sessionStorage.removeItem("email");
     sessionStorage.removeItem("admin");
@@ -63,7 +63,8 @@ handleRefresh();
   }
   const handleCourse = (e, event) => {
     event.preventDefault();
-    navigate("/Colleges", { state: { courseName: e } });
+    const courseIndex = courses[e];
+    navigate("/Colleges", { state: { courseName: courseIndex } });
   }
     
   function handleRefresh() {
@@ -98,13 +99,11 @@ handleRefresh();
             <MDBDropdown group className='ms-2'>
               <MDBDropdownToggle outline rounded color={isLoggedIn ? 'light' : 'warning'} className='nav-button-1' ><MDBIcon fas icon="graduation-cap" size='lg'/> Courses</MDBDropdownToggle>
               <MDBDropdownMenu dark>
-              {courses.map((course, index) => (
-            
-              <MDBDropdownItem link key={index} value={course} onClick={(event)=>handleCourse(course,event)}>{course}</MDBDropdownItem>
-              
-          
-          ))}
-                
+                {Object.keys(courses).map((course, index) => (
+                  <MDBDropdownItem link key={index} onClick={(event) => handleCourse(course, event)}>
+                    {course}
+                  </MDBDropdownItem>
+                ))}
               </MDBDropdownMenu>
             </MDBDropdown>
             

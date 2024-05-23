@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
@@ -17,7 +17,13 @@ import { NavLink } from "react-router-dom";
 
 const AddUser = () => {
   const navigate = useNavigate();
-  const url = "http://13.202.120.24:8080/user/add";
+  const url = "http://localhost:8080/user/add";
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("admin");
+    if (!sessionData) {
+      navigate("/admin"); // or any other route you want to redirect to
+    }
+  }, [navigate]);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",

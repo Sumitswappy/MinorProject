@@ -33,7 +33,7 @@ public class CollegeController {
                 .orElse(ResponseEntity.notFound().build());
     }
     @GetMapping("byCourse/{course}")
-    public List<CollegeEntity> getCollegesByCourse(@PathVariable String course) {
+    public List<CollegeEntity> getCollegesByCourse(@PathVariable int course) {
         return collegeService.getCollegesByCourse(course);
     }
     @GetMapping("byCity/{city}")
@@ -51,7 +51,13 @@ public List<CollegeEntity> getCollegesByCityAndCourse(
 
     return collegeService.getCollegesByCityAndCourse(city, course);
 }
+    @GetMapping("/get-filtered-state")
+    public List<CollegeEntity> getCollegesByStateAndCourse(
+            @RequestParam(name = "state", required = false) String state,
+            @RequestParam(name = "course", required = false) String course) {
 
+        return collegeService.getCollegesByStateAndCourse(state, course);
+    }
     @PostMapping("add")
     public void saveCollege(@RequestBody CollegeEntity college) {
         collegeService.saveCollege(college);

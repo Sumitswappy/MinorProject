@@ -28,7 +28,7 @@ export default function Category() {
 
         const counts = {};
         for (const category of categories) {
-          const response = await fetch(`http://13.202.120.24:8080/categories/colleges?categoryName=${category}`);
+          const response = await fetch(`http://localhost:8080/categories/colleges?categoryName=${category}`);
           if (response.ok) {
             const data = await response.json();
             counts[category] = data;

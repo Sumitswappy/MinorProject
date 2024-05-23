@@ -25,7 +25,13 @@ import Navbar from "../components/Navbar";
 
 const UserProfile = ({ userId }) => {
   const navigate = useNavigate();
-  const url = "http://13.202.120.24:8080/user/";
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("email");
+    if (!sessionData) {
+      navigate("/Login"); // or any other route you want to redirect to
+    }
+  }, [navigate]);
+  const url = "http://localhost:8080/user/";
   const location = useLocation();
   const [data, setData] = useState({
     firstName: "",
@@ -69,7 +75,7 @@ const UserProfile = ({ userId }) => {
       const formData = new FormData();
       formData.append("file", file);
   
-      Axios.put(`http://13.202.120.24:8080/files`, formData, {
+      Axios.put(`http://localhost:8080/files`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

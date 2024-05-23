@@ -19,6 +19,7 @@ public class Application {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.addAllowedOrigin("http://localhost:3000");
+
 		config.addAllowedMethod("*");
 		config.addAllowedHeader("*");
 		source.registerCorsConfiguration("/**", config);

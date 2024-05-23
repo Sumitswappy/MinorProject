@@ -3,6 +3,7 @@
 .view-user {
     padding-top: 20px;
     background-image: linear-gradient(to bottom, rgb(65, 65, 65),rgb(237, 237, 237),rgb(237, 237, 237),rgb(237, 237, 237),rgb(237, 237, 237),rgb(237, 237, 237));
+    background-size: cover;
     background-repeat: no-repeat;
   }
   

@@ -38,21 +38,21 @@ export default function CustomSearch() {
   };
   const allLocations = [
     "Agra", "Ahmedabad", "Ahmednagar", "Ajmer", "Aligarh", "Allahabad", "Ambala", "Amravati", "Amritsar",
-    "Anand", "Aurangabad","Bangalore", "Bareilly", "Bathinda", "Beed", "Belgaum", "Bhavnagar", "Bhilwara", "Bhopal", "Bhubaneswar",
+    "Anand", "Aurangabad", "Bangalore","Bareilly", "Bathinda", "Beed", "Belgaum", "Bhavnagar", "Bhilwara", "Bhopal", "Bhubaneswar",
     "Bidar", "Bijapur", "Bikaner", "Bilaspur", "Calicut", "Chandigarh", "Chennai", "Chirala", "Chittoor", "Cochin", "Cuttack",
     "Davangere", "Dehradun", "Delhi", "Dewas", "Dhanbad", "Dhule", "Durg", "Durgapur", "Eluru", "Erode", "Faridabad",
     "Farrukhabad", "Firozabad", "Gangtok", "Gandhinagar", "Gaya", "Ghaziabad", "Gorakhpur", "Greater Noida",
     "Gulbarga", "Guna", "Guntur", "Gurgaon", "Guwahati", "Haridwar", "Hisar", "Hooghly", "Howrah", "Hubli","Hyderabad", "Ichalkaranji",
     "Imphal", "Indore", "Jabalpur", "Jaipur", "Jalandhar", "Jamnagar", "Jamshedpur", "Jammu", "Jhansi", "Jharkhand", "Jodhpur",
-    "Junagadh", "Kadapa", "Kakinada", "Kalyan-Dombivli", "Kanpur", "Karimnagar", "Karnal","Kharagpur","Kochi", "Kolar", "Kolkata", "Kollam",
+    "Junagadh", "Kadapa", "Kakinada", "Kalyan-Dombivli", "Kanpur", "Karimnagar", "Karnal", "Kharagpur", "Kochi", "Kolar", "Kolkata", "Kollam",
     "Kota", "Kozhikode", "Kurnool", "Kurukshetra", "Lucknow", "Ludhiana", "Madhya Pradesh", "Madurai", "Maharashtra", "Malappuram",
     "Manipal", "Mangalore", "Mathura", "Meerut", "Moradabad", "Mumbai", "Muzaffarnagar", "Muzaffarpur", "Mysore", "Nagpur",
     "Naihati", "Nanded", "Nashik", "Navi Mumbai", "Nellore", "Nizamabad", "Noida", "Odisha", "Ozhukarai", "Palakkad",
     "Panchkula", "Panipat", "Panaji", "Patna", "Patiala", "Proddatur", "Puducherry", "Pune", "Raipur", "Rajahmundry", "Rajkot",
     "Rampur", "Ranchi", "Ratlam", "Rewa", "Roorkee", "Rourkela", "Sagar", "Saharanpur", "Salem", "Sangli", "Satara", "Satna",
     "Secunderabad", "Shillong", "Shimla", "Shimoga", "Siliguri", "Solan", "Solapur", "Sonipat", "Srinagar", "Srikakulam",
-    "Surat", "Thane", "Thanjavur", "Thiruvananthapuram", "Thrissur", "Tiruchengode", "Tirunelveli", "Tirupathi", "Tirupur",
-    "Udaipur", "Ujjain", "Ulhasnagar", "Uran", "Vadodara", "Vasai", "Vellore", "Vijayawada", "Vijayanagaram", "Visakhapatnam",
+    "Surat", "Thane", "Thanjavur", "Thiruvananthapuram", "Thrissur", "Tiruchengode","Tiruchirappalli", "Tirunelveli", "Tirupathi", "Tirupur",
+    "Udaipur", "Ujjain", "Ulhasnagar", "Uran", "Vadodara", "Varanasi" , "Vasai", "Vellore", "Vijayawada", "Vijayanagaram", "Visakhapatnam",
     "Vizianagaram", "Warangal", "Wardha", "Yamuna Nagar"
   ];
 

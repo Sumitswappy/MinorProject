@@ -15,7 +15,7 @@ import './StudentRegister.css';
 
 function Register() {
   const navigate = useNavigate();
-  const url = "http://13.202.120.24:8080/user/add";
+  const url = "http://localhost:8080/user/add";
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -126,7 +126,7 @@ function Register() {
       })
         .then(res => {
           console.log(res.data);
-          navigate('/');
+          navigate('/Login');
         })
     }
   }

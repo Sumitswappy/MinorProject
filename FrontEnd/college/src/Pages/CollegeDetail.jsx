@@ -13,12 +13,18 @@ import "./CollegeDetail.css";
 
 const CollegeDetail = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("email");
+    if (!sessionData) {
+      navigate("/Login"); // or any other route you want to redirect to
+    }
+  }, [navigate]);
   const { id } = useParams();
   const [basicModal, setBasicModal] = useState(false);
   const toggleOpen = () => setBasicModal(!basicModal);
   const [collegeData, setCollegeData] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
-  const url = "http://13.202.120.24:8080/College/";
+  const url = "http://localhost:8080/College/";
   const location = useLocation();
   const [userId, setUserId] = useState(""); // State to store user id
   const [isCollegeUser,setIsCollegeUser]=useState(false);
@@ -123,25 +129,7 @@ const CollegeDetail = () => {
     }
   };
 
-  const handleDownload = () => {
-    console.log(collegeData.brochurefileUri);
-    Axios.get(collegeData.brochurefileUri)
-      .then((response) => {
-        console.log("Download response:", response);
-        const file = new Blob([response.data], { type: response.data.type });
-        const fileURL = URL.createObjectURL(file);
-        const link = document.createElement("a");
-        link.href = fileURL;
-        link.download = collegeData.filename;
-        document.body.appendChild(link);
-        link.click();
-        URL.revokeObjectURL(fileURL);
-        document.body.removeChild(link);
-      })
-      .catch((error) => {
-        console.error("Error downloading file:", error);
-      });
-  };
+
   
   const handleProfileFileChange = (event) => {
     console.log(event.target.files[0]);
@@ -154,7 +142,7 @@ const CollegeDetail = () => {
       const formData = new FormData();
       formData.append("file", profilefile);
   
-      Axios.put(`http://13.202.120.24:8080/files`, formData, {
+      Axios.put(`http://localhost:8080/files`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -211,15 +199,19 @@ const CollegeDetail = () => {
     setShowCoverUploadButton(true);
   };
   const openURL = () => {
-    const url = collegeData.applyweb; // Replace 'https://example.com' with your desired URL
+    const url = collegeData.applyweb; 
     window.open(url, '_blank'); // Opens the URL in a new tab/window
+  };
+  const brochureURL = () => {
+    const burl = collegeData.brochurefileUri; 
+    window.open(burl, '_blank'); // Opens the URL in a new tab/window
   };
   const uploadCoverPhoto = () => {
     if (coverfile) {
       const formData = new FormData();
       formData.append("file", coverfile);
   
-      Axios.put(`http://13.202.120.24:8080/files`, formData, {
+      Axios.put(`http://localhost:8080/files`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -373,7 +365,7 @@ const CollegeDetail = () => {
   {renderContent()}
   <div className="action-buttons">
     <button className="btn btn-primary" onClick={openURL}>Apply Now</button>
-    <button className="btn btn-secondary" onClick={handleDownload}>Download Brochure</button>
+    <button className="btn btn-secondary" onClick={brochureURL}>Download Brochure</button>
   </div>
 </MDBCol>
   

@@ -1,12 +1,20 @@
-import { React, useState } from "react";
+import { React, useState,useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { MDBBreadcrumb, MDBBreadcrumbItem, MDBCol, MDBContainer, MDBRow,MDBIcon } from 'mdb-react-ui-kit';
 import './AdminDash.css';
 import Axios from "axios";
 export default function AdminDash() {
   const [userNo, setUserNo]=useState([]);
   const [collegeNo, setCollegeNo]=useState([]);
-  const userurl = "http://13.202.120.24:8080/user";
-  const collegeurl="http://13.202.120.24:8080/College"
+  const navigate = useNavigate();
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("admin");
+    if (!sessionData) {
+      navigate("/admin"); // or any other route you want to redirect to
+    }
+  }, [navigate]);
+  const userurl = "http://localhost:8080/user";
+  const collegeurl="http://localhost:8080/College"
   const getQuery=`/get`;
   const getUserUrl=`${userurl}${getQuery}`;
   const getCollegeUrl=`${collegeurl}${getQuery}`;
