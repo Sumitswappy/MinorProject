@@ -169,7 +169,7 @@ const EditUser = () => {
           </MDBBreadcrumb>
           <MDBContainer fluid className="heading">
             <h2 className="view-heading">Edit User</h2>
-            <NavLink to="/AdminHome/view-user" className="add-user-button">
+            <NavLink to="/AdminHome/view-user" className="addbutton">
               View User
             </NavLink>
           </MDBContainer>

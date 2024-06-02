@@ -11,11 +11,17 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Integer> {
-    @Query("SELECT COUNT(c) FROM CategoryEntity c " +
+    @Query("SELECT COUNT(DISTINCT co) FROM CategoryEntity c " +
             "JOIN c.categoryCourses cc " +
             "JOIN cc.college co " +
             "WHERE c.category = :categoryName")
     int countCollegesByCategoryName(@Param("categoryName") String categoryName);
+
+    @Query("SELECT co FROM CategoryEntity c " +
+            "JOIN c.categoryCourses cc " +
+            "JOIN cc.college co " +
+            "WHERE c.category = :categoryName")
+    List<CollegeEntity> findCollegesByCategoryName(@Param("categoryName") String categoryName);
 
 
 }

@@ -14,7 +14,6 @@ import SidebarFilters from "../components/SideBarFilters";
 import Navbar from "../components/Navbar.jsx";
 import './CollegeList.css';
 import UpbarFilters from "../components/Upbarfilters.jsx";
-
 const CollegeList = () => {
   const [filters, setFilters] = useState({
     city: '',
@@ -43,7 +42,7 @@ const CollegeList = () => {
 
   const url = "http://localhost:8080/College/get-filtered";
   const url2 = "http://localhost:8080/College/get";
-  const url3 = "http://localhost:8080/College/get-filtered-state";
+  const url3= "http://localhost:8080/College/get-filtered-state"
   const [searchdata, setSearchData] = useState(useLocation());
   const [collegeDetails, setCollegeDetails] = useState([]);
   const courses = {
@@ -85,7 +84,6 @@ const CollegeList = () => {
     "Political Science (BA/B.Sc Political Science)": 36,
     "Languages (BA Literature/Linguistics)": 37
   };
-
   useEffect(() => {
     const college = async () => {
       try {
@@ -99,37 +97,46 @@ const CollegeList = () => {
             response = await Axios.get(`http://localhost:8080/College/byCity/${filters.city}`);
           } else if (filters.state && !filters.course && !filters.city) {
             response = await Axios.get(`http://localhost:8080/College/byState/${filters.state}`);
-          } else if (filters.city && filters.course && !filters.state) {
-            const courseIndexToName = Object.fromEntries(Object.entries(courses).map(([name, index]) => [index, name]));
-            const coursename=filters.course? courseIndexToName[filters.course]:'';
-            const query = `?city=${filters.city || ''}&course=${coursename || ''}`;
-            const fullUrl = `${url}${query}`;
-            response = await Axios.get(fullUrl);
-            console.log("Query: ", query);
-          } else if (!filters.city && filters.course && filters.state) {
-            const courseIndexToName = Object.fromEntries(Object.entries(courses).map(([name, index]) => [index, name]));
-            const coursename=filters.course? courseIndexToName[filters.course]:'';
-            const query = `?state=${filters.state || ''}&course=${coursename || ''}`;
-            const fullUrl = `${url3}${query}`;
-            response = await Axios.get(fullUrl);
-            console.log("Query: ", query);
-          } 
+          }
+          else if (filters.city && filters.course && !filters.state)
+            {
+              const courseIndexToName = Object.fromEntries(Object.entries(courses).map(([name, index]) => [index, name]));
+              const coursename=filters.course? courseIndexToName[filters.course]:'';
+              const query = `?city=${filters.city || ''}&course=${coursename || ''}`;
+              const fullUrl = `${url}${query}`;
+              response = await Axios.get(fullUrl);
+              
+            }
+            else if (!filters.city && filters.course && filters.state)
+              {
+                const courseIndexToName = Object.fromEntries(Object.entries(courses).map(([name, index]) => [index, name]));
+                const coursename=filters.course? courseIndexToName[filters.course]:'';
+                const query = `?state=${filters.state || ''}&course=${coursename || ''}`;
+                const fullUrl = `${url3}${query}`;
+                response = await Axios.get(fullUrl);
+                
+              }
           else {
             const query = `?city=${filters.city || ''}&course=${filters.course || ''}`;
             const fullUrl = `${url}${query}`;
             response = await Axios.get(fullUrl);
-            console.log("Query: ", query);
+           
           }
-        } else if (searchdata.state.courseName && !searchdata.state.cityName) {
-          console.log("Using searchdata state: ", searchdata.state);
+        }
+        else if(searchdata.state.categoryName){
+          response = await Axios.get(`http://localhost:8080/categories/college?categoryName=${searchdata.state.categoryName}`);
+        }
+        else if (searchdata.state.courseName && !searchdata.state.cityName) {
+          
           response = await Axios.get(`http://localhost:8080/College/byCourse/${searchdata.state.courseName}`);
-        } else {
+        }
+         else {
           const query = `?city=${searchdata.state.cityName || ''}&course=${searchdata.state.courseName || ''}`;
           const fullUrl = `${url}${query}`;
           response = await Axios.get(fullUrl);
-          console.log("Query: ", query);
+          
         }
-        console.log("Response: ", response);
+        
         setCollegeDetails(response.data);
       } catch (error) {
         console.log("Error: ", error);
@@ -140,17 +147,16 @@ const CollegeList = () => {
 
   const onHandle = (college) => {
     if (sessionStorage.getItem("email") != null) {
-      console.log("Editing user:", college);
+      
       const collegeId = college.id;
-      console.log("College ID:", collegeId);
+      
       navigate("/CollegesProfile", { state: { id: collegeId } });
     } else {
-      navigate("/login");
+      navigate("/Login");
       alert("Please Log In...");
     }
   };
-
-  const renderStars = (rating) => {
+  const renderStars = rating => {
     const fullStars = Math.floor(rating);
     const halfStar = rating - fullStars >= 0.5;
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
@@ -168,28 +174,26 @@ const CollegeList = () => {
 
     return stars;
   };
-
   return (
     <div className='college-body'>
       <MDBContainer className='college-container' fluid>
-        <MDBRow>
+      <MDBRow>
         <Navbar />
-        
         </MDBRow>
         <div className="upbarfilters">
           <UpbarFilters onFilterChange={handleFilterChange}/>
         </div>
         <MDBRow>
-          <MDBCol size='12' md='2' className="sidebar-filters">
+          <MDBCol size='2' md='2' className="sidebar-filters">
             <SidebarFilters onFilterChange={handleFilterChange} />
           </MDBCol>
-          <MDBCol size='12' md='10' >
-            <MDBContainer className="college-container" style={{ paddingLeft: '20px', marginTop: '75px' }} fluid>
+          <MDBCol size='12' md='10'>
+            <MDBContainer className="college-container" style={{ flex: 1, paddingLeft: '20px', marginTop: '75px' }} fluid>
               <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "10px" }}>
                 {collegeDetails.map((college, index) => (
-                  <MDBCard key={index} className="college-card" style={{ margin: '10px auto', zIndex: '-1' }}>
+                  <MDBCard key={index} className="college-card" style={{ width: '75%', margin: '10px' }}>
                     <MDBCardBody style={{ backgroundImage: `url(${college.coverphotoUri})`, backgroundSize: 'cover', borderRadius: '40px' }}>
-                      <div style={{ display: "flex", justifyContent: "flex-start", padding: '20px', background: '#ffffff85', borderRadius: '20px', color: 'black' }}>
+                      <div style={{ display: "flex", justifyContent: "flex-start",  padding: '20px', background: '#ffffff85',borderRadius: '20px', color: 'black' }}>
                         <img
                           src={college.profilephotoUri}
                           alt={`College ${index + 1}`}
@@ -200,11 +204,11 @@ const CollegeList = () => {
                           <MDBCardText className="cardTextStyle">
                             {college.state} <br />
                             {college.city} <br />
-                            {college.establishmentYear}<br />
-                            {college.certification} Certified<br />
+                            established in {college.establishmentYear}<br />
+                            and {college.certification} Certified<br />
                             <p className="card-text">
-                              Rating: {renderStars(college.rating)}
-                            </p><br />
+                  Rating: {renderStars(college.rating)}
+                </p><br/>
                             <button className="btn btn-primary" onClick={() => onHandle(college)}>View Details</button>
                           </MDBCardText>
                         </div>

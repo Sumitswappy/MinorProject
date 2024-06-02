@@ -44,34 +44,35 @@ const ViewUser = () => {
     .catch((error) => {
       console.error("Error fetching user data:", error);
     });*/
-
-const onHandleDelete = async (user) => {
-  try {
-    const delId = user.id;
-    const delQuery = `/delete/${delId}`;
-    const delUrl = `${url}${delQuery}`;
-
-    // Delete user
-    await Axios.delete(delUrl);
-    alert("User deleted successfully.");
-
-    // Fetch college ID
-    const geturl = `http://localhost:8080/College/getByEmail?email=${user.email}`;
-    const resp = await Axios.get(geturl);
-    const collegeId = resp.data[0].id;
-console.log("id:",collegeId);
-    if (collegeId) {
-      // Delete college
-      const delColQuery = `/delete/${collegeId}`;
-      const delColUrl = `http://localhost:8080/College${delColQuery}`;
-      await Axios.delete(delColUrl);
-    } else {
-      alert("No college found for the user.");
+    function handleRefresh() {
+      window.location.reload();
     }
-  } catch (error) {
-    console.error("Error deleting user or college:", error);
-  }
-};
+    const onHandleDelete = async (user) => {
+      const confirmDelete = window.confirm("Do you want to delete this account?");
+      if (confirmDelete) {
+        try {
+          const delId = user.id;
+          const resp = await Axios.get(`http://localhost:8080/College/getByEmail?email=${user.email}`);
+          const collegeId = resp.data[0]?.id;
+          if (collegeId) {
+            await Axios.delete(`http://localhost:8080/College/delete/${collegeId}`);
+            await Axios.delete(`http://localhost:8080/user/delete/${delId}`);
+           
+        handleRefresh();
+            alert("Account deleted successfully.");
+          } else {
+            console.log("No college found for the user.");
+            await Axios.delete(`http://localhost:8080/user/delete/${delId}`);
+            
+        handleRefresh();
+            alert("Account deleted successfully.");
+          }
+         
+        } catch (error) {
+          console.error("Error deleting user or college:", error);
+        }
+      }
+    };
 
     const onHandleEdit = (user) => {
       console.log("Editing user:", user);
@@ -109,7 +110,7 @@ console.log("id:",collegeId);
         </MDBBreadcrumb>
         <MDBContainer fluid className="heading">
         <h2 className="view-heading">View User</h2>
-          <NavLink to="/AdminHome/add-user" className="add-user-button">
+          <NavLink to="/AdminHome/add-user" className="addbutton">
             Add User
           </NavLink>
         </MDBContainer>

@@ -194,19 +194,22 @@ const EditCollege = () => {
   const handleCourseChange = (index, value) => {
     setCollegeData((prevData) => {
       const updatedCourses = [...prevData.collegeCourses];
-      if (value != undefined) {
-        console.log(value);
-        updatedCourses[index] = { id: value };
+  
+      // If value is undefined, uncheck the course and remove it from collegeCourses
+      if (value === undefined) {
+        const filteredCourses = updatedCourses.filter((course, idx) => idx !== index);
+        return { ...prevData, collegeCourses: filteredCourses };
       }
-      return {
-        ...prevData,
-        collegeCourses: updatedCourses,
-      };
+  
+      // Check the course and add/update it in collegeCourses
+      updatedCourses[index] = { id: value };
+      return { ...prevData, collegeCourses: updatedCourses };
     });
+  
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [`course${index}`]: "",
-      collegeCourses: "",
+      [`course${index}`]: "", // Reset error for the specific course index
+      collegeCourses: "", // Reset any generic collegeCourses error
     }));
   };
   
@@ -336,7 +339,7 @@ const EditCollege = () => {
         </MDBBreadcrumb>
         <MDBContainer fluid className="heading">
           <h2 className="view-heading">Edit College</h2>
-          <NavLink to="/AdminHome/view-college" className="add-user-button">
+          <NavLink to="/AdminHome/view-college" className="addbutton">
             View College
           </NavLink>
         </MDBContainer>
@@ -502,39 +505,35 @@ const EditCollege = () => {
                       <MDBDropdownMenu
                         style={{ overflow: "auto", maxHeight: "160px" }}
                       >
-                        {course.map((_, index) => (
-                          <div
-                            key={index}
-                            className="custom-control custom-checkbox"
-                          >
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id={`courseCheckbox${index}`}
-                              checked={
-                                collegeData.collegeCourses[index]?.id !==
-                                undefined
-                              }
-                              onChange={() =>
-                                handleCourseChange(
-                                  index,
-                                  collegeData.collegeCourses[index]?.id
-                                    ? undefined
-                                    : index + 1
-                                )
-                              }
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor={`courseCheckbox${index}`}
-                            >
-                              {course[index]}
-                            </label>
-                             {errors.collegeCourses && errors.collegeCourses[index] && (
-          <div className="text-danger">{errors.collegeCourses[index]}</div>
-        )} 
-                          </div>
-                        ))}
+                        {course.map((courseName, index) => (
+  <div key={index} className="custom-control custom-checkbox">
+    <input
+      type="checkbox"
+      className="custom-control-input"
+      id={`courseCheckbox${index}`}
+      checked={collegeData.collegeCourses.some(
+        (course) => course?.id === index + 1
+      )}
+      onChange={() =>
+        handleCourseChange(
+          index,
+          collegeData.collegeCourses.some((course) => course?.id === index + 1)
+            ? undefined
+            : index + 1
+        )
+      }
+    />
+    <label
+      className="custom-control-label"
+      htmlFor={`courseCheckbox${index}`}
+    >
+      {courseName}
+    </label>
+    {errors.collegeCourses && errors.collegeCourses[index] && (
+      <div className="text-danger">{errors.collegeCourses[index]}</div>
+    )}
+  </div>
+))}
                       </MDBDropdownMenu>
                     </MDBDropdown>
                   </MDBCol>

@@ -35,9 +35,21 @@ function submit(e){
       navigate("/");
     }
     else{
-      alert("Email doesn't exist or the password is incorrect...");
+      alert("Email address is incorrect or the password is incorrect...");
     }
   })
+  .catch(error => {
+    if (error.response) {
+      if (error.response.status === 500) {
+        alert("Account does not exist...");
+      } else {
+        alert("An error occurred. Please try again later.");
+      }
+    } else {
+      console.error("Error submitting login:", error);
+      alert("An unexpected error occurred. Please check your network connection and try again.");
+    }
+  });
 }
 
   return (
@@ -53,8 +65,8 @@ function submit(e){
 
             <div className='d-flex flex-column justify-content-center h-custom-2 w-75 pt-4'>
               <h3 className="fw-large mb-3 ps-5 pb-3" style={{ letterSpacing: '1px' }}>Log in to Continue</h3>
-              <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Email address' id='userName' type='email' size="lg" onChange={(e)=>handle(e)} value={data.userName} />
-              <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Password' id='password' type='password' size="lg" onChange={(e)=>handle(e)} value={data.password} />
+              <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Email address' id='userName' type='email' size="lg" onChange={(e)=>handle(e)} value={data.userName} required />
+              <MDBInput wrapperClass='mb-4 mx-5 w-100' label='Password' id='password' type='password' size="lg" onChange={(e)=>handle(e)} value={data.password} required />
 
               <MDBBtn className="mb-4 px-5 mx-5 w-100" color='primary' size='lg'>Login</MDBBtn>
               <p className="small mb-5 pb-lg-3 ms-5"><a className="text-muted" href="#!">Forgot password?</a></p>

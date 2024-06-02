@@ -5,7 +5,24 @@ body {
   #form1:focus {
     border-color: #00589E; 
   }
- 
+  .password-strength.strong {
+    color: green;
+  }
+  .password-strength.medium {
+    color: orange;
+  }
+  .password-strength.weak {
+    color: red;
+  }
+  .password-strength.too-short {
+    color: gray;
+  }
+  .password-feedback {
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+    font-size: small;
+    list-style-type: none;
+  }  
 
 
 @media (max-width: 767px) {

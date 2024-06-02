@@ -39,8 +39,6 @@ const ViewCollege = () => {
       const delId=e.id;
       const delQuery=`delete/${delId}`;
   const delUrl=`${url}${delQuery}`;
-  await Axios.delete(delUrl);
-  alert("College deleted successfully.");
   const geturl = `http://localhost:8080/user/getByEmail?email=${e.email}`;
     const resp = await Axios.get(geturl);
     const userId = resp.data[0].id;
@@ -49,8 +47,12 @@ const ViewCollege = () => {
       const delUseQuery = `/delete/${userId}`;
       const delUseUrl = `http://localhost:8080/user${delUseQuery}`;
       await Axios.delete(delUseUrl);
+      await Axios.delete(delUrl);
+  alert("College deleted successfully.");
     } else {
-      alert("No user found for the user.");
+      await Axios.delete(delUrl);
+  alert("College deleted successfully.");
+      console.log("No user found for the user.");
     }
   } catch (error) {
     console.error("Error deleting user or college:", error);
@@ -90,7 +92,7 @@ const ViewCollege = () => {
         </MDBBreadcrumb>
         <MDBContainer fluid className="heading">
         <h2 className="view-heading">View College</h2>
-          <NavLink to="/AdminHome/add-college" className="add-user-button">
+          <NavLink to="/AdminHome/add-college" className="addbutton">
             Add College
           </NavLink>
         </MDBContainer>

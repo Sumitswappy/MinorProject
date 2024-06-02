@@ -31,7 +31,9 @@ public class CategoryService {
     public int getNumberOfCollegesByCategoryName(String categoryName) {
         return categoryRepository.countCollegesByCategoryName(categoryName);
     }
-
+    public List<CollegeEntity> getCollegesByCategoryName(String categoryName) {
+        return categoryRepository.findCollegesByCategoryName(categoryName);
+    }
 
     public CategoryEntity createCategory(CategoryEntity categoryEntity) {
         return categoryRepository.save(categoryEntity);

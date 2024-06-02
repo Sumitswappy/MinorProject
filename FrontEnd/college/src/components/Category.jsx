@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { MDBNavbarLink, MDBIcon } from 'mdb-react-ui-kit';
+import { Link, useNavigate } from 'react-router-dom';
+import { MDBIcon } from 'mdb-react-ui-kit';
 import './Category.css';
 
 export default function Category() {
   const [collegeCounts, setCollegeCounts] = useState({});
-
+const navigate= useNavigate();
   useEffect(() => {
     async function fetchCollegeCounts() {
       try {
@@ -45,14 +46,17 @@ export default function Category() {
 
     fetchCollegeCounts();
   }, []); // Execute once on component mount
-
+  const handleCategory = (e, event) => {
+    event.preventDefault();
+    navigate("/Colleges", { state: { categoryName: e } });
+  }
   return (
     <div className='categories'>
       {Object.entries(collegeCounts).map(([category, count]) => (
-        <MDBNavbarLink key={category} active aria-current='page' href='#'>
-          {getCategoryIcon(category)}<br></br>
+        <Link key={category} onClick={(event) => handleCategory(category,event)} className='category-link'>
+          {getCategoryIcon(category)}<br />
           {category} ({count})
-        </MDBNavbarLink>
+        </Link>
       ))}
     </div>
   );

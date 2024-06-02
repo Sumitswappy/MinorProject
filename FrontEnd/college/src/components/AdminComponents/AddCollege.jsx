@@ -63,7 +63,8 @@ const AddCollege = () => {
   }, []);
 
   const [errors, setErrors] = useState({});
-
+  const [passwordStrength, setPasswordStrength] = useState('');
+  const [passwordFeedback, setPasswordFeedback] = useState([]);
   const states = [
     "Andhra Pradesh",
     "Arunachal Pradesh",
@@ -100,6 +101,7 @@ const AddCollege = () => {
     "Lakshadweep",
     "Puducherry",
   ];
+ 
   const handleCourseChange = (index, value) => {
     setCollegeData((prevData) => {
       const updatedCourses = [...prevData.collegeCourses];
@@ -118,7 +120,50 @@ const AddCollege = () => {
       collegeCourses: "",
     }));
   };
+ const handleCourseReset = () => {
+    setCollegeData((prevData) => ({
+      ...prevData,
+      collegeCourses: [], // Reset selected courses
+    }));
+    
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      collegeCourses: "", // Reset any errors related to course selection
+    }));
+  };
+  function evaluatePasswordStrength(password) {
+    let strength = '';
+    const feedback = [];
 
+    if (password.length < 8) {
+      strength = 'Too Short';
+      feedback.push('Password must be at least 8 characters long.');
+    } else {
+      if (!/[A-Z]/.test(password)) {
+        feedback.push('Password should include at least one uppercase letter.');
+      }
+      if (!/[a-z]/.test(password)) {
+        feedback.push('Password should include at least one lowercase letter.');
+      }
+      if (!/\d/.test(password)) {
+        feedback.push('Password should include at least one number.');
+      }
+      if (!/[!@#$%^&*]/.test(password)) {
+        feedback.push('Password should include at least one special character.');
+      }
+
+      if (feedback.length === 0) {
+        strength = 'Strong';
+      } else if (feedback.length <= 2) {
+        strength = 'Medium';
+      } else {
+        strength = 'Weak';
+      }
+    }
+
+    setPasswordStrength(strength);
+    setPasswordFeedback(feedback);
+  }
   const validateForm = () => {
     let valid = true;
     const newErrors = {};
@@ -127,16 +172,17 @@ const AddCollege = () => {
       newErrors.name = "*College name is required";
       valid = false;
     }
-
+  
     if (!collegeData.firstName.trim()) {
-      newErrors.firstName = "*Contact person name is required";
+      newErrors.firstName = "*Contact person first name is required";
       valid = false;
     }
+  
     if (!collegeData.lastName.trim()) {
-      newErrors.lastName = "*Contact person name is required";
+      newErrors.lastName = "*Contact person last name is required";
       valid = false;
     }
-
+  
     if (
       !collegeData.phoneNumber.trim() ||
       !/^\d{10}$/.test(collegeData.phoneNumber.trim())
@@ -144,17 +190,21 @@ const AddCollege = () => {
       newErrors.phoneNumber = "*Valid 10-digit phone number is required";
       valid = false;
     }
-
+    if (!collegeData.address.trim()) {
+      newErrors.address = "*Address is required";
+      valid = false;
+    }
+  
     if (!collegeData.state.trim()) {
       newErrors.state = "*State is required";
       valid = false;
     }
-
+  
     if (!collegeData.city.trim()) {
       newErrors.city = "*City is required";
       valid = false;
     }
-
+  
     if (
       !collegeData.email.trim() ||
       !/\S+@\S+\.\S+/.test(collegeData.email.trim())
@@ -162,19 +212,17 @@ const AddCollege = () => {
       newErrors.email = "*Valid email is required";
       valid = false;
     }
-
   
-
     if (!collegeData.affiliation.trim()) {
       newErrors.affiliation = "*Affiliation is required";
       valid = false;
     }
-
+  
     if (!collegeData.certification.trim()) {
       newErrors.certification = "*Certification is required";
       valid = false;
     }
-
+  
     if (
       !collegeData.establishmentYear.trim() ||
       !/^\d{4}$/.test(collegeData.establishmentYear.trim())
@@ -182,19 +230,63 @@ const AddCollege = () => {
       newErrors.establishmentYear = "*Valid 4-digit year is required";
       valid = false;
     }
-
+  
     if (!collegeData.collegeCourses.length) {
       newErrors.collegeCourses = "*At least one course is required";
       valid = false;
-    } 
-    else {
-      collegeData.collegeCourses.forEach((course, index) => {
-        if (!course || !course.id) {
-          newErrors[`course${index}`] = `*Course ${index + 1} is required`;
-          valid = false;
-        }
-      });
+    
     }
+  
+    if (!collegeData.brochurefileUri.trim()) {
+      newErrors.brochurefileUri = "*Brochure file URI is required";
+      valid = false;
+    }
+  
+    if (!collegeData.filename.trim()) {
+      newErrors.filename = "*Filename is required";
+      valid = false;
+    }
+  
+    if (!collegeData.collegeweb.trim()) {
+      newErrors.collegeweb = "*College website URL is required";
+      valid = false;
+    }
+  
+    if (!collegeData.applyweb.trim()) {
+      newErrors.applyweb = "*Admission portal URL is required";
+      valid = false;
+    }
+  
+    if (!collegeData.useraddress.trim()) {
+      newErrors.useraddress = "*User address is required";
+      valid = false;
+    }
+  
+    if (!collegeData.userstate.trim()) {
+      newErrors.userstate = "*User state is required";
+      valid = false;
+    }
+  
+    if (!collegeData.usercity.trim()) {
+      newErrors.usercity = "*User city is required";
+      valid = false;
+    }
+    if (!/^.{8,}$/.test(collegeData.password.trim())) {
+      newErrors.password = '*Password must be at least 8 characters';
+      valid = false;
+    }
+
+    if (!collegeData.confirmPassword.trim()) {
+      newErrors.confirmPassword = '*Confirm your password';
+      valid = false;
+    }
+
+    if (collegeData.password !== collegeData.confirmPassword) {
+      newErrors.confirmPassword = '*Password and confirm password do not match';
+      valid = false;
+    } 
+    
+    
 
     setErrors(newErrors);
     return valid;
@@ -211,35 +303,6 @@ const AddCollege = () => {
    if (collegeData.brochurefileUri !== "" && collegeData.filename !== "") {
     console.log("File uploaded successfully:", collegeData.brochurefileUri);
     console.log("Filename:", collegeData.filename);
-
-    // Continue with form submission
-    {/*if (validateForm()) {
-      console.log("Start:", collegeData);
-      Axios.post(`http://localhost:8080/College/add`, collegeData)
-        .then((res) => {
-          console.log("response:", res.data);
-          alert("College added..");
-          // navigate("/");
-        })
-        .catch((error) => {
-          console.error("Error submitting form:", error);
-        });
-        Axios.post("http://localhost:8080/user/add", {
-          firstName: collegeData.firstName,
-          lastName: collegeData.lastName,
-          city: collegeData.city,
-          state: collegeData.state,
-          phone: collegeData.phoneNumber,
-          email: collegeData.email,
-          password: '',
-          isCollegeUser: true,
-        })
-          .then(res => {
-            console.log(res.data);
-          })
-        navigate("/AdminHome/view-college");
-    }*/}
-
     
     }
   }, [collegeData]);
@@ -271,7 +334,7 @@ const AddCollege = () => {
         console.log("Updated collegeData:", collegeData); // Add this log
   
         // After updating collegeData, proceed with form submission
-        if (true) {
+        if (validateForm()) {
           console.log("Start:", collegeData);
           Axios.post(`http://localhost:8080/College/add`, collegeData)
             .then((res) => {
@@ -322,6 +385,9 @@ const AddCollege = () => {
       ...prevErrors,
       [id]: "",
     }));
+    if (e.target.id === 'password') {
+      evaluatePasswordStrength(e.target.value);
+    }
   };
 
   return (
@@ -351,7 +417,7 @@ const AddCollege = () => {
         </MDBBreadcrumb>
         <MDBContainer fluid className="heading">
           <h2 className="view-heading">Add College</h2>
-          <NavLink to="/AdminHome/view-college" className="add-user-button">
+          <NavLink to="/AdminHome/view-college" className="addbutton">
             View College
           </NavLink>
         </MDBContainer>
@@ -373,6 +439,8 @@ const AddCollege = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.name}
+                      
+                      
                     />
                     {errors.name && (
                       <div className="text-danger">{errors.name}</div>
@@ -389,6 +457,7 @@ const AddCollege = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.affiliation}
+                      
                     />
                     {errors.affiliation && (
                       <div className="text-danger">{errors.affiliation}</div>
@@ -405,6 +474,7 @@ const AddCollege = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.address}
+                      
                     />
                     {errors.address && (
                       <div className="text-danger">{errors.address}</div>
@@ -416,6 +486,7 @@ const AddCollege = () => {
                       id="state"
                       onChange={handleChange}
                       value={collegeData.state}
+                      
                     >
                       <option value="">Select State</option>
                       {states.map((state, index) => (
@@ -438,6 +509,7 @@ const AddCollege = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.city}
+                      
                     />
                     {errors.city && (
                       <div className="text-danger">{errors.city}</div>
@@ -454,6 +526,7 @@ const AddCollege = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.certification}
+                      
                     />
                     {errors.certification && (
                       <div className="text-danger">{errors.certification}</div>
@@ -469,6 +542,7 @@ const AddCollege = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.establishmentYear}
+                      
                     />
                     {errors.establishmentYear && (
                       <div className="text-danger">
@@ -487,7 +561,7 @@ const AddCollege = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.collegeweb}
-                      required
+                      
                     />
                     {errors.collegeweb && (
                       <div className="text-danger">{errors.collegeweb}</div>
@@ -503,7 +577,7 @@ const AddCollege = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.applyweb}
-                      required
+                      
                     />
                     {errors.applyweb && (
                       <div className="text-danger">
@@ -553,8 +627,18 @@ const AddCollege = () => {
         )} 
                           </div>
                         ))}
+                      
                       </MDBDropdownMenu>
                     </MDBDropdown>
+                    <MDBBtn
+                    color="danger"
+                    size="md"
+                    type="button"
+                    value="reset"
+                    onClick={handleCourseReset}
+                  >
+                    Reset Courses
+                  </MDBBtn>
                   </MDBCol>
                   <MDBCol md="6">
                     <label className="form-label" htmlFor="brochureFile">
@@ -566,6 +650,7 @@ const AddCollege = () => {
                       id="brochureFile"
                       onChange={handleFileChange}
                       accept=".pdf"
+                      required
                     />
                   </MDBCol>
                   <MDBCol md="6">
@@ -671,8 +756,9 @@ const AddCollege = () => {
                   </MDBCol>
                 </MDBRow>
 
+                
                 <MDBRow>
-                  <MDBCol md="6">
+                  <MDBCol md="4">
                     <MDBInput
                       wrapperClass="mb-4"
                       label="Email"
@@ -681,13 +767,14 @@ const AddCollege = () => {
                       type="email"
                       onChange={handleChange}
                       value={collegeData.email}
+                      
                     />
                     {errors.email && (
                       <div className="text-danger">{errors.email}</div>
                     )}
                   </MDBCol>
 
-                  <MDBCol md="6">
+                  <MDBCol md="4">
                     <MDBInput
                       wrapperClass="mb-4"
                       label="Password"
@@ -696,10 +783,30 @@ const AddCollege = () => {
                       type="password"
                       onChange={handleChange}
                       value={collegeData.password}
+                      
                     />
                     {errors.password && (
                       <div className="text-danger">{errors.password}</div>
                     )}
+                    <div className={`password-strength ${passwordStrength.toLowerCase()}`}>
+                  {passwordStrength && <span>Password Strength: {passwordStrength}</span>}
+                </div>
+                <ul className="password-feedback">
+                  {passwordFeedback.map((item, index) => (
+                    <li key={index} className="text-danger">{item}</li>
+                  ))}
+                </ul>
+                  </MDBCol>
+                  <MDBCol md="4">
+                  <MDBInput
+                  wrapperClass='mb-4'
+                  label='Confirm Password'
+                  size="lg"
+                  id='confirmPassword'
+                  type='password'
+                  onChange={handleChange}
+                  value={collegeData.confirmPassword}
+                />
                   </MDBCol>
                 </MDBRow>
                 <div style={{ float: 'left' }}>

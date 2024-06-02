@@ -29,7 +29,10 @@ public class CategoryController {
     public int getNumberOfCollegesByCategoryName(@RequestParam String categoryName) {
         return categoryService.getNumberOfCollegesByCategoryName(categoryName);
     }
-
+    @GetMapping("/college")
+    public List<CollegeEntity> getCollegesByCategoryName(@RequestParam String categoryName) {
+        return categoryService.getCollegesByCategoryName(categoryName);
+    }
     @PostMapping
     public CategoryEntity createCategory(@RequestBody CategoryEntity categoryEntity) {
         return categoryService.createCategory(categoryEntity);

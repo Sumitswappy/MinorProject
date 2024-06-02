@@ -26,7 +26,6 @@ const CollegeRegister = () => {
     state: "",
     city: "",
     email: "",
-    password: "",
     affiliation: "",
     certification: "",
     establishmentYear: "",
@@ -35,10 +34,13 @@ const CollegeRegister = () => {
     filename: "",
     collegeweb: "",
     applyweb: "",
+    password: "",
+    confirmPassword: "",
     useraddress: "",
     userstate: "",
     usercity: "",
   });
+ 
   const [course, setCourse] = useState([]);
   const navigate = useNavigate();
 
@@ -56,7 +58,8 @@ const CollegeRegister = () => {
   }, []);
 
   const [errors, setErrors] = useState({});
-
+  const [passwordStrength, setPasswordStrength] = useState('');
+  const [passwordFeedback, setPasswordFeedback] = useState([]);
   const states = [
     "Andhra Pradesh",
     "Arunachal Pradesh",
@@ -94,6 +97,173 @@ const CollegeRegister = () => {
     "Puducherry",
   ];
 
+ 
+  
+  
+
+  const validateForm = () => {
+    let valid = true;
+    const newErrors = {};
+  
+    if (!collegeData.name.trim()) {
+      newErrors.name = "*College name is required";
+      valid = false;
+    }
+  
+    if (!collegeData.firstName.trim()) {
+      newErrors.firstName = "*Contact person first name is required";
+      valid = false;
+    }
+  
+    if (!collegeData.lastName.trim()) {
+      newErrors.lastName = "*Contact person last name is required";
+      valid = false;
+    }
+  
+    if (
+      !collegeData.phoneNumber.trim() ||
+      !/^\d{10}$/.test(collegeData.phoneNumber.trim())
+    ) {
+      newErrors.phoneNumber = "*Valid 10-digit phone number is required";
+      valid = false;
+    }
+    if (!collegeData.address.trim()) {
+      newErrors.address = "*Address is required";
+      valid = false;
+    }
+  
+    if (!collegeData.state.trim()) {
+      newErrors.state = "*State is required";
+      valid = false;
+    }
+  
+    if (!collegeData.city.trim()) {
+      newErrors.city = "*City is required";
+      valid = false;
+    }
+  
+    if (
+      !collegeData.email.trim() ||
+      !/\S+@\S+\.\S+/.test(collegeData.email.trim())
+    ) {
+      newErrors.email = "*Valid email is required";
+      valid = false;
+    }
+  
+    if (!collegeData.affiliation.trim()) {
+      newErrors.affiliation = "*Affiliation is required";
+      valid = false;
+    }
+  
+    if (!collegeData.certification.trim()) {
+      newErrors.certification = "*Certification is required";
+      valid = false;
+    }
+  
+    if (
+      !collegeData.establishmentYear.trim() ||
+      !/^\d{4}$/.test(collegeData.establishmentYear.trim())
+    ) {
+      newErrors.establishmentYear = "*Valid 4-digit year is required";
+      valid = false;
+    }
+  
+    if (!collegeData.collegeCourses.length) {
+      newErrors.collegeCourses = "*At least one course is required";
+      valid = false;
+    
+    }
+  
+    if (!collegeData.brochurefileUri.trim()) {
+      newErrors.brochurefileUri = "*Brochure file URI is required";
+      valid = false;
+    }
+  
+    if (!collegeData.filename.trim()) {
+      newErrors.filename = "*Filename is required";
+      valid = false;
+    }
+  
+    if (!collegeData.collegeweb.trim()) {
+      newErrors.collegeweb = "*College website URL is required";
+      valid = false;
+    }
+  
+    if (!collegeData.applyweb.trim()) {
+      newErrors.applyweb = "*Admission portal URL is required";
+      valid = false;
+    }
+  
+    if (!collegeData.useraddress.trim()) {
+      newErrors.useraddress = "*User address is required";
+      valid = false;
+    }
+  
+    if (!collegeData.userstate.trim()) {
+      newErrors.userstate = "*User state is required";
+      valid = false;
+    }
+  
+    if (!collegeData.usercity.trim()) {
+      newErrors.usercity = "*User city is required";
+      valid = false;
+    }
+    if (!/^.{8,}$/.test(collegeData.password.trim())) {
+      newErrors.password = '*Password must be at least 8 characters';
+      valid = false;
+    }
+
+    if (!collegeData.confirmPassword.trim()) {
+      newErrors.confirmPassword = '*Confirm your password';
+      valid = false;
+    }
+
+    if (collegeData.password !== collegeData.confirmPassword) {
+      newErrors.confirmPassword = '*Password and confirm password do not match';
+      valid = false;
+    }
+    setErrors(newErrors);
+    return valid;
+  };
+  
+
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  const handleUpload = () => {
+    if (!file) {
+      alert("Please select a brochure file");
+      return;
+    }
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    Axios.put("http://localhost:8080/files", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        console.log("File uploaded successfully:", res.data);
+        console.log(res.data.fileDownloadUrl);
+        setCollegeData((prevData) => ({
+          ...prevData,
+          brochurefileUri: res.data.fileDownloadUrl,
+          filename: res.data.filename,
+        }));
+        setUploading(false);
+      })
+      .catch((error) => {
+        console.error("Error uploading file:", error);
+        setUploading(false);
+      });
+  };
+ 
   const handleCourseChange = (index, value) => {
     setCollegeData((prevData) => {
       const updatedCourses = [...prevData.collegeCourses];
@@ -112,97 +282,73 @@ const CollegeRegister = () => {
       collegeCourses: "",
     }));
   };
+ const handleCourseReset = () => {
+    setCollegeData((prevData) => ({
+      ...prevData,
+      collegeCourses: [], // Reset selected courses
+    }));
+    
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      collegeCourses: "", // Reset any errors related to course selection
+    }));
+  };
+  function evaluatePasswordStrength(password) {
+    let strength = '';
+    const feedback = [];
 
-  const validateForm = () => {
-    let valid = true;
-    const newErrors = {};
-
-    if (!collegeData.name.trim()) {
-      newErrors.name = "*College name is required";
-      valid = false;
-    }
-
-    if (!collegeData.firstName.trim()) {
-      newErrors.firstName = "*Contact person name is required";
-      valid = false;
-    }
-    if (!collegeData.lastName.trim()) {
-      newErrors.lastName = "*Contact person name is required";
-      valid = false;
-    }
-    if (
-      !collegeData.phoneNumber.trim() ||
-      !/^\d{10}$/.test(collegeData.phoneNumber.trim())
-    ) {
-      newErrors.phoneNumber = "*Valid 10-digit phone number is required";
-      valid = false;
-    }
-
-    if (!collegeData.state.trim()) {
-      newErrors.state = "*State is required";
-      valid = false;
-    }
-
-    if (!collegeData.city.trim()) {
-      newErrors.city = "*City is required";
-      valid = false;
-    }
-
-    if (
-      !collegeData.email.trim() ||
-      !/\S+@\S+\.\S+/.test(collegeData.email.trim())
-    ) {
-      newErrors.email = "*Valid email is required";
-      valid = false;
-    }
-
-   
-
-    if (!collegeData.affiliation.trim()) {
-      newErrors.affiliation = "*Affiliation is required";
-      valid = false;
-    }
-
-    if (!collegeData.certification.trim()) {
-      newErrors.certification = "*Certification is required";
-      valid = false;
-    }
-
-    if (
-      !collegeData.establishmentYear.trim() ||
-      !/^\d{4}$/.test(collegeData.establishmentYear.trim())
-    ) {
-      newErrors.establishmentYear = "*Valid 4-digit year is required";
-      valid = false;
-    }
-
-    if (!collegeData.collegeCourses.length) {
-      newErrors.collegeCourses = "*At least one course is required";
-      valid = false;
+    if (password.length < 8) {
+      strength = 'Too Short';
+      feedback.push('Password must be at least 8 characters long.');
     } else {
-      collegeData.collegeCourses.forEach((course, index) => {
-        if (!course || !course.id) {
-          newErrors[`course${index}`] = `*Course ${index + 1} is required`;
-          valid = false;
-        }
-      });
+      if (!/[A-Z]/.test(password)) {
+        feedback.push('Password should include at least one uppercase letter.');
+      }
+      if (!/[a-z]/.test(password)) {
+        feedback.push('Password should include at least one lowercase letter.');
+      }
+      if (!/\d/.test(password)) {
+        feedback.push('Password should include at least one number.');
+      }
+      if (!/[!@#$%^&*]/.test(password)) {
+        feedback.push('Password should include at least one special character.');
+      }
+
+      if (feedback.length === 0) {
+        strength = 'Strong';
+      } else if (feedback.length <= 2) {
+        strength = 'Medium';
+      } else {
+        strength = 'Weak';
+      }
     }
 
-    setErrors(newErrors);
-    return valid;
+    setPasswordStrength(strength);
+    setPasswordFeedback(feedback);
+  }
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setCollegeData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+     
+    }));
+    if (e.target.id === 'password') {
+      evaluatePasswordStrength(e.target.value);
+    }
+ 
   };
-
-  const [file, setFile] = useState(null);
-
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
-
-  useEffect(() => {
-    if (collegeData.brochurefileUri !== "" && collegeData.filename !== "") {
-      Axios.post(`http://localhost:8080/College/add`, collegeData)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const isValid = validateForm(); // Call validateForm to check the form validity
+  console.log("Final data:",collegeData);
+    if (isValid) {
+      // Proceed with Axios POST requests
+      Axios.post("http://localhost:8080/College/add", collegeData)
         .then((res) => {
-          
           Axios.post("http://localhost:8080/user/add", {
             firstName: collegeData.firstName,
             lastName: collegeData.lastName,
@@ -225,49 +371,11 @@ const CollegeRegister = () => {
         .catch((error) => {
           console.error("Error submitting college form:", error);
         });
+    } else {
+      console.log("Form validation failed");
     }
-  }, [collegeData, navigate]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!file) {
-      alert("Please select a brochure file");
-      return;
-    }
-    const formData = new FormData();
-    formData.append("file", file);
-
-    Axios.put("http://localhost:8080/files", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((res) => {
-        console.log("File uploaded successfully:", res.data);
-        console.log(res.data.fileDownloadUrl);
-        setCollegeData((prevData) => ({
-          ...prevData,
-          brochurefileUri: res.data.fileDownloadUrl,
-          filename: res.data.filename,
-        }));
-      })
-      .catch((error) => {
-        console.error("Error uploading file:", error);
-      });
   };
-
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setCollegeData((prevData) => ({
-      ...prevData,
-      [id]: value,
-    }));
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [id]: "",
-    }));
-  };
-
+  
   return (
     <div className="form-body">
       <div
@@ -300,7 +408,7 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.name}
-                      required
+                      
                     />
                     {errors.name && (
                       <div className="text-danger">{errors.name}</div>
@@ -317,7 +425,7 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.affiliation}
-                      required
+                      
                     />
                     {errors.affiliation && (
                       <div className="text-danger">{errors.affiliation}</div>
@@ -334,7 +442,7 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.address}
-                      required
+                      
                     />
                     {errors.address && (
                       <div className="text-danger">{errors.address}</div>
@@ -368,7 +476,7 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.city}
-                      required
+                      
                     />
                     {errors.city && (
                       <div className="text-danger">{errors.city}</div>
@@ -385,7 +493,7 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.certification}
-                      required
+                      
                     />
                     {errors.certification && (
                       <div className="text-danger">{errors.certification}</div>
@@ -401,7 +509,7 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.establishmentYear}
-                      required
+                      
                     />
                     {errors.establishmentYear && (
                       <div className="text-danger">
@@ -420,7 +528,7 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.collegeweb}
-                      required
+                      
                     />
                     {errors.collegeweb && (
                       <div className="text-danger">{errors.collegeweb}</div>
@@ -436,7 +544,7 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.applyweb}
-                      required
+                      
                     />
                     {errors.applyweb && (
                       <div className="text-danger">
@@ -453,7 +561,7 @@ const CollegeRegister = () => {
                       <MDBDropdownMenu
                         style={{ overflow: "auto", maxHeight: "160px" }}
                       >
-                        {course.map((_, index) => (
+                       {course.map((_, index) => (
                           <div
                             key={index}
                             className="custom-control custom-checkbox"
@@ -486,21 +594,39 @@ const CollegeRegister = () => {
         )} 
                           </div>
                         ))}
+                         
                       </MDBDropdownMenu>
                     </MDBDropdown>
+                    <MDBBtn
+                    
+                    
+                    color="danger"
+                    size="md"
+                    type="button"
+                    value="reset"
+                    onClick={handleCourseReset}
+                  >
+                    Reset Courses
+                  </MDBBtn>
                   </MDBCol>
                   <MDBCol md="6">
-                    <label className="form-label" htmlFor="brochureFile">
-                      College Brochure (PDF):
-                    </label>
-                    <input
-                      className="form-control mb-4"
-                      type="file"
-                      id="brochureFile"
-                      onChange={handleFileChange}
-                      accept=".pdf"
-                    />
-                  </MDBCol>
+          <label className="form-label" htmlFor="brochureFile">
+            College Brochure (PDF):
+          </label>
+          <input
+            className="form-control mb-4"
+            type="file"
+            id="brochureFile"
+            onChange={handleFileChange}
+            accept=".pdf"
+            required
+          />
+          {file && (
+            <MDBBtn color="primary" onClick={handleUpload} disabled={uploading}>
+              {uploading ? "Uploading..." : "Upload Brochure"}
+            </MDBBtn>
+          )}
+        </MDBCol>
                   <MDBCol md="6">
                     {errors.collegeCourses && (
                       <div className="text-danger">{errors.collegeCourses}</div>
@@ -519,9 +645,9 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.firstName}
-                      required
+                      
                     />
-                    {errors.contactName && (
+                    {errors.firstName && (
                       <div className="text-danger">{errors.firstName}</div>
                     )}
                   </MDBCol>
@@ -534,7 +660,7 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.lastName}
-                      required
+                      
                     />
                     {errors.lastName && (
                       <div className="text-danger">{errors.lastName}</div>
@@ -549,7 +675,7 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.phoneNumber}
-                      required
+                      
                     />
                     {errors.phoneNumber && (
                       <div className="text-danger">{errors.phoneNumber}</div>
@@ -567,7 +693,7 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.useraddress}
-                      required
+                      
                     />
                     {errors.address && (
                       <div className="text-danger">{errors.useraddress}</div>
@@ -601,7 +727,7 @@ const CollegeRegister = () => {
                       type="text"
                       onChange={handleChange}
                       value={collegeData.usercity}
-                      required
+                      
                     />
                     {errors.usercity && (
                       <div className="text-danger">{errors.usercity}</div>
@@ -610,7 +736,7 @@ const CollegeRegister = () => {
                 </MDBRow>
 
                 <MDBRow>
-                  <MDBCol md="6">
+                  <MDBCol md="4">
                     <MDBInput
                       wrapperClass="mb-4"
                       label="Email"
@@ -619,14 +745,14 @@ const CollegeRegister = () => {
                       type="email"
                       onChange={handleChange}
                       value={collegeData.email}
-                      required
+                      
                     />
                     {errors.email && (
                       <div className="text-danger">{errors.email}</div>
                     )}
                   </MDBCol>
 
-                  <MDBCol md="6">
+                  <MDBCol md="4">
                     <MDBInput
                       wrapperClass="mb-4"
                       label="Password"
@@ -635,10 +761,30 @@ const CollegeRegister = () => {
                       type="password"
                       onChange={handleChange}
                       value={collegeData.password}
+                      
                     />
                     {errors.password && (
                       <div className="text-danger">{errors.password}</div>
                     )}
+                    <div className={`password-strength ${passwordStrength.toLowerCase()}`}>
+                  {passwordStrength && <span>Password Strength: {passwordStrength}</span>}
+                </div>
+                <ul className="password-feedback">
+                  {passwordFeedback.map((item, index) => (
+                    <li key={index} className="text-danger">{item}</li>
+                  ))}
+                </ul>
+                  </MDBCol>
+                  <MDBCol md="4">
+                  <MDBInput
+                  wrapperClass='mb-4'
+                  label='Confirm Password'
+                  size="lg"
+                  id='confirmPassword'
+                  type='password'
+                  onChange={handleChange}
+                  value={collegeData.confirmPassword}
+                />
                   </MDBCol>
                 </MDBRow>
                 
@@ -646,7 +792,7 @@ const CollegeRegister = () => {
                   Submit
                 </MDBBtn>
               </form>
-              <p className='ms-5'>Already have an account? <a href="/Collegelogin" className="link-primary">Login here</a></p>
+              <p className='ms-5'>Already have an account? <a href="/Login" className="link-primary">Login here</a></p>
             </MDBCardBody>
           </MDBCard>
           </MDBCol>
@@ -661,6 +807,3 @@ const CollegeRegister = () => {
 };
 
 export default CollegeRegister;
-
-
-

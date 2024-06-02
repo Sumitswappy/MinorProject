@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
-import {  MDBBtn } from "mdb-react-ui-kit";
+import { MDBBtn } from "mdb-react-ui-kit";
 import Axios from 'axios';
 
 const AddReview = ({ userId, collegeId }) => {
@@ -16,18 +16,18 @@ const AddReview = ({ userId, collegeId }) => {
     };
     function handleRefresh() {
         window.location.reload();
-      }
+    }
     const handleSubmit = () => {
         // Prepare the review data
         const currentDate = new Date().toISOString(); // Get current date in ISO string format
         const reviewData = {
-            userid: {id: userId},
-            collegeid: {id: collegeId},
+            userid: { id: userId },
+            collegeid: { id: collegeId },
             reviewDate: currentDate,
             reviews: reviewText,
             rating: rating // Add rating to the review data
         };
-    
+
         // Send the review data to the server
         Axios.post("http://localhost:8080/reviews/add", reviewData)
             .then(response => {
@@ -36,11 +36,14 @@ const AddReview = ({ userId, collegeId }) => {
                 // Handle success, maybe show a success message to the user
             })
             .catch(error => {
-                console.error("Error submitting review:", error);
-                // Handle error, maybe show an error message to the user
+                if (error.response && error.response.status === 400) {
+                    alert("Already provided a review on this college");
+                } else {
+                    console.error("Error submitting review:", error);
+                    // Handle other errors, maybe show a generic error message to the user
+                }
             });
     };
-    
 
     console.log("userId:", userId);
     console.log("collegeId:", collegeId);

@@ -65,11 +65,11 @@ function submit(e){
 
           <MDBRow>
             <MDBCol col='6'>
-            <MDBInput wrapperClass='mb-4' label='Username' id='userName' type='email' onChange={(e)=>handle(e)} value={data.userName} />
+            <MDBInput wrapperClass='mb-4' label='Username' id='userName' type='email' onChange={(e)=>handle(e)} value={data.userName} required />
             </MDBCol>
 
             <MDBCol col='6'>
-            <MDBInput wrapperClass='mb-4' label='Password' id='password' type='password' onChange={(e)=>handle(e)} value={data.password} />
+            <MDBInput wrapperClass='mb-4' label='Password' id='password' type='password' onChange={(e)=>handle(e)} value={data.password} required />
             </MDBCol>
           </MDBRow>
           <MDBRow>

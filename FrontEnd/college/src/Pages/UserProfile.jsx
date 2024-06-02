@@ -25,6 +25,8 @@ import Navbar from "../components/Navbar";
 
 const UserProfile = ({ userId }) => {
   const navigate = useNavigate();
+  const [isCollegeUser,setIsCollegeUser]=useState(false);//new
+  const [college,setCollege]=useState(""); //new
   useEffect(() => {
     const sessionData = sessionStorage.getItem("email");
     if (!sessionData) {
@@ -47,16 +49,17 @@ const UserProfile = ({ userId }) => {
   useEffect(() => {
     if (location.state && location.state.id) {
       const userId = location.state.id;
-      console.log("id",userId);
+      console.log("id", userId);
       const getQuery = `get/${userId}`;
       Axios.get(`${url}${getQuery}`).then((res) => {
         setUsers(res.data);
         setData(res.data);
         setPhotoUrl(res.data.profilephotoUri); // Set photoUrl after data state is updated
+        setIsCollegeUser(sessionStorage.getItem("isCollegeUser") === "true");
       })
-        .catch((error) => {
-          console.error("Error fetching user data:", error);
-        });
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
     }
   }, [location]);
 
@@ -138,8 +141,62 @@ const UserProfile = ({ userId }) => {
     console.log("User ID:", userId);
     navigate("/editprofile", { state: { id: userId } });
   };
-  
-  
+  function handleRefresh() {
+    window.location.reload();
+  }
+  const onHandleDelete = async () => {
+    const confirmDelete = window.confirm("Do you want to delete your account?");
+    if (confirmDelete) {
+      try {
+        const delId = data.id;
+        const resp = await Axios.get(`http://localhost:8080/College/getByEmail?email=${data.email}`);
+        const collegeId = resp.data[0]?.id;
+        
+        setCollege(collegeId);
+        if (collegeId) {
+          await Axios.delete(`http://localhost:8080/College/delete/${collegeId}`);
+          await Axios.delete(`http://localhost:8080/user/delete/${delId}`);
+          sessionStorage.removeItem("email");
+          sessionStorage.removeItem("admin");
+          navigate("/");
+      handleRefresh();
+          alert("Account deleted successfully.");
+        } else {
+          console.log("No college found for the user.");
+          await Axios.delete(`http://localhost:8080/user/delete/${delId}`);
+          sessionStorage.removeItem("email");
+          sessionStorage.removeItem("admin");
+          navigate("/");
+      handleRefresh();
+          alert("Account deleted successfully.");
+        }
+       
+      } catch (error) {
+        console.error("Error deleting user or college:", error);
+      }
+    }
+  };
+  const isCurrentUserCollegeUser = isCollegeUser && sessionStorage.getItem("email") === data.email;
+  const onHandleVisit = async (college) => {
+    try {
+      if (sessionStorage.getItem("email") != null) {
+        const resp = await Axios.get(`http://localhost:8080/College/getByEmail?email=${data.email}`);
+        const collegeId = resp.data?.[0]?.id; // Optional chaining to safely access the ID
+        if (collegeId) {
+          console.log("colid:", collegeId);
+          navigate("/CollegesProfile", { state: { id: collegeId } });
+        } else {
+          console.log("No college found for the user.");
+          alert("No college profile associated with this user.");
+        }
+      } else {
+        navigate("/Login");
+        alert("Please Log In...");
+      }
+    } catch (error) {
+      console.error("Error fetching college data:", error);
+    }
+  };
   return (
     
     <section className="body">
@@ -225,12 +282,31 @@ const UserProfile = ({ userId }) => {
                 </MDBRow><hr/>
                 <MDBBtn
                     className="w-10 mb-4"
-                    color="primary"
+                    color="success"
                     size="md"
                     onClick={onHandleEdit}
                   >
-                    Edit Profile
+                    Edit My Profile
                   </MDBBtn>
+                  {isCurrentUserCollegeUser&&(<MDBBtn
+                    className="w-10 mb-4"
+                    style={{ marginLeft: "10px" }}
+                    color="primary"
+                    size="md"
+                    onClick={() => onHandleVisit(college)}
+                  >
+                    View My College Profile
+                  </MDBBtn>)}
+                  <MDBBtn
+                    className="w-10 mb-4"
+                    style={{ marginLeft: "10px" }}
+                    color="danger"
+                    size="md"
+                    onClick={onHandleDelete}
+                  >
+                    Delete Account
+                  </MDBBtn>
+                 
               </MDBCardBody>
             </MDBCard>
           </MDBCol>

@@ -59,17 +59,19 @@
   text-align: center;
   padding: 10px;
 }
-.add-user-button{
-  color: rgb(0, 106, 255);
-  padding-left: 15px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  padding-right: 15px;
-  border: 2px solid rgb(0, 106, 255);
-  border-radius: 5px;
+.addbutton{
+  color: rgb(255, 255, 255);
+    background-color: rgb(0, 106, 255);
+    padding-left: 15px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-right: 15px;
+    border: 2px solid rgb(0, 106, 255);
+    border-radius: 5px;
 }
-.add-user-button:hover{
-  background-color: rgb(0, 106, 255);
-  color:white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.43);
+.addbutton:hover{
+  background-color: rgb(2, 100, 236);
+    border: 2px solid rgb(2, 100, 236);
+    color:white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.43);
 }

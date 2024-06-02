@@ -212,6 +212,7 @@ const EditColProf = () => {
       collegeCourses: "",
     }));
   };
+
   
   const [file, setFile] = useState(null);
 
@@ -294,7 +295,17 @@ const EditColProf = () => {
   
     }
   };
-  
+  const handleCourseReset = () => {
+    setCollegeData((prevData) => ({
+      ...prevData,
+      collegeCourses: [], // Reset selected courses
+    }));
+    
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      collegeCourses: "", // Reset any errors related to course selection
+    }));
+  };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -502,7 +513,7 @@ const EditColProf = () => {
                       <MDBDropdownMenu
                         style={{ overflow: "auto", maxHeight: "160px" }}
                       >
-                        {course.map((_, index) => (
+                                                {course.map((_, index) => (
                           <div
                             key={index}
                             className="custom-control custom-checkbox"
@@ -537,6 +548,17 @@ const EditColProf = () => {
                         ))}
                       </MDBDropdownMenu>
                     </MDBDropdown>
+                    <MDBBtn
+                    
+                    
+                    color="danger"
+                    size="md"
+                    type="button"
+                    value="reset"
+                    onClick={handleCourseReset}
+                  >
+                    Reset Courses
+                  </MDBBtn>
                   </MDBCol>
                   <MDBCol md="6">
                     <label className="form-label" htmlFor="brochureFile">

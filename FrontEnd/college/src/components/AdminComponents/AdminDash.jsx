@@ -18,22 +18,24 @@ export default function AdminDash() {
   const getQuery=`/get`;
   const getUserUrl=`${userurl}${getQuery}`;
   const getCollegeUrl=`${collegeurl}${getQuery}`;
-
+useEffect(() => {
   Axios.get(getUserUrl)
-    .then((res) => {
-      setUserNo(res.data.length);
-    })
-    .catch((error) => {
-      console.error("Error fetching user data:", error);
-    });
+  .then((res) => {
+    setUserNo(res.data.length);
+  })
+  .catch((error) => {
+    console.error("Error fetching user data:", error);
+  });
 
-    Axios.get(getCollegeUrl)
-    .then((res) => {
-      setCollegeNo(res.data.length);
-    })
-    .catch((error) => {
-      console.error("Error fetching user data:", error);
-    });
+  Axios.get(getCollegeUrl)
+  .then((res) => {
+    setCollegeNo(res.data.length);
+  })
+  .catch((error) => {
+    console.error("Error fetching user data:", error);
+  });
+});
+ 
 
   return (
           <div className="view-user">
